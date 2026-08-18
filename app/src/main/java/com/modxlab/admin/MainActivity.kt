@@ -128,7 +128,20 @@ class MainActivity : ComponentActivity() {
             ModXAdminTheme {
                 val hazeState = remember { dev.chrisbanes.haze.HazeState() }
                 CompositionLocalProvider(LocalHazeState provides hazeState) {
-                    Box(modifier = Modifier.fillMaxSize()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color(0xFF0F172A),
+                                        Color(0xFF1E1B4B),
+                                        Color(0xFF311042),
+                                        Color(0xFF0D0C1D)
+                                    )
+                                )
+                            )
+                    ) {
                         Image(
                             painter = painterResource(id = R.drawable.nature_bg),
                             contentDescription = "Background",
