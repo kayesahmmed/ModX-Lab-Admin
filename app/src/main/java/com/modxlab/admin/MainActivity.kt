@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
@@ -31,6 +32,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -214,12 +216,12 @@ fun MainApp(viewModel: AdminViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .windowInsetsPadding(WindowInsets.navigationBars)
-                        .padding(horizontal = 16.dp, vertical = 10.dp)
+                        .padding(horizontal = 20.dp, vertical = 6.dp)
                 ) {
                     Surface(
                         shape = CircleShape,
                         color = Color.White.copy(alpha = 0.15f),
-                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
+                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.25f)),
                         shadowElevation = 0.dp,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -231,36 +233,54 @@ fun MainApp(viewModel: AdminViewModel) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 4.dp, vertical = 4.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
+                                .padding(horizontal = 6.dp, vertical = 3.dp),
+                            horizontalArrangement = Arrangement.SpaceAround,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             bottomNavItems.forEach { item ->
                                 val selected = currentRoute == item.route
 
                                 val iconScale by animateFloatAsState(
-                                    targetValue = if (selected) 1.15f else 1.0f,
+                                    targetValue = if (selected) 1.12f else 1.0f,
                                     animationSpec = spring(
-                                        dampingRatio = Spring.DampingRatioHighBouncy,
-                                        stiffness = Spring.StiffnessLow
+                                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                                        stiffness = Spring.StiffnessMediumLow
                                     ),
                                     label = "iconScale_${item.title}"
                                 )
 
+                                val iconOffsetY by animateDpAsState(
+                                    targetValue = if (selected) (-1.5).dp else 0.dp,
+                                    animationSpec = spring(
+                                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                                        stiffness = Spring.StiffnessMediumLow
+                                    ),
+                                    label = "iconOffsetY_${item.title}"
+                                )
+
                                 val pillBgColor by animateColorAsState(
-                                    targetValue = if (selected) Color.White else Color.Transparent,
+                                    targetValue = if (selected) Color.White.copy(alpha = 0.95f) else Color.Transparent,
                                     animationSpec = spring(
                                         dampingRatio = Spring.DampingRatioNoBouncy,
-                                        stiffness = Spring.StiffnessLow
+                                        stiffness = Spring.StiffnessMediumLow
                                     ),
                                     label = "pillBg_${item.title}"
                                 )
 
-                                val contentColor by animateColorAsState(
-                                    targetValue = if (selected) BrandCyan else Color.White.copy(alpha = 0.7f),
+                                val pillBorderColor by animateColorAsState(
+                                    targetValue = if (selected) Color.White.copy(alpha = 0.6f) else Color.Transparent,
                                     animationSpec = spring(
                                         dampingRatio = Spring.DampingRatioNoBouncy,
-                                        stiffness = Spring.StiffnessLow
+                                        stiffness = Spring.StiffnessMediumLow
+                                    ),
+                                    label = "pillBorder_${item.title}"
+                                )
+
+                                val contentColor by animateColorAsState(
+                                    targetValue = if (selected) BrandCyan else Color.White.copy(alpha = 0.8f),
+                                    animationSpec = spring(
+                                        dampingRatio = Spring.DampingRatioNoBouncy,
+                                        stiffness = Spring.StiffnessMediumLow
                                     ),
                                     label = "contentColor_${item.title}"
                                 )
@@ -268,8 +288,10 @@ fun MainApp(viewModel: AdminViewModel) {
                                 Box(
                                     modifier = Modifier
                                         .weight(1f)
+                                        .padding(horizontal = 4.dp, vertical = 2.dp)
                                         .clip(CircleShape)
                                         .background(pillBgColor)
+                                        .border(BorderStroke(1.dp, pillBorderColor), CircleShape)
                                         .clickable(
                                             interactionSource = remember { MutableInteractionSource() },
                                             indication = null
@@ -284,28 +306,29 @@ fun MainApp(viewModel: AdminViewModel) {
                                                 }
                                             }
                                         }
-                                        .padding(vertical = 10.dp)
+                                        .padding(vertical = 6.dp)
                                         .testTag(item.testTag),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Column(
                                         horizontalAlignment = Alignment.CenterHorizontally,
-                                        verticalArrangement = Arrangement.Center
+                                        verticalArrangement = Arrangement.Center,
+                                        modifier = Modifier.offset(y = iconOffsetY)
                                     ) {
                                         Icon(
                                             imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
                                             contentDescription = item.title,
                                             tint = contentColor,
                                             modifier = Modifier
-                                                .size(24.dp)
+                                                .size(21.dp)
                                                 .scale(iconScale)
                                         )
-                                        Spacer(modifier = Modifier.height(2.dp))
+                                        Spacer(modifier = Modifier.height(1.dp))
                                         Text(
                                             text = item.title,
                                             style = MaterialTheme.typography.labelSmall.copy(
                                                 fontWeight = FontWeight.Bold,
-                                                fontSize = 11.sp,
+                                                fontSize = 10.5.sp,
                                                 color = contentColor
                                             ),
                                             maxLines = 1
