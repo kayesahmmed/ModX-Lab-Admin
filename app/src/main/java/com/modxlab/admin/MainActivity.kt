@@ -1,8 +1,4 @@
 package com.modxlab.admin
-import dev.chrisbanes.haze.hazeChild
-import dev.chrisbanes.haze.haze
-import dev.chrisbanes.haze.HazeStyle
-import dev.chrisbanes.haze.HazeState
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,6 +14,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -63,7 +60,9 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -100,15 +99,6 @@ import com.modxlab.admin.ui.viewmodel.AdminViewModel
 import com.modxlab.admin.ui.viewmodel.AdminViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 
-import androidx.compose.foundation.Image
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
-import com.modxlab.admin.R
-
-val LocalHazeState = compositionLocalOf { dev.chrisbanes.haze.HazeState() }
-
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,38 +116,14 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ModXAdminTheme {
-                val hazeState = remember { dev.chrisbanes.haze.HazeState() }
-                CompositionLocalProvider(LocalHazeState provides hazeState) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(
-                                Brush.verticalGradient(
-                                    colors = listOf(
-                                        Color(0xFF0F172A),
-                                        Color(0xFF1E1B4B),
-                                        Color(0xFF311042),
-                                        Color(0xFF0D0C1D)
-                                    )
-                                )
-                            )
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.nature_bg),
-                            contentDescription = "Background",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .haze(
-                                    state = hazeState,
-                                    style = dev.chrisbanes.haze.HazeStyle(
-                                        tint = Color.White.copy(alpha = 0.15f),
-                                        blurRadius = 16.dp
-                                    )
-                                )
-                        )
-                        MainApp(viewModel = viewModel)
-                    }
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Image(
+                        painter = painterResource(id = R.drawable.nature_bg),
+                        contentDescription = "Background",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    MainApp(viewModel = viewModel)
                 }
             }
         }
@@ -233,15 +199,10 @@ fun MainApp(viewModel: AdminViewModel) {
                 ) {
                     Surface(
                         shape = CircleShape,
-                        color = Color.White.copy(alpha = 0.15f),
-                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.25f)),
-                        shadowElevation = 0.dp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .hazeChild(
-                                state = LocalHazeState.current,
-                                shape = CircleShape
-                            )
+                        color = Color(0xFF0F172A).copy(alpha = 0.55f),
+                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.3f)),
+                        shadowElevation = 4.dp,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         Row(
                             modifier = Modifier

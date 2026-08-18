@@ -1,5 +1,4 @@
 package com.modxlab.admin.ui.screens
-import dev.chrisbanes.haze.hazeChild
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -150,10 +149,7 @@ fun DashboardScreen(
                 shape = RoundedCornerShape(16.dp),
                 color = Color.White.copy(alpha = 0.1f),
                 border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
-                modifier = Modifier.fillMaxWidth().hazeChild(
-                    state = com.modxlab.admin.LocalHazeState.current,
-                    shape = RoundedCornerShape(16.dp)
-                )
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
@@ -323,12 +319,7 @@ fun DashboardScreen(
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
                     border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .hazeChild(
-                            state = com.modxlab.admin.LocalHazeState.current,
-                            shape = RoundedCornerShape(16.dp)
-                        )
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -381,12 +372,7 @@ private fun MetricCard(
         shape = RoundedCornerShape(16.dp),
         color = Color.White.copy(alpha = 0.1f),
         border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
-        modifier = modifier
-            .hazeChild(
-                state = com.modxlab.admin.LocalHazeState.current,
-                shape = RoundedCornerShape(16.dp)
-            )
-            .clickable(onClick = onClick)
+        modifier = modifier.clickable(onClick = onClick)
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
             Row(
@@ -455,10 +441,6 @@ private fun GradientActionCard(
         border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         modifier = Modifier
             .fillMaxWidth()
-            .hazeChild(
-                state = com.modxlab.admin.LocalHazeState.current,
-                shape = RoundedCornerShape(18.dp)
-            )
             .clip(RoundedCornerShape(18.dp))
             .clickable(onClick = onCardClick)
             .testTag(testTag)
