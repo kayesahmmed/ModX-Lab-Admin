@@ -6,41 +6,61 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Campaign
-import androidx.compose.material.icons.filled.Dashboard
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Key
-import androidx.compose.material.icons.filled.Storefront
-import androidx.compose.material.icons.outlined.Campaign
-import androidx.compose.material.icons.outlined.Dashboard
+import androidx.compose.material.icons.filled.SystemUpdate
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Key
-import androidx.compose.material.icons.outlined.Storefront
+import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -59,15 +79,25 @@ import com.modxlab.admin.ui.screens.EditUserScreen
 import com.modxlab.admin.ui.screens.MaintenanceScreen
 import com.modxlab.admin.ui.screens.SellerListScreen
 import com.modxlab.admin.ui.screens.UserListScreen
+import com.modxlab.admin.ui.theme.BrandCyan
 import com.modxlab.admin.ui.theme.BrandEmerald
+import com.modxlab.admin.ui.theme.BrandEmeraldLight
+import com.modxlab.admin.ui.theme.CyberBg
 import com.modxlab.admin.ui.theme.CyberBorder
+import com.modxlab.admin.ui.theme.CyberBorderLight
 import com.modxlab.admin.ui.theme.CyberSurface
+import com.modxlab.admin.ui.theme.CyberSurfaceVariant
 import com.modxlab.admin.ui.theme.ModXAdminTheme
 import com.modxlab.admin.ui.theme.TextPrimary
 import com.modxlab.admin.ui.theme.TextSecondary
 import com.modxlab.admin.ui.viewmodel.AdminViewModel
 import com.modxlab.admin.ui.viewmodel.AdminViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
+
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import com.modxlab.admin.R
 
 class MainActivity : ComponentActivity() {
 
@@ -90,7 +120,15 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ModXAdminTheme {
-                MainApp(viewModel = viewModel)
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Image(
+                        painter = painterResource(id = R.drawable.nature_bg),
+                        contentDescription = "Background",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    MainApp(viewModel = viewModel)
+                }
             }
         }
     }
@@ -103,33 +141,26 @@ sealed class BottomNavItem(
     val unselectedIcon: ImageVector,
     val testTag: String
 ) {
-    data object Dashboard : BottomNavItem(
+    data object Home : BottomNavItem(
         route = Screen.Dashboard.route,
-        title = "Dashboard",
-        selectedIcon = Icons.Filled.Dashboard,
-        unselectedIcon = Icons.Outlined.Dashboard,
-        testTag = "nav_bottom_dashboard"
+        title = "Home",
+        selectedIcon = Icons.Filled.Home,
+        unselectedIcon = Icons.Outlined.Home,
+        testTag = "nav_bottom_home"
     )
-    data object Users : BottomNavItem(
+    data object SetPass : BottomNavItem(
         route = Screen.Users.route,
-        title = "Users",
+        title = "Set Pass",
         selectedIcon = Icons.Filled.Key,
         unselectedIcon = Icons.Outlined.Key,
-        testTag = "nav_bottom_users"
+        testTag = "nav_bottom_set_pass"
     )
-    data object Sellers : BottomNavItem(
-        route = Screen.Sellers.route,
-        title = "Sellers",
-        selectedIcon = Icons.Filled.Storefront,
-        unselectedIcon = Icons.Outlined.Storefront,
-        testTag = "nav_bottom_sellers"
-    )
-    data object Maintenance : BottomNavItem(
+    data object Update : BottomNavItem(
         route = Screen.Maintenance.route,
-        title = "Broadcast",
-        selectedIcon = Icons.Filled.Campaign,
-        unselectedIcon = Icons.Outlined.Campaign,
-        testTag = "nav_bottom_maintenance"
+        title = "Update",
+        selectedIcon = Icons.Filled.SystemUpdate,
+        unselectedIcon = Icons.Outlined.SystemUpdate,
+        testTag = "nav_bottom_update"
     )
 }
 
@@ -148,15 +179,15 @@ fun MainApp(viewModel: AdminViewModel) {
     }
 
     val bottomNavItems = listOf(
-        BottomNavItem.Dashboard,
-        BottomNavItem.Users,
-        BottomNavItem.Sellers,
-        BottomNavItem.Maintenance
+        BottomNavItem.Home,
+        BottomNavItem.SetPass,
+        BottomNavItem.Update
     )
 
     val isTopLevelDestination = bottomNavItems.any { it.route == currentRoute }
 
     Scaffold(
+        containerColor = Color.Transparent,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         bottomBar = {
             AnimatedVisibility(
@@ -164,50 +195,101 @@ fun MainApp(viewModel: AdminViewModel) {
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                NavigationBar(
-                    containerColor = CyberSurface,
-                    tonalElevation = 8.dp,
-                    modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .windowInsetsPadding(WindowInsets.navigationBars)
+                        .padding(horizontal = 16.dp, vertical = 10.dp)
                 ) {
-                    bottomNavItems.forEach { item ->
-                        val selected = currentRoute == item.route
-                        NavigationBarItem(
-                            selected = selected,
-                            onClick = {
-                                if (currentRoute != item.route) {
-                                    navController.navigate(item.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
+                    Surface(
+                        shape = RoundedCornerShape(32.dp),
+                        color = Color.White.copy(alpha = 0.85f),
+                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.5f)),
+                        shadowElevation = 8.dp,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 8.dp, vertical = 8.dp),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            bottomNavItems.forEach { item ->
+                                val selected = currentRoute == item.route
+
+                                val iconScale by animateFloatAsState(
+                                    targetValue = if (selected) 1.1f else 1.0f,
+                                    animationSpec = spring(
+                                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                                        stiffness = Spring.StiffnessLow
+                                    ),
+                                    label = "iconScale_${item.title}"
+                                )
+
+                                val pillBgColor by animateColorAsState(
+                                    targetValue = if (selected) Color(0xFFE3F2FD) else Color.Transparent,
+                                    animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                                    label = "pillBg_${item.title}"
+                                )
+
+                                val contentColor by animateColorAsState(
+                                    targetValue = if (selected) Color(0xFF1976D2) else Color(0xFF424242),
+                                    label = "contentColor_${item.title}"
+                                )
+
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(24.dp))
+                                        .background(pillBgColor)
+                                        .clickable(
+                                            interactionSource = remember { MutableInteractionSource() },
+                                            indication = null
+                                        ) {
+                                            if (currentRoute != item.route) {
+                                                navController.navigate(item.route) {
+                                                    popUpTo(navController.graph.findStartDestination().id) {
+                                                        saveState = true
+                                                    }
+                                                    launchSingleTop = true
+                                                    restoreState = true
+                                                }
+                                            }
                                         }
-                                        launchSingleTop = true
-                                        restoreState = true
+                                        .padding(horizontal = 24.dp, vertical = 8.dp)
+                                        .testTag(item.testTag),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.Center
+                                    ) {
+                                        Icon(
+                                            imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
+                                            contentDescription = item.title,
+                                            tint = contentColor,
+                                            modifier = Modifier
+                                                .size(26.dp)
+                                                .scale(iconScale)
+                                        )
+                                        Spacer(modifier = Modifier.height(2.dp))
+                                        Text(
+                                            text = item.title,
+                                            style = MaterialTheme.typography.labelSmall.copy(
+                                                fontWeight = FontWeight.Bold,
+                                                fontSize = 11.sp,
+                                                color = contentColor
+                                            ),
+                                            maxLines = 1
+                                        )
                                     }
                                 }
-                            },
-                            icon = {
-                                Icon(
-                                    imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
-                                    contentDescription = item.title
-                                )
-                            },
-                            label = {
-                                Text(
-                                    text = item.title,
-                                    color = if (selected) BrandEmerald else TextSecondary
-                                )
-                            },
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = Color.Black,
-                                indicatorColor = BrandEmerald,
-                                unselectedIconColor = TextSecondary
-                            ),
-                            modifier = Modifier.testTag(item.testTag)
-                        )
+                            }
+                        }
                     }
                 }
             }
-        },
-        containerColor = Color.Transparent
+        }
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -290,3 +372,4 @@ fun MainApp(viewModel: AdminViewModel) {
         }
     }
 }
+

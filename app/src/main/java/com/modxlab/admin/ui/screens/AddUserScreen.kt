@@ -116,15 +116,15 @@ fun AddUserScreen(
             Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(
-                    text = "Generate License Key",
+                    text = "Create Passkey",
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold,
-                        color = TextPrimary
+                        color = Color.White
                     )
                 )
                 Text(
-                    text = "Register a new client user to Realtime DB",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                    text = "Generate and configure user access pass",
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                 )
             }
         }
@@ -134,8 +134,8 @@ fun AddUserScreen(
         // Form Container Card
         Card(
             shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = CyberSurface),
-            border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+            colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
@@ -144,7 +144,7 @@ fun AddUserScreen(
                     text = "Username",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -154,7 +154,7 @@ fun AddUserScreen(
                         username = it
                         if (usernameError != null) usernameError = null
                     },
-                    placeholder = { Text("Enter client username", color = TextTertiary) },
+                    placeholder = { Text("Enter client username", color = Color.White.copy(alpha = 0.6f)) },
                     leadingIcon = {
                         Icon(Icons.Default.Person, contentDescription = "Username", tint = BrandEmeraldLight)
                     },
@@ -167,10 +167,10 @@ fun AddUserScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = CyberSurfaceVariant,
-                        unfocusedContainerColor = CyberSurfaceVariant,
+                        focusedContainerColor = Color.Black.copy(alpha = 0.7f),
+                        unfocusedContainerColor = Color.Black.copy(alpha = 0.7f),
                         focusedBorderColor = BrandEmerald,
-                        unfocusedBorderColor = CyberBorder,
+                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary
                     ),
@@ -186,7 +186,7 @@ fun AddUserScreen(
                     text = "Password / Token",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -196,7 +196,7 @@ fun AddUserScreen(
                         password = it
                         if (passwordError != null) passwordError = null
                     },
-                    placeholder = { Text("Enter client password / token", color = TextTertiary) },
+                    placeholder = { Text("Enter client password / token", color = Color.White.copy(alpha = 0.6f)) },
                     leadingIcon = {
                         Icon(Icons.Default.Lock, contentDescription = "Password", tint = BrandEmeraldLight)
                     },
@@ -209,10 +209,10 @@ fun AddUserScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = CyberSurfaceVariant,
-                        unfocusedContainerColor = CyberSurfaceVariant,
+                        focusedContainerColor = Color.Black.copy(alpha = 0.7f),
+                        unfocusedContainerColor = Color.Black.copy(alpha = 0.7f),
                         focusedBorderColor = BrandEmerald,
-                        unfocusedBorderColor = CyberBorder,
+                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary
                     ),
@@ -228,7 +228,7 @@ fun AddUserScreen(
                     text = "Validity Period",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -236,7 +236,7 @@ fun AddUserScreen(
                     Surface(
                         shape = RoundedCornerShape(12.dp),
                         color = CyberSurfaceVariant,
-                        border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable { validityDropdownExpanded = true }
@@ -258,7 +258,7 @@ fun AddUserScreen(
                                 Text(
                                     text = validityLabel,
                                     style = MaterialTheme.typography.bodyMedium.copy(
-                                        color = TextPrimary,
+                                        color = Color.White,
                                         fontWeight = FontWeight.Medium
                                     )
                                 )
@@ -285,7 +285,7 @@ fun AddUserScreen(
                             90 to "90 Days"
                         ).forEach { (days, label) ->
                             DropdownMenuItem(
-                                text = { Text(label, color = TextPrimary) },
+                                text = { Text(label, color = Color.White) },
                                 onClick = {
                                     validityDays = days
                                     validityLabel = label
@@ -303,7 +303,7 @@ fun AddUserScreen(
                     text = "Device Access Restriction",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -340,14 +340,14 @@ fun AddUserScreen(
                                 Text(
                                     text = "1 Device",
                                     style = MaterialTheme.typography.titleMedium.copy(
-                                        color = TextPrimary,
+                                        color = Color.White,
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 14.sp
                                     )
                                 )
                                 Text(
                                     text = "HWID locked",
-                                    style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary)
+                                    style = MaterialTheme.typography.labelSmall.copy(color = Color.White.copy(alpha = 0.8f))
                                 )
                             }
                         }
@@ -381,14 +381,14 @@ fun AddUserScreen(
                                 Text(
                                     text = "Unlimited (∞)",
                                     style = MaterialTheme.typography.titleMedium.copy(
-                                        color = TextPrimary,
+                                        color = Color.White,
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 14.sp
                                     )
                                 )
                                 Text(
                                     text = "Multi-device",
-                                    style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary)
+                                    style = MaterialTheme.typography.labelSmall.copy(color = Color.White.copy(alpha = 0.8f))
                                 )
                             }
                         }

@@ -42,7 +42,7 @@ class AdminRepository(
 
     private val userRef by lazy { firebaseDatabase.getReference("User") }
     private val sellerRef by lazy { firebaseDatabase.getReference("Seller") }
-    private val maintenanceRef by lazy { firebaseDatabase.getReference("Maintenance/up") }
+    private val maintenanceRef by lazy { firebaseDatabase.getReference("update/up") }
     private val legacyUpRef by lazy { firebaseDatabase.getReference("up") }
 
     val allUsers: Flow<List<UserEntity>> = userDao.getAllUsers()

@@ -133,12 +133,12 @@ fun SellerListScreen(
                         text = "Authorized Resellers",
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            color = TextPrimary
+                            color = Color.White
                         )
                     )
                     Text(
                         text = "${sellers.size} registered seller accounts",
-                        style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                     )
                 }
             }
@@ -149,7 +149,7 @@ fun SellerListScreen(
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { viewModel.setSellerSearchQuery(it) },
-                placeholder = { Text("Search by username, key...", color = TextTertiary) },
+                placeholder = { Text("Search by username, key...", color = Color.White.copy(alpha = 0.6f)) },
                 leadingIcon = {
                     Icon(Icons.Default.Search, contentDescription = "Search", tint = TextSecondary)
                 },
@@ -163,10 +163,10 @@ fun SellerListScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(14.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = CyberSurface,
-                    unfocusedContainerColor = CyberSurface,
+                    focusedContainerColor = Color.Black.copy(alpha = 0.6f),
+                    unfocusedContainerColor = Color.Black.copy(alpha = 0.6f),
                     focusedBorderColor = BrandIndigo,
-                    unfocusedBorderColor = CyberBorder,
+                    unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
                     focusedTextColor = TextPrimary,
                     unfocusedTextColor = TextPrimary
                 ),
@@ -195,7 +195,7 @@ fun SellerListScreen(
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = BrandIndigo.copy(alpha = 0.25f),
                             selectedLabelColor = Color.White,
-                            containerColor = CyberSurface,
+                            containerColor = Color.Black.copy(alpha = 0.5f),
                             labelColor = TextSecondary
                         ),
                         border = FilterChipDefaults.filterChipBorder(
@@ -228,11 +228,11 @@ fun SellerListScreen(
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
                             text = if (searchQuery.isNotEmpty()) "No matching resellers found" else "No resellers registered yet",
-                            style = MaterialTheme.typography.bodyLarge.copy(color = TextSecondary)
+                            style = MaterialTheme.typography.bodyLarge.copy(color = Color.White.copy(alpha = 0.8f))
                         )
                         Text(
                             text = "Tap the + button to onboard a new reseller",
-                            style = MaterialTheme.typography.bodyMedium.copy(color = TextTertiary)
+                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.6f))
                         )
                     }
                 }
@@ -271,7 +271,7 @@ fun SellerListScreen(
             text = {
                 Text(
                     "Are you sure you want to delete reseller \"${seller.user}\" (${seller.key})? This action cannot be undone.",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                 )
             },
             confirmButton = {
@@ -287,10 +287,10 @@ fun SellerListScreen(
             },
             dismissButton = {
                 TextButton(onClick = { sellerToDelete = null }) {
-                    Text("Cancel", color = TextSecondary)
+                    Text("Cancel", color = Color.White.copy(alpha = 0.8f))
                 }
             },
-            containerColor = CyberSurfaceVariant,
+            containerColor = Color.Black.copy(alpha = 0.7f),
             shape = RoundedCornerShape(16.dp)
         )
     }
@@ -310,7 +310,7 @@ fun SellerListScreen(
             text = {
                 Text(
                     "Are you sure you want to ${if (willActivate) "activate" else "deactivate"} reseller \"${seller.user}\"?",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                 )
             },
             confirmButton = {
@@ -330,10 +330,10 @@ fun SellerListScreen(
             },
             dismissButton = {
                 TextButton(onClick = { sellerToToggle = null }) {
-                    Text("Cancel", color = TextSecondary)
+                    Text("Cancel", color = Color.White.copy(alpha = 0.8f))
                 }
             },
-            containerColor = CyberSurfaceVariant,
+            containerColor = Color.Black.copy(alpha = 0.7f),
             shape = RoundedCornerShape(16.dp)
         )
     }
@@ -351,8 +351,8 @@ private fun SellerCardItem(
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = CyberSurface),
-        border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+        colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         modifier = Modifier
             .fillMaxWidth()
             .combinedClickable(
@@ -378,7 +378,7 @@ private fun SellerCardItem(
                         text = index.toString(),
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Bold,
-                            color = TextSecondary
+                            color = Color.White.copy(alpha = 0.8f)
                         )
                     )
                 }
@@ -409,7 +409,7 @@ private fun SellerCardItem(
                         text = seller.user,
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            color = TextPrimary
+                            color = Color.White
                         )
                     )
 
@@ -513,7 +513,7 @@ private fun SellerCardItem(
                     Text(
                         text = if (seller.isUnlimitedDevice) "Unlimited (∞)" else "1 Device",
                         style = MaterialTheme.typography.labelSmall.copy(
-                            color = TextSecondary,
+                            color = Color.White.copy(alpha = 0.8f),
                             fontSize = 11.sp
                         )
                     )

@@ -110,12 +110,12 @@ fun AddSellerScreen(
                     text = "Onboard Reseller",
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold,
-                        color = TextPrimary
+                        color = Color.White
                     )
                 )
                 Text(
                     text = "Grant seller distribution portal credentials",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                 )
             }
         }
@@ -125,8 +125,8 @@ fun AddSellerScreen(
         // Form Card
         Card(
             shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = CyberSurface),
-            border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+            colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
@@ -135,7 +135,7 @@ fun AddSellerScreen(
                     text = "Reseller Username",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -145,7 +145,7 @@ fun AddSellerScreen(
                         username = it
                         if (usernameError != null) usernameError = null
                     },
-                    placeholder = { Text("Enter seller username", color = TextTertiary) },
+                    placeholder = { Text("Enter seller username", color = Color.White.copy(alpha = 0.6f)) },
                     leadingIcon = {
                         Icon(Icons.Default.Person, contentDescription = "Username", tint = BrandIndigo)
                     },
@@ -158,10 +158,10 @@ fun AddSellerScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = CyberSurfaceVariant,
-                        unfocusedContainerColor = CyberSurfaceVariant,
+                        focusedContainerColor = Color.Black.copy(alpha = 0.7f),
+                        unfocusedContainerColor = Color.Black.copy(alpha = 0.7f),
                         focusedBorderColor = BrandIndigo,
-                        unfocusedBorderColor = CyberBorder,
+                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary
                     ),
@@ -177,7 +177,7 @@ fun AddSellerScreen(
                     text = "Reseller Password / Token",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -187,7 +187,7 @@ fun AddSellerScreen(
                         password = it
                         if (passwordError != null) passwordError = null
                     },
-                    placeholder = { Text("Enter secret seller token", color = TextTertiary) },
+                    placeholder = { Text("Enter secret seller token", color = Color.White.copy(alpha = 0.6f)) },
                     leadingIcon = {
                         Icon(Icons.Default.Lock, contentDescription = "Password", tint = BrandIndigo)
                     },
@@ -200,10 +200,10 @@ fun AddSellerScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = CyberSurfaceVariant,
-                        unfocusedContainerColor = CyberSurfaceVariant,
+                        focusedContainerColor = Color.Black.copy(alpha = 0.7f),
+                        unfocusedContainerColor = Color.Black.copy(alpha = 0.7f),
                         focusedBorderColor = BrandIndigo,
-                        unfocusedBorderColor = CyberBorder,
+                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary
                     ),
@@ -219,7 +219,7 @@ fun AddSellerScreen(
                     text = "Initial Credit Allocation ($ USD)",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -255,7 +255,7 @@ fun AddSellerScreen(
                                 )
                                 Text(
                                     text = "Credit",
-                                    style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary)
+                                    style = MaterialTheme.typography.labelSmall.copy(color = Color.White.copy(alpha = 0.8f))
                                 )
                             }
                         }
@@ -269,7 +269,7 @@ fun AddSellerScreen(
                     text = "Device Access Restriction",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -304,14 +304,14 @@ fun AddSellerScreen(
                                 Text(
                                     text = "1 Device",
                                     style = MaterialTheme.typography.titleMedium.copy(
-                                        color = TextPrimary,
+                                        color = Color.White,
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 14.sp
                                     )
                                 )
                                 Text(
                                     text = "Single device",
-                                    style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary)
+                                    style = MaterialTheme.typography.labelSmall.copy(color = Color.White.copy(alpha = 0.8f))
                                 )
                             }
                         }
@@ -343,14 +343,14 @@ fun AddSellerScreen(
                                 Text(
                                     text = "Unlimited (∞)",
                                     style = MaterialTheme.typography.titleMedium.copy(
-                                        color = TextPrimary,
+                                        color = Color.White,
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 14.sp
                                     )
                                 )
                                 Text(
                                     text = "Multi-device",
-                                    style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary)
+                                    style = MaterialTheme.typography.labelSmall.copy(color = Color.White.copy(alpha = 0.8f))
                                 )
                             }
                         }

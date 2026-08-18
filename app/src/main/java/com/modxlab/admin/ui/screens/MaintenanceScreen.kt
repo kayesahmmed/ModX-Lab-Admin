@@ -127,15 +127,15 @@ fun MaintenanceScreen(
             Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(
-                    text = "System Maintenance & Updates",
+                    text = "System Update",
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold,
-                        color = TextPrimary
+                        color = Color.White
                     )
                 )
                 Text(
-                    text = "Push instant broadcast alerts & new APK links",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                    text = "Broadcast announcements and updates",
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                 )
             }
         }
@@ -145,8 +145,8 @@ fun MaintenanceScreen(
         // Broadcast Form Card
         Card(
             shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = CyberSurface),
-            border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+            colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
@@ -170,7 +170,7 @@ fun MaintenanceScreen(
                         text = "Global Broadcast Node (/update/up)",
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            color = TextPrimary
+                            color = Color.White
                         )
                     )
                 }
@@ -182,7 +182,7 @@ fun MaintenanceScreen(
                     text = "App Target Version",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -192,7 +192,7 @@ fun MaintenanceScreen(
                         version = it
                         if (versionError != null) versionError = null
                     },
-                    placeholder = { Text("e.g. 2.4.2", color = TextTertiary) },
+                    placeholder = { Text("e.g. 2.4.2", color = Color.White.copy(alpha = 0.6f)) },
                     leadingIcon = {
                         Icon(Icons.Default.SystemUpdate, contentDescription = "Version", tint = BrandCrimson)
                     },
@@ -205,10 +205,10 @@ fun MaintenanceScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = CyberSurfaceVariant,
-                        unfocusedContainerColor = CyberSurfaceVariant,
+                        focusedContainerColor = Color.Black.copy(alpha = 0.7f),
+                        unfocusedContainerColor = Color.Black.copy(alpha = 0.7f),
                         focusedBorderColor = BrandCrimson,
-                        unfocusedBorderColor = CyberBorder,
+                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary
                     ),
@@ -221,10 +221,10 @@ fun MaintenanceScreen(
 
                 // Message Field
                 Text(
-                    text = "Maintenance / Update Announcement Message",
+                    text = "Announcement Message",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -234,7 +234,7 @@ fun MaintenanceScreen(
                         message = it
                         if (messageError != null) messageError = null
                     },
-                    placeholder = { Text("Enter the notice displayed to clients", color = TextTertiary) },
+                    placeholder = { Text("Enter the notice displayed to clients", color = Color.White.copy(alpha = 0.6f)) },
                     leadingIcon = {
                         Icon(Icons.AutoMirrored.Filled.Message, contentDescription = "Message", tint = BrandCrimson)
                     },
@@ -248,10 +248,10 @@ fun MaintenanceScreen(
                     maxLines = 5,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = CyberSurfaceVariant,
-                        unfocusedContainerColor = CyberSurfaceVariant,
+                        focusedContainerColor = Color.Black.copy(alpha = 0.7f),
+                        unfocusedContainerColor = Color.Black.copy(alpha = 0.7f),
                         focusedBorderColor = BrandCrimson,
-                        unfocusedBorderColor = CyberBorder,
+                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary
                     ),
@@ -267,7 +267,7 @@ fun MaintenanceScreen(
                     text = "Update Direct Download Link",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -277,7 +277,7 @@ fun MaintenanceScreen(
                         link = it
                         if (linkError != null) linkError = null
                     },
-                    placeholder = { Text("https://example.com/modx-latest.apk", color = TextTertiary) },
+                    placeholder = { Text("https://example.com/modx-latest.apk", color = Color.White.copy(alpha = 0.6f)) },
                     leadingIcon = {
                         Icon(Icons.Default.Link, contentDescription = "Link", tint = BrandCrimson)
                     },
@@ -290,10 +290,10 @@ fun MaintenanceScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = CyberSurfaceVariant,
-                        unfocusedContainerColor = CyberSurfaceVariant,
+                        focusedContainerColor = Color.Black.copy(alpha = 0.7f),
+                        unfocusedContainerColor = Color.Black.copy(alpha = 0.7f),
                         focusedBorderColor = BrandCrimson,
-                        unfocusedBorderColor = CyberBorder,
+                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary
                     ),
@@ -361,7 +361,7 @@ fun MaintenanceScreen(
             text = "Client Dialog Live Preview",
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.Bold,
-                color = TextPrimary
+                color = Color.White
             )
         )
 
@@ -369,7 +369,7 @@ fun MaintenanceScreen(
 
         Card(
             shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = CyberSurfaceVariant),
+            colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.7f)),
             border = androidx.compose.foundation.BorderStroke(1.dp, BrandCrimson.copy(alpha = 0.5f)),
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -391,7 +391,7 @@ fun MaintenanceScreen(
                             text = "New Update Available!",
                             style = MaterialTheme.typography.titleLarge.copy(
                                 fontWeight = FontWeight.Bold,
-                                color = TextPrimary
+                                color = Color.White
                             )
                         )
                     }
@@ -416,7 +416,7 @@ fun MaintenanceScreen(
 
                 Text(
                     text = message.ifEmpty { "🔥 System maintenance and security optimizations completed. Please upgrade to the latest build to continue." },
-                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -440,7 +440,7 @@ fun MaintenanceScreen(
                     ) {
                         Icon(Icons.Default.OpenInBrowser, contentDescription = "Test Link", modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text("Test Link", color = TextPrimary)
+                        Text("Test Link", color = Color.White)
                     }
 
                     Button(

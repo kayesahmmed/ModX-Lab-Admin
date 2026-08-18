@@ -131,15 +131,15 @@ fun UserListScreen(
             ) {
                 Column {
                     Text(
-                        text = "User License Keys",
+                        text = "Set Pass",
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            color = TextPrimary
+                            color = Color.White
                         )
                     )
                     Text(
-                        text = "${users.size} license records found",
-                        style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                        text = "${users.size} pass records active",
+                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                     )
                 }
             }
@@ -150,26 +150,26 @@ fun UserListScreen(
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { viewModel.setUserSearchQuery(it) },
-                placeholder = { Text("Search by username, key, or device...", color = TextTertiary) },
+                placeholder = { Text("Search by user, key, or device...", color = Color.White.copy(alpha = 0.6f)) },
                 leadingIcon = {
-                    Icon(Icons.Default.Search, contentDescription = "Search", tint = TextSecondary)
+                    Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.White.copy(alpha = 0.7f))
                 },
                 trailingIcon = {
                     if (searchQuery.isNotEmpty()) {
                         IconButton(onClick = { viewModel.setUserSearchQuery("") }) {
-                            Icon(Icons.Default.Clear, contentDescription = "Clear", tint = TextSecondary)
+                            Icon(Icons.Default.Clear, contentDescription = "Clear", tint = Color.White.copy(alpha = 0.7f))
                         }
                     }
                 },
                 singleLine = true,
                 shape = RoundedCornerShape(14.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = CyberSurface,
-                    unfocusedContainerColor = CyberSurface,
+                    focusedContainerColor = Color.Black.copy(alpha = 0.6f),
+                    unfocusedContainerColor = Color.Black.copy(alpha = 0.4f),
                     focusedBorderColor = BrandEmerald,
-                    unfocusedBorderColor = CyberBorder,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
+                    unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -184,7 +184,7 @@ fun UserListScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 listOf(
-                    "ALL" to "All Keys",
+                    "ALL" to "All Passes",
                     "ACTIVE" to "Active Only",
                     "INACTIVE" to "Deactivated"
                 ).forEach { (filterKey, label) ->
@@ -194,16 +194,16 @@ fun UserListScreen(
                         onClick = { viewModel.setUserStatusFilter(filterKey) },
                         label = { Text(label, style = MaterialTheme.typography.labelSmall) },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = BrandEmerald.copy(alpha = 0.2f),
-                            selectedLabelColor = BrandEmeraldLight,
-                            containerColor = CyberSurface,
-                            labelColor = TextSecondary
+                            selectedContainerColor = BrandEmerald.copy(alpha = 0.4f),
+                            selectedLabelColor = Color.White,
+                            containerColor = Color.Black.copy(alpha = 0.4f),
+                            labelColor = Color.White.copy(alpha = 0.8f)
                         ),
                         border = FilterChipDefaults.filterChipBorder(
                             enabled = true,
                             selected = isSelected,
                             selectedBorderColor = BrandEmerald,
-                            borderColor = CyberBorder
+                            borderColor = Color.White.copy(alpha = 0.2f)
                         )
                     )
                 }
@@ -222,18 +222,18 @@ fun UserListScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
                             imageVector = Icons.Default.Key,
-                            contentDescription = "No users",
+                            contentDescription = "No passkeys",
                             tint = TextTertiary,
                             modifier = Modifier.size(56.dp)
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
-                            text = if (searchQuery.isNotEmpty()) "No matching license keys found" else "No users registered yet",
-                            style = MaterialTheme.typography.bodyLarge.copy(color = TextSecondary)
+                            text = if (searchQuery.isNotEmpty()) "No matching pass records found" else "No passkeys created yet",
+                            style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
                         )
                         Text(
-                            text = "Tap the + button to generate a new license",
-                            style = MaterialTheme.typography.bodyMedium.copy(color = TextTertiary)
+                            text = "Tap the + button to create a new passkey",
+                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.7f))
                         )
                     }
                 }
@@ -272,7 +272,7 @@ fun UserListScreen(
             text = {
                 Text(
                     "Are you sure you want to delete user \"${user.user}\" (${user.key})? This action cannot be undone.",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                 )
             },
             confirmButton = {
@@ -288,10 +288,10 @@ fun UserListScreen(
             },
             dismissButton = {
                 TextButton(onClick = { userToDelete = null }) {
-                    Text("Cancel", color = TextSecondary)
+                    Text("Cancel", color = Color.White.copy(alpha = 0.8f))
                 }
             },
-            containerColor = CyberSurfaceVariant,
+            containerColor = Color.Black.copy(alpha = 0.7f),
             shape = RoundedCornerShape(16.dp)
         )
     }
@@ -311,7 +311,7 @@ fun UserListScreen(
             text = {
                 Text(
                     "Are you sure you want to ${if (willActivate) "activate" else "deactivate"} license for \"${user.user}\"?",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                 )
             },
             confirmButton = {
@@ -331,10 +331,10 @@ fun UserListScreen(
             },
             dismissButton = {
                 TextButton(onClick = { userToToggle = null }) {
-                    Text("Cancel", color = TextSecondary)
+                    Text("Cancel", color = Color.White.copy(alpha = 0.8f))
                 }
             },
-            containerColor = CyberSurfaceVariant,
+            containerColor = Color.Black.copy(alpha = 0.7f),
             shape = RoundedCornerShape(16.dp)
         )
     }
@@ -352,8 +352,8 @@ private fun UserCardItem(
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = CyberSurface),
-        border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+        colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         modifier = Modifier
             .fillMaxWidth()
             .combinedClickable(
@@ -372,14 +372,14 @@ private fun UserCardItem(
                     modifier = Modifier
                         .size(28.dp)
                         .clip(CircleShape)
-                        .background(CyberSurfaceVariant),
+                        .background(Color.White.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = index.toString(),
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Bold,
-                            color = TextSecondary
+                            color = Color.White.copy(alpha = 0.8f)
                         )
                     )
                 }
@@ -414,7 +414,7 @@ private fun UserCardItem(
                             text = user.user,
                             style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.Bold,
-                                color = TextPrimary
+                                color = Color.White
                             )
                         )
                     }
@@ -437,7 +437,7 @@ private fun UserCardItem(
                             Icon(
                                 imageVector = Icons.Default.ContentCopy,
                                 contentDescription = "Copy Key",
-                                tint = TextTertiary,
+                                tint = Color.White.copy(alpha = 0.6f),
                                 modifier = Modifier.size(12.dp)
                             )
                         }
@@ -481,20 +481,20 @@ private fun UserCardItem(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(CyberSurfaceVariant)
+                        .background(Color.White.copy(alpha = 0.1f))
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Timer,
                         contentDescription = "Validity",
-                        tint = TextSecondary,
+                        tint = Color.White.copy(alpha = 0.7f),
                         modifier = Modifier.size(12.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = user.validity.ifEmpty { "Expires in 30 Days" },
                         style = MaterialTheme.typography.labelSmall.copy(
-                            color = TextSecondary,
+                            color = Color.White.copy(alpha = 0.8f),
                             fontSize = 11.sp
                         )
                     )
@@ -505,20 +505,20 @@ private fun UserCardItem(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(CyberSurfaceVariant)
+                        .background(Color.White.copy(alpha = 0.1f))
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Devices,
                         contentDescription = "Device Access",
-                        tint = TextSecondary,
+                        tint = Color.White.copy(alpha = 0.7f),
                         modifier = Modifier.size(12.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = if (user.isUnlimitedDevice) "Unlimited (∞)" else "1 Device",
                         style = MaterialTheme.typography.labelSmall.copy(
-                            color = TextSecondary,
+                            color = Color.White.copy(alpha = 0.8f),
                             fontSize = 11.sp
                         )
                     )
@@ -534,7 +534,7 @@ private fun UserCardItem(
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Edit User",
-                        tint = TextSecondary,
+                        tint = Color.White.copy(alpha = 0.8f),
                         modifier = Modifier.size(16.dp)
                     )
                 }

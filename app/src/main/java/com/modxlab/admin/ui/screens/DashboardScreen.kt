@@ -99,18 +99,20 @@ fun DashboardScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column {
+                    Column(modifier = Modifier.weight(1f)) {
                         Text(
                             text = "ModX Admin",
                             style = MaterialTheme.typography.displayLarge.copy(
-                                fontSize = 28.sp,
+                                fontSize = 24.sp,
                                 fontWeight = FontWeight.ExtraBold,
-                                color = TextPrimary
-                            )
+                                color = Color.White
+                            ),
+                            maxLines = 1
                         )
                         Text(
-                            text = "Central Security & License Management",
-                            style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                            text = "Admin Panel",
+                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f)),
+                            maxLines = 1
                         )
                     }
                     Box(
@@ -145,8 +147,8 @@ fun DashboardScreen(
         item {
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = CyberSurfaceVariant,
-                border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+                color = Color.Black.copy(alpha = 0.5f),
+                border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
@@ -157,29 +159,30 @@ fun DashboardScreen(
                         modifier = Modifier
                             .size(44.dp)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(BrandEmerald.copy(alpha = 0.15f)),
+                            .background(Color.White.copy(alpha = 0.15f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Default.Security,
                             contentDescription = "Security",
-                            tint = BrandEmeraldLight
+                            tint = Color.White
                         )
                     }
                     Spacer(modifier = Modifier.width(12.dp))
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "Cloud-Hardened Backend Protection",
+                            text = "Backend Security",
                             style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.Bold,
-                                color = TextPrimary
-                            )
+                                color = Color.White
+                            ),
+                            maxLines = 1
                         )
                         Text(
-                            text = "Direct database writes disabled (.write: false). Operations verified through Admin custom claims.",
+                            text = "System database is secure and protected.",
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontSize = 12.sp,
-                                color = TextSecondary
+                                color = Color.White.copy(alpha = 0.7f)
                             )
                         )
                     }
@@ -190,10 +193,10 @@ fun DashboardScreen(
         // Live Metric Counters
         item {
             Text(
-                text = "Live Infrastructure Overview",
+                text = "Live Overview",
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
-                    color = TextPrimary
+                    color = Color.White
                 ),
                 modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
             )
@@ -252,10 +255,10 @@ fun DashboardScreen(
         // Main Navigation Gradient Cards (Directly matching original Sketchware architecture with modern Compose Polish)
         item {
             Text(
-                text = "Management Modules",
+                text = "Management",
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
-                    color = TextPrimary
+                    color = Color.White
                 ),
                 modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
             )
@@ -264,15 +267,15 @@ fun DashboardScreen(
         // 1. User Pass Management Card (Green gradient in original)
         item {
             GradientActionCard(
-                title = "User & License Keys",
-                subtitle = "Generate, activate, deactivate, or delete client user accounts with device binding",
+                title = "Set Pass & Keys",
+                subtitle = "Manage user accounts, passkeys & device HWID binding",
                 icon = Icons.Default.Key,
-                startColor = Color(0xFF1B5E20),
-                endColor = Color(0xFF2E7D32),
+                startColor = Color(0xFF00875A),
+                endColor = Color(0xFF00C853),
                 badgeText = "${stats.totalUsers} Keys",
                 onCardClick = onNavigateToUsers,
                 onActionClick = onNavigateToAddUser,
-                actionLabel = "Add User",
+                actionLabel = "Add Pass",
                 testTag = "btn_nav_users"
             )
         }
@@ -280,15 +283,15 @@ fun DashboardScreen(
         // 2. Maintenance & Updates (Red gradient in original)
         item {
             GradientActionCard(
-                title = "System Maintenance",
-                subtitle = "Broadcast instant update announcements, version requirements & download links",
+                title = "System Update",
+                subtitle = "Broadcast update announcements, version & download links",
                 icon = Icons.Default.Campaign,
-                startColor = Color(0xFFB71C1C),
-                endColor = Color(0xFFC62828),
+                startColor = Color(0xFFC62828),
+                endColor = Color(0xFFFF1744),
                 badgeText = "v${stats.currentVersion}",
                 onCardClick = onNavigateToMaintenance,
                 onActionClick = onNavigateToMaintenance,
-                actionLabel = "Configure",
+                actionLabel = "Update",
                 testTag = "btn_nav_maintenance"
             )
         }
@@ -296,11 +299,11 @@ fun DashboardScreen(
         // 3. Resellers / Sellers (Indigo gradient in original)
         item {
             GradientActionCard(
-                title = "Reseller Management",
-                subtitle = "Manage authorized distributors, credit allocations, and reseller tier statuses",
+                title = "Seller Management",
+                subtitle = "Manage sellers and credit allocations",
                 icon = Icons.Default.Storefront,
-                startColor = Color(0xFF303F9F),
-                endColor = Color(0xFF3F51B5),
+                startColor = Color(0xFF3949AB),
+                endColor = Color(0xFF5C6BC0),
                 badgeText = "${stats.totalSellers} Sellers",
                 onCardClick = onNavigateToSellers,
                 onActionClick = onNavigateToAddSeller,
@@ -314,8 +317,8 @@ fun DashboardScreen(
             item {
                 Card(
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = CyberSurface),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+                    colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
@@ -328,17 +331,17 @@ fun DashboardScreen(
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = "Current Client Broadcast (v${maintenance?.version})",
+                                text = "Current Update (v${maintenance?.version})",
                                 style = MaterialTheme.typography.titleMedium.copy(
                                     fontWeight = FontWeight.Bold,
-                                    color = TextPrimary
+                                    color = Color.White
                                 )
                             )
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = maintenance?.message ?: "",
-                            style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
@@ -367,8 +370,8 @@ private fun MetricCard(
 ) {
     Surface(
         shape = RoundedCornerShape(16.dp),
-        color = CyberSurface,
-        border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+        color = Color.Black.copy(alpha = 0.5f),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         modifier = modifier.clickable(onClick = onClick)
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
@@ -380,7 +383,7 @@ private fun MetricCard(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.bodyMedium.copy(
-                        color = TextSecondary,
+                        color = Color.White.copy(alpha = 0.8f),
                         fontSize = 13.sp
                     )
                 )
@@ -388,7 +391,7 @@ private fun MetricCard(
                     modifier = Modifier
                         .size(30.dp)
                         .clip(CircleShape)
-                        .background(color.copy(alpha = 0.15f)),
+                        .background(color.copy(alpha = 0.25f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -404,7 +407,7 @@ private fun MetricCard(
                 text = value,
                 style = MaterialTheme.typography.headlineMedium.copy(
                     fontWeight = FontWeight.Bold,
-                    color = TextPrimary
+                    color = Color.White
                 )
             )
             Spacer(modifier = Modifier.height(2.dp))
@@ -434,11 +437,11 @@ private fun GradientActionCard(
 ) {
     Card(
         shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(18.dp))
-            .background(Brush.horizontalGradient(listOf(startColor, endColor)))
             .clickable(onClick = onCardClick)
             .testTag(testTag)
     ) {

@@ -122,7 +122,7 @@ fun EditUserScreen(
     if (userEntity == null) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("User not found", style = MaterialTheme.typography.titleMedium.copy(color = TextPrimary))
+                Text("User not found", style = MaterialTheme.typography.titleMedium.copy(color = Color.White))
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(onClick = onNavigateBack) {
                     Text("Go Back")
@@ -165,15 +165,15 @@ fun EditUserScreen(
                 Spacer(modifier = Modifier.width(12.dp))
                 Column {
                     Text(
-                        text = "Edit User Details",
+                        text = "Edit Passkey",
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold,
-                            color = TextPrimary
+                            color = Color.White
                         )
                     )
                     Text(
-                        text = "Manage license status & credentials",
-                        style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                        text = "Manage credentials, HWID binding & status",
+                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                     )
                 }
             }
@@ -200,7 +200,7 @@ fun EditUserScreen(
         Surface(
             shape = RoundedCornerShape(16.dp),
             color = CyberSurfaceVariant,
-            border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -228,7 +228,7 @@ fun EditUserScreen(
                         Text(
                             text = "LICENSE KEY",
                             style = MaterialTheme.typography.labelSmall.copy(
-                                color = TextTertiary,
+                                color = Color.White.copy(alpha = 0.6f),
                                 fontWeight = FontWeight.Bold
                             )
                         )
@@ -264,8 +264,8 @@ fun EditUserScreen(
         // Edit Credentials Form Card
         Card(
             shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = CyberSurface),
-            border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+            colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
@@ -273,7 +273,7 @@ fun EditUserScreen(
                     text = "Account Credentials",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
-                        color = TextPrimary
+                        color = Color.White
                     )
                 )
 
@@ -283,7 +283,7 @@ fun EditUserScreen(
                     text = "Username",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -296,10 +296,10 @@ fun EditUserScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = CyberSurfaceVariant,
-                        unfocusedContainerColor = CyberSurfaceVariant,
+                        focusedContainerColor = Color.Black.copy(alpha = 0.7f),
+                        unfocusedContainerColor = Color.Black.copy(alpha = 0.7f),
                         focusedBorderColor = BrandEmerald,
-                        unfocusedBorderColor = CyberBorder,
+                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary
                     ),
@@ -314,7 +314,7 @@ fun EditUserScreen(
                     text = "Password / Token",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -327,10 +327,10 @@ fun EditUserScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = CyberSurfaceVariant,
-                        unfocusedContainerColor = CyberSurfaceVariant,
+                        focusedContainerColor = Color.Black.copy(alpha = 0.7f),
+                        unfocusedContainerColor = Color.Black.copy(alpha = 0.7f),
                         focusedBorderColor = BrandEmerald,
-                        unfocusedBorderColor = CyberBorder,
+                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary
                     ),
@@ -377,8 +377,8 @@ fun EditUserScreen(
         // Activation Toggle Card
         Card(
             shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = CyberSurface),
-            border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+            colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -413,7 +413,7 @@ fun EditUserScreen(
                         )
                         Text(
                             text = if (user.isActive) "Client can login & authenticate" else "Client access blocked",
-                            style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary, fontSize = 12.sp)
+                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f), fontSize = 12.sp)
                         )
                     }
                 }
@@ -440,8 +440,8 @@ fun EditUserScreen(
         // Hardware & Session Telemetry Card
         Card(
             shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = CyberSurface),
-            border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+            colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
@@ -449,7 +449,7 @@ fun EditUserScreen(
                     text = "Hardware & Telemetry Info",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
-                        color = TextPrimary
+                        color = Color.White
                     )
                 )
 
@@ -505,7 +505,7 @@ fun EditUserScreen(
             text = {
                 Text(
                     "Are you sure you want to permanently delete user \"${user.user}\"? All device bindings will be purged.",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                 )
             },
             confirmButton = {
@@ -521,10 +521,10 @@ fun EditUserScreen(
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancel", color = TextSecondary)
+                    Text("Cancel", color = Color.White.copy(alpha = 0.8f))
                 }
             },
-            containerColor = CyberSurfaceVariant,
+            containerColor = Color.Black.copy(alpha = 0.7f),
             shape = RoundedCornerShape(16.dp)
         )
     }
@@ -554,12 +554,12 @@ private fun InfoRow(
         Column {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall.copy(color = TextTertiary, fontSize = 11.sp)
+                style = MaterialTheme.typography.labelSmall.copy(color = Color.White.copy(alpha = 0.6f), fontSize = 11.sp)
             )
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    color = TextPrimary,
+                    color = Color.White,
                     fontWeight = FontWeight.Medium,
                     fontSize = 13.sp
                 )

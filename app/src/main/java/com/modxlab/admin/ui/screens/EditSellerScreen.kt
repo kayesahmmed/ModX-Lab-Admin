@@ -122,7 +122,7 @@ fun EditSellerScreen(
     if (sellerEntity == null) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Seller not found", style = MaterialTheme.typography.titleMedium.copy(color = TextPrimary))
+                Text("Seller not found", style = MaterialTheme.typography.titleMedium.copy(color = Color.White))
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(onClick = onNavigateBack) {
                     Text("Go Back")
@@ -168,12 +168,12 @@ fun EditSellerScreen(
                         text = "Edit Reseller",
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold,
-                            color = TextPrimary
+                            color = Color.White
                         )
                     )
                     Text(
                         text = "Reseller key: ${seller.key}",
-                        style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                     )
                 }
             }
@@ -200,7 +200,7 @@ fun EditSellerScreen(
         Surface(
             shape = RoundedCornerShape(16.dp),
             color = CyberSurfaceVariant,
-            border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -228,7 +228,7 @@ fun EditSellerScreen(
                         Text(
                             text = "SELLER KEY",
                             style = MaterialTheme.typography.labelSmall.copy(
-                                color = TextTertiary,
+                                color = Color.White.copy(alpha = 0.6f),
                                 fontWeight = FontWeight.Bold
                             )
                         )
@@ -264,8 +264,8 @@ fun EditSellerScreen(
         // Form Card
         Card(
             shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = CyberSurface),
-            border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+            colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
@@ -273,7 +273,7 @@ fun EditSellerScreen(
                     text = "Reseller Credentials",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
-                        color = TextPrimary
+                        color = Color.White
                     )
                 )
 
@@ -283,7 +283,7 @@ fun EditSellerScreen(
                     text = "Username",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -296,10 +296,10 @@ fun EditSellerScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = CyberSurfaceVariant,
-                        unfocusedContainerColor = CyberSurfaceVariant,
+                        focusedContainerColor = Color.Black.copy(alpha = 0.7f),
+                        unfocusedContainerColor = Color.Black.copy(alpha = 0.7f),
                         focusedBorderColor = BrandIndigo,
-                        unfocusedBorderColor = CyberBorder,
+                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary
                     ),
@@ -314,7 +314,7 @@ fun EditSellerScreen(
                     text = "Password / Token",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = TextSecondary
+                        color = Color.White.copy(alpha = 0.8f)
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -327,10 +327,10 @@ fun EditSellerScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = CyberSurfaceVariant,
-                        unfocusedContainerColor = CyberSurfaceVariant,
+                        focusedContainerColor = Color.Black.copy(alpha = 0.7f),
+                        unfocusedContainerColor = Color.Black.copy(alpha = 0.7f),
                         focusedBorderColor = BrandIndigo,
-                        unfocusedBorderColor = CyberBorder,
+                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary
                     ),
@@ -377,8 +377,8 @@ fun EditSellerScreen(
         // Activation Toggle Card
         Card(
             shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = CyberSurface),
-            border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+            colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -413,7 +413,7 @@ fun EditSellerScreen(
                         )
                         Text(
                             text = if (seller.isActive) "Able to create sub-licenses & distribute" else "Portal access suspended",
-                            style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary, fontSize = 12.sp)
+                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f), fontSize = 12.sp)
                         )
                     }
                 }
@@ -440,8 +440,8 @@ fun EditSellerScreen(
         // Hardware & Access Info
         Card(
             shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = CyberSurface),
-            border = androidx.compose.foundation.BorderStroke(1.dp, CyberBorder),
+            colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
@@ -449,7 +449,7 @@ fun EditSellerScreen(
                     text = "Reseller Telemetry & Access",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
-                        color = TextPrimary
+                        color = Color.White
                     )
                 )
 
@@ -473,7 +473,7 @@ fun EditSellerScreen(
                     Column {
                         Text(
                             text = "Credit Balance Allocated",
-                            style = MaterialTheme.typography.labelSmall.copy(color = TextTertiary, fontSize = 11.sp)
+                            style = MaterialTheme.typography.labelSmall.copy(color = Color.White.copy(alpha = 0.6f), fontSize = 11.sp)
                         )
                         Text(
                             text = "$${seller.coin} USD",
@@ -506,11 +506,11 @@ fun EditSellerScreen(
                     Column {
                         Text(
                             text = "Bound Hardware Device",
-                            style = MaterialTheme.typography.labelSmall.copy(color = TextTertiary, fontSize = 11.sp)
+                            style = MaterialTheme.typography.labelSmall.copy(color = Color.White.copy(alpha = 0.6f), fontSize = 11.sp)
                         )
                         Text(
                             text = if (seller.device == "null" || seller.device.isBlank()) "Not Authorized Yet (null)" else seller.device,
-                            style = MaterialTheme.typography.bodyMedium.copy(color = TextPrimary, fontSize = 13.sp)
+                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White, fontSize = 13.sp)
                         )
                     }
                 }
@@ -535,11 +535,11 @@ fun EditSellerScreen(
                     Column {
                         Text(
                             text = "Client Version",
-                            style = MaterialTheme.typography.labelSmall.copy(color = TextTertiary, fontSize = 11.sp)
+                            style = MaterialTheme.typography.labelSmall.copy(color = Color.White.copy(alpha = 0.6f), fontSize = 11.sp)
                         )
                         Text(
                             text = if (seller.version == "null" || seller.version.isBlank()) "Not Registered Yet (null)" else seller.version,
-                            style = MaterialTheme.typography.bodyMedium.copy(color = TextPrimary, fontSize = 13.sp)
+                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White, fontSize = 13.sp)
                         )
                     }
                 }
@@ -564,11 +564,11 @@ fun EditSellerScreen(
                     Column {
                         Text(
                             text = "Device Access Restriction",
-                            style = MaterialTheme.typography.labelSmall.copy(color = TextTertiary, fontSize = 11.sp)
+                            style = MaterialTheme.typography.labelSmall.copy(color = Color.White.copy(alpha = 0.6f), fontSize = 11.sp)
                         )
                         Text(
                             text = if (seller.isUnlimitedDevice) "Unlimited Devices (∞)" else "1 Device HWID Locked",
-                            style = MaterialTheme.typography.bodyMedium.copy(color = TextPrimary, fontSize = 13.sp)
+                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White, fontSize = 13.sp)
                         )
                     }
                 }
@@ -585,7 +585,7 @@ fun EditSellerScreen(
             text = {
                 Text(
                     "Are you sure you want to delete reseller \"${seller.user}\"? They will lose access to the reseller portal.",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                 )
             },
             confirmButton = {
@@ -601,10 +601,10 @@ fun EditSellerScreen(
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancel", color = TextSecondary)
+                    Text("Cancel", color = Color.White.copy(alpha = 0.8f))
                 }
             },
-            containerColor = CyberSurfaceVariant,
+            containerColor = Color.Black.copy(alpha = 0.7f),
             shape = RoundedCornerShape(16.dp)
         )
     }
