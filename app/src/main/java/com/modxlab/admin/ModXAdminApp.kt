@@ -113,11 +113,12 @@ object CrashHandler {
             // 2. Save to External Files Directory (Accessible in File Manager)
             val externalDir = context.getExternalFilesDir(null)
             if (externalDir != null) {
+                // Delete old timestamped files if any exist to prevent clutter
+                externalDir.listFiles { file -> file.name.startsWith("crash_") && file.name.endsWith(".txt") && file.name != "crash_log.txt" }
+                    ?.forEach { it.delete() }
+
                 val crashFile = File(externalDir, "crash_log.txt")
                 crashFile.writeText(report)
-                
-                val historyFile = File(externalDir, "crash_${System.currentTimeMillis()}.txt")
-                historyFile.writeText(report)
             }
 
             // 3. Save to Internal Files Directory (Always writable)
