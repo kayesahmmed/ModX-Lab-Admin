@@ -25,9 +25,9 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Campaign
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Link
-import androidx.compose.material.icons.filled.Message
+import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.material.icons.filled.OpenInBrowser
-import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.SystemUpdate
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -236,7 +236,7 @@ fun MaintenanceScreen(
                     },
                     placeholder = { Text("Enter the notice displayed to clients", color = TextTertiary) },
                     leadingIcon = {
-                        Icon(Icons.Default.Message, contentDescription = "Message", tint = BrandCrimson)
+                        Icon(Icons.AutoMirrored.Filled.Message, contentDescription = "Message", tint = BrandCrimson)
                     },
                     isError = messageError != null,
                     supportingText = {
@@ -346,7 +346,7 @@ fun MaintenanceScreen(
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("Broadcasting...", fontWeight = FontWeight.Bold)
                     } else {
-                        Icon(Icons.Default.Send, contentDescription = "Broadcast", modifier = Modifier.size(18.dp))
+                        Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Broadcast", modifier = Modifier.size(18.dp))
                         Spacer(modifier = Modifier.width(6.dp))
                         Text("SET & BROADCAST UPDATE", fontWeight = FontWeight.Bold)
                     }
