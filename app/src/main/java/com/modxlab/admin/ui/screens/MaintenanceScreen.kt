@@ -205,12 +205,12 @@ fun MaintenanceScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.White.copy(alpha = 0.2f),
-                        unfocusedContainerColor = Color.White.copy(alpha = 0.2f),
+                        focusedContainerColor = Color(0xFF0F172A).copy(alpha = 0.6f),
+                        unfocusedContainerColor = Color(0xFF0F172A).copy(alpha = 0.4f),
                         focusedBorderColor = BrandCrimson,
-                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
+                        unfocusedBorderColor = Color.White.copy(alpha = 0.25f),
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -248,12 +248,12 @@ fun MaintenanceScreen(
                     maxLines = 5,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.White.copy(alpha = 0.2f),
-                        unfocusedContainerColor = Color.White.copy(alpha = 0.2f),
+                        focusedContainerColor = Color(0xFF0F172A).copy(alpha = 0.6f),
+                        unfocusedContainerColor = Color(0xFF0F172A).copy(alpha = 0.4f),
                         focusedBorderColor = BrandCrimson,
-                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
+                        unfocusedBorderColor = Color.White.copy(alpha = 0.25f),
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -290,12 +290,12 @@ fun MaintenanceScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.White.copy(alpha = 0.2f),
-                        unfocusedContainerColor = Color.White.copy(alpha = 0.2f),
+                        focusedContainerColor = Color(0xFF0F172A).copy(alpha = 0.6f),
+                        unfocusedContainerColor = Color(0xFF0F172A).copy(alpha = 0.4f),
                         focusedBorderColor = BrandCrimson,
-                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
+                        unfocusedBorderColor = Color.White.copy(alpha = 0.25f),
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
