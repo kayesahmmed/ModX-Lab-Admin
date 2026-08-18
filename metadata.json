@@ -1,0 +1,6 @@
+{
+  "name": "ModX Admin",
+  "description": "Admin console for managing user licenses, reseller credits, and maintenance broadcasts.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
