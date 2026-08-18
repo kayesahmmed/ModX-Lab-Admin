@@ -1,4 +1,7 @@
 package com.modxlab.admin
+import dev.chrisbanes.haze.haze
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.HazeState
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -97,7 +100,11 @@ import kotlinx.coroutines.flow.collectLatest
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import com.modxlab.admin.R
+
+val LocalHazeState = compositionLocalOf { dev.chrisbanes.haze.HazeState() }
 
 class MainActivity : ComponentActivity() {
 
@@ -105,29 +112,36 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val database = AppDatabase.getDatabase(this, (application as? android.app.Application)?.let {
-            kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO)
-        } ?: kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO))
-
-        val repository = AdminRepository(
-            userDao = database.userDao(),
-            sellerDao = database.sellerDao(),
-            maintenanceDao = database.maintenanceDao()
+        val factory = AdminViewModelFactory(
+            AdminRepository(
+                userDao = AppDatabase.getDatabase(this, kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO)).userDao(),
+                sellerDao = AppDatabase.getDatabase(this, kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO)).sellerDao(),
+                maintenanceDao = AppDatabase.getDatabase(this, kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO)).maintenanceDao()
+            )
         )
-
-        val factory = AdminViewModelFactory(repository)
         val viewModel: AdminViewModel by viewModels { factory }
 
         setContent {
             ModXAdminTheme {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Image(
-                        painter = painterResource(id = R.drawable.nature_bg),
-                        contentDescription = "Background",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                    MainApp(viewModel = viewModel)
+                val hazeState = remember { dev.chrisbanes.haze.HazeState() }
+                CompositionLocalProvider(LocalHazeState provides hazeState) {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Image(
+                            painter = painterResource(id = R.drawable.nature_bg),
+                            contentDescription = "Background",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .haze(
+                                    state = hazeState,
+                                    style = dev.chrisbanes.haze.HazeStyle(
+                                        tint = Color.Black.copy(alpha = 0.2f),
+                                        blurRadius = 16.dp
+                                    )
+                                )
+                        )
+                        MainApp(viewModel = viewModel)
+                    }
                 }
             }
         }

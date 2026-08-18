@@ -1,4 +1,5 @@
 package com.modxlab.admin.ui.screens
+import dev.chrisbanes.haze.hazeChild
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -355,6 +356,10 @@ private fun SellerCardItem(
         border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         modifier = Modifier
             .fillMaxWidth()
+            .hazeChild(
+                state = com.modxlab.admin.LocalHazeState.current,
+                shape = RoundedCornerShape(16.dp)
+            )
             .combinedClickable(
                 onClick = onEditClick,
                 onLongClick = onToggleStatusClick

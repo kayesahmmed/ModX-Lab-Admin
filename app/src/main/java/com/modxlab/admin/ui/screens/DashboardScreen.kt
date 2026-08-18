@@ -1,4 +1,5 @@
 package com.modxlab.admin.ui.screens
+import dev.chrisbanes.haze.hazeChild
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -101,7 +102,7 @@ fun DashboardScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "ModX Admin",
+                            text = "Admin Panel",
                             style = MaterialTheme.typography.displayLarge.copy(
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.ExtraBold,
@@ -110,7 +111,7 @@ fun DashboardScreen(
                             maxLines = 1
                         )
                         Text(
-                            text = "Admin Panel",
+                            text = "System Overview",
                             style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f)),
                             maxLines = 1
                         )
@@ -149,7 +150,10 @@ fun DashboardScreen(
                 shape = RoundedCornerShape(16.dp),
                 color = Color.Black.copy(alpha = 0.5f),
                 border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().hazeChild(
+                    state = com.modxlab.admin.LocalHazeState.current,
+                    shape = RoundedCornerShape(16.dp)
+                )
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
@@ -319,7 +323,12 @@ fun DashboardScreen(
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
                     border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .hazeChild(
+                            state = com.modxlab.admin.LocalHazeState.current,
+                            shape = RoundedCornerShape(16.dp)
+                        )
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -372,7 +381,12 @@ private fun MetricCard(
         shape = RoundedCornerShape(16.dp),
         color = Color.Black.copy(alpha = 0.5f),
         border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
-        modifier = modifier.clickable(onClick = onClick)
+        modifier = modifier
+            .hazeChild(
+                state = com.modxlab.admin.LocalHazeState.current,
+                shape = RoundedCornerShape(16.dp)
+            )
+            .clickable(onClick = onClick)
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
             Row(
@@ -441,6 +455,10 @@ private fun GradientActionCard(
         border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         modifier = Modifier
             .fillMaxWidth()
+            .hazeChild(
+                state = com.modxlab.admin.LocalHazeState.current,
+                shape = RoundedCornerShape(18.dp)
+            )
             .clip(RoundedCornerShape(18.dp))
             .clickable(onClick = onCardClick)
             .testTag(testTag)
