@@ -80,122 +80,138 @@ class AdminRepository(
     }
 
     private fun setupFirebaseRealtimeSync() {
-        // Sync Users from Firebase Realtime Database
-        userRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val userList = mutableListOf<UserEntity>()
-                for (child in snapshot.children) {
-                    val key = child.key ?: child.child("key").getValue(String::class.java) ?: continue
-                    val user = child.child("user").getValue(String::class.java) ?: ""
-                    val pass = child.child("pass").getValue(String::class.java) ?: ""
-                    val status = child.child("status").getValue(String::class.java) ?: "true"
-                    val access = child.child("access").getValue(String::class.java) ?: "1"
-                    val device = child.child("device").getValue(String::class.java) ?: "null"
-                    val version = child.child("version").getValue(String::class.java) ?: "null"
-                    val rgtime = child.child("rgtime").getValue(String::class.java) ?: ""
-                    val time = child.child("time").getValue(String::class.java) ?: ""
-                    val validity = child.child("Validity").getValue(String::class.java)
-                        ?: child.child("validity").getValue(String::class.java) ?: ""
+        try {
+            // Sync Users from Firebase Realtime Database
+            userRef.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    try {
+                        val userList = mutableListOf<UserEntity>()
+                        for (child in snapshot.children) {
+                            val key = child.key ?: child.child("key").getValue(String::class.java) ?: continue
+                            val user = child.child("user").getValue(String::class.java) ?: ""
+                            val pass = child.child("pass").getValue(String::class.java) ?: ""
+                            val status = child.child("status").getValue(String::class.java) ?: "true"
+                            val access = child.child("access").getValue(String::class.java) ?: "1"
+                            val device = child.child("device").getValue(String::class.java) ?: "null"
+                            val version = child.child("version").getValue(String::class.java) ?: "null"
+                            val rgtime = child.child("rgtime").getValue(String::class.java) ?: ""
+                            val time = child.child("time").getValue(String::class.java) ?: ""
+                            val validity = child.child("Validity").getValue(String::class.java)
+                                ?: child.child("validity").getValue(String::class.java) ?: ""
 
-                    userList.add(
-                        UserEntity(
-                            key = key,
-                            user = user,
-                            pass = pass,
-                            status = status,
-                            access = access,
-                            device = device,
-                            version = version,
-                            rgtime = rgtime,
-                            time = time,
-                            validity = validity
-                        )
-                    )
-                }
-
-                if (userList.isNotEmpty()) {
-                    scope.launch(Dispatchers.IO) {
-                        userDao.insertUsers(userList)
-                        userDao.deleteUsersNotIn(userList.map { it.key })
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("AdminRepository", "Firebase User listener error: ${error.message}")
-            }
-        })
-
-        // Sync Sellers from Firebase Realtime Database
-        sellerRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val sellerList = mutableListOf<SellerEntity>()
-                for (child in snapshot.children) {
-                    val key = child.key ?: child.child("key").getValue(String::class.java) ?: continue
-                    val user = child.child("user").getValue(String::class.java) ?: ""
-                    val pass = child.child("pass").getValue(String::class.java) ?: ""
-                    val status = child.child("status").getValue(String::class.java) ?: "true"
-                    val access = child.child("access").getValue(String::class.java) ?: "1"
-                    val device = child.child("device").getValue(String::class.java) ?: "null"
-                    val version = child.child("version").getValue(String::class.java) ?: "null"
-                    val coin = child.child("coin").getValue(String::class.java) ?: "0"
-
-                    sellerList.add(
-                        SellerEntity(
-                            key = key,
-                            user = user,
-                            pass = pass,
-                            status = status,
-                            access = access,
-                            device = device,
-                            version = version,
-                            coin = coin
-                        )
-                    )
-                }
-
-                if (sellerList.isNotEmpty()) {
-                    scope.launch(Dispatchers.IO) {
-                        sellerDao.insertSellers(sellerList)
-                        sellerDao.deleteSellersNotIn(sellerList.map { it.key })
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("AdminRepository", "Firebase Seller listener error: ${error.message}")
-            }
-        })
-
-        // Sync Maintenance from Firebase Realtime Database
-        val maintenanceListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    val version = snapshot.child("version").getValue(String::class.java) ?: "1.0.0"
-                    val message = snapshot.child("message").getValue(String::class.java) ?: ""
-                    val link = snapshot.child("link").getValue(String::class.java) ?: ""
-
-                    scope.launch(Dispatchers.IO) {
-                        maintenanceDao.insertOrUpdate(
-                            MaintenanceEntity(
-                                id = "up",
-                                version = version,
-                                message = message,
-                                link = link,
-                                updatedAt = System.currentTimeMillis()
+                            userList.add(
+                                UserEntity(
+                                    key = key,
+                                    user = user,
+                                    pass = pass,
+                                    status = status,
+                                    access = access,
+                                    device = device,
+                                    version = version,
+                                    rgtime = rgtime,
+                                    time = time,
+                                    validity = validity
+                                )
                             )
-                        )
+                        }
+
+                        if (userList.isNotEmpty()) {
+                            scope.launch(Dispatchers.IO) {
+                                userDao.insertUsers(userList)
+                                userDao.deleteUsersNotIn(userList.map { it.key })
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("AdminRepository", "Error processing Firebase users: ${e.message}", e)
                     }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.w("AdminRepository", "Firebase User listener error: ${error.message}")
+                }
+            })
+
+            // Sync Sellers from Firebase Realtime Database
+            sellerRef.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    try {
+                        val sellerList = mutableListOf<SellerEntity>()
+                        for (child in snapshot.children) {
+                            val key = child.key ?: child.child("key").getValue(String::class.java) ?: continue
+                            val user = child.child("user").getValue(String::class.java) ?: ""
+                            val pass = child.child("pass").getValue(String::class.java) ?: ""
+                            val status = child.child("status").getValue(String::class.java) ?: "true"
+                            val access = child.child("access").getValue(String::class.java) ?: "1"
+                            val device = child.child("device").getValue(String::class.java) ?: "null"
+                            val version = child.child("version").getValue(String::class.java) ?: "null"
+                            val coin = child.child("coin").getValue(String::class.java) ?: "0"
+
+                            sellerList.add(
+                                SellerEntity(
+                                    key = key,
+                                    user = user,
+                                    pass = pass,
+                                    status = status,
+                                    access = access,
+                                    device = device,
+                                    version = version,
+                                    coin = coin
+                                )
+                            )
+                        }
+
+                        if (sellerList.isNotEmpty()) {
+                            scope.launch(Dispatchers.IO) {
+                                sellerDao.insertSellers(sellerList)
+                                sellerDao.deleteSellersNotIn(sellerList.map { it.key })
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("AdminRepository", "Error processing Firebase sellers: ${e.message}", e)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.w("AdminRepository", "Firebase Seller listener error: ${error.message}")
+                }
+            })
+
+            // Sync Maintenance from Firebase Realtime Database
+            val maintenanceListener = object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    try {
+                        if (snapshot.exists()) {
+                            val version = snapshot.child("version").getValue(String::class.java) ?: "1.0.0"
+                            val message = snapshot.child("message").getValue(String::class.java) ?: ""
+                            val link = snapshot.child("link").getValue(String::class.java) ?: ""
+
+                            scope.launch(Dispatchers.IO) {
+                                maintenanceDao.insertOrUpdate(
+                                    MaintenanceEntity(
+                                        id = "up",
+                                        version = version,
+                                        message = message,
+                                        link = link,
+                                        updatedAt = System.currentTimeMillis()
+                                    )
+                                )
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("AdminRepository", "Error processing Firebase maintenance: ${e.message}", e)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.w("AdminRepository", "Firebase Maintenance listener error: ${error.message}")
                 }
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("AdminRepository", "Firebase Maintenance listener error: ${error.message}")
-            }
+            maintenanceRef.addValueEventListener(maintenanceListener)
+            legacyUpRef.addValueEventListener(maintenanceListener)
+        } catch (e: Exception) {
+            Log.e("AdminRepository", "Firebase setup failed: ${e.message}", e)
         }
-
-        maintenanceRef.addValueEventListener(maintenanceListener)
-        legacyUpRef.addValueEventListener(maintenanceListener)
     }
 
     private fun nowStamp(date: Date = Date()): String {
