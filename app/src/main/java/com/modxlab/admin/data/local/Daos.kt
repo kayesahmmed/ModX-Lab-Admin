@@ -22,6 +22,9 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: UserEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUsers(users: List<UserEntity>)
+
     @Update
     suspend fun updateUser(user: UserEntity)
 
@@ -31,8 +34,17 @@ interface UserDao {
     @Query("UPDATE users SET status = :status WHERE `key` = :key")
     suspend fun toggleUserStatus(key: String, status: String)
 
+    @Query("UPDATE users SET device = 'null' WHERE `key` = :key")
+    suspend fun resetHwid(key: String)
+
+    @Query("UPDATE users SET time = :time, validity = :validity WHERE `key` = :key")
+    suspend fun updateValidity(key: String, time: String, validity: String)
+
     @Query("DELETE FROM users WHERE `key` = :key")
     suspend fun deleteByKey(key: String)
+
+    @Query("DELETE FROM users WHERE `key` NOT IN (:keys)")
+    suspend fun deleteUsersNotIn(keys: List<String>)
 
     @Query("SELECT COUNT(*) FROM users")
     fun getUserCount(): Flow<Int>
@@ -52,6 +64,9 @@ interface SellerDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSeller(seller: SellerEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSellers(sellers: List<SellerEntity>)
+
     @Update
     suspend fun updateSeller(seller: SellerEntity)
 
@@ -61,8 +76,17 @@ interface SellerDao {
     @Query("UPDATE sellers SET status = :status WHERE `key` = :key")
     suspend fun toggleSellerStatus(key: String, status: String)
 
+    @Query("UPDATE sellers SET device = 'null' WHERE `key` = :key")
+    suspend fun resetHwid(key: String)
+
+    @Query("UPDATE sellers SET coin = :coin WHERE `key` = :key")
+    suspend fun updateCoin(key: String, coin: String)
+
     @Query("DELETE FROM sellers WHERE `key` = :key")
     suspend fun deleteByKey(key: String)
+
+    @Query("DELETE FROM sellers WHERE `key` NOT IN (:keys)")
+    suspend fun deleteSellersNotIn(keys: List<String>)
 
     @Query("SELECT COUNT(*) FROM sellers")
     fun getSellerCount(): Flow<Int>
@@ -82,3 +106,4 @@ interface MaintenanceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdate(maintenance: MaintenanceEntity)
 }
+
