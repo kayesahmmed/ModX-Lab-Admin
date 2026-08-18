@@ -148,7 +148,7 @@ fun DashboardScreen(
         item {
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = Color.Black.copy(alpha = 0.5f),
+                color = Color.White.copy(alpha = 0.1f),
                 border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
                 modifier = Modifier.fillMaxWidth().hazeChild(
                     state = com.modxlab.admin.LocalHazeState.current,
@@ -321,7 +321,7 @@ fun DashboardScreen(
             item {
                 Card(
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+                    colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
                     border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -379,7 +379,7 @@ private fun MetricCard(
 ) {
     Surface(
         shape = RoundedCornerShape(16.dp),
-        color = Color.Black.copy(alpha = 0.5f),
+        color = Color.White.copy(alpha = 0.1f),
         border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         modifier = modifier
             .hazeChild(
@@ -451,7 +451,7 @@ private fun GradientActionCard(
 ) {
     Card(
         shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
         border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         modifier = Modifier
             .fillMaxWidth()
@@ -497,7 +497,7 @@ private fun GradientActionCard(
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(Color.Black.copy(alpha = 0.3f))
+                        .background(Color.White.copy(alpha = 0.1f))
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Text(

@@ -1,4 +1,5 @@
 package com.modxlab.admin
+import dev.chrisbanes.haze.hazeChild
 import dev.chrisbanes.haze.haze
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeState
@@ -135,7 +136,7 @@ class MainActivity : ComponentActivity() {
                                 .haze(
                                     state = hazeState,
                                     style = dev.chrisbanes.haze.HazeStyle(
-                                        tint = Color.Black.copy(alpha = 0.2f),
+                                        tint = Color.White.copy(alpha = 0.15f),
                                         blurRadius = 16.dp
                                     )
                                 )
@@ -216,45 +217,58 @@ fun MainApp(viewModel: AdminViewModel) {
                         .padding(horizontal = 16.dp, vertical = 10.dp)
                 ) {
                     Surface(
-                        shape = RoundedCornerShape(32.dp),
-                        color = Color.White.copy(alpha = 0.85f),
-                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.5f)),
-                        shadowElevation = 8.dp,
-                        modifier = Modifier.fillMaxWidth()
+                        shape = CircleShape,
+                        color = Color.White.copy(alpha = 0.15f),
+                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
+                        shadowElevation = 0.dp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .hazeChild(
+                                state = LocalHazeState.current,
+                                shape = CircleShape
+                            )
                     ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 8.dp, vertical = 8.dp),
-                            horizontalArrangement = Arrangement.SpaceAround,
+                                .padding(horizontal = 4.dp, vertical = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             bottomNavItems.forEach { item ->
                                 val selected = currentRoute == item.route
 
                                 val iconScale by animateFloatAsState(
-                                    targetValue = if (selected) 1.1f else 1.0f,
+                                    targetValue = if (selected) 1.15f else 1.0f,
                                     animationSpec = spring(
-                                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                                        dampingRatio = Spring.DampingRatioHighBouncy,
                                         stiffness = Spring.StiffnessLow
                                     ),
                                     label = "iconScale_${item.title}"
                                 )
 
                                 val pillBgColor by animateColorAsState(
-                                    targetValue = if (selected) Color(0xFFE3F2FD) else Color.Transparent,
-                                    animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                                    targetValue = if (selected) Color.White else Color.Transparent,
+                                    animationSpec = spring(
+                                        dampingRatio = Spring.DampingRatioNoBouncy,
+                                        stiffness = Spring.StiffnessLow
+                                    ),
                                     label = "pillBg_${item.title}"
                                 )
 
                                 val contentColor by animateColorAsState(
-                                    targetValue = if (selected) Color(0xFF1976D2) else Color(0xFF424242),
+                                    targetValue = if (selected) BrandCyan else Color.White.copy(alpha = 0.7f),
+                                    animationSpec = spring(
+                                        dampingRatio = Spring.DampingRatioNoBouncy,
+                                        stiffness = Spring.StiffnessLow
+                                    ),
                                     label = "contentColor_${item.title}"
                                 )
 
                                 Box(
                                     modifier = Modifier
-                                        .clip(RoundedCornerShape(24.dp))
+                                        .weight(1f)
+                                        .clip(CircleShape)
                                         .background(pillBgColor)
                                         .clickable(
                                             interactionSource = remember { MutableInteractionSource() },
@@ -270,7 +284,7 @@ fun MainApp(viewModel: AdminViewModel) {
                                                 }
                                             }
                                         }
-                                        .padding(horizontal = 24.dp, vertical = 8.dp)
+                                        .padding(vertical = 10.dp)
                                         .testTag(item.testTag),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -283,7 +297,7 @@ fun MainApp(viewModel: AdminViewModel) {
                                             contentDescription = item.title,
                                             tint = contentColor,
                                             modifier = Modifier
-                                                .size(26.dp)
+                                                .size(24.dp)
                                                 .scale(iconScale)
                                         )
                                         Spacer(modifier = Modifier.height(2.dp))

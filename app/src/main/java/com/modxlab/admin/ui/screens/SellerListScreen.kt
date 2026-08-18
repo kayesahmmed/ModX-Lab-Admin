@@ -164,8 +164,8 @@ fun SellerListScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(14.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.Black.copy(alpha = 0.6f),
-                    unfocusedContainerColor = Color.Black.copy(alpha = 0.6f),
+                    focusedContainerColor = Color.White.copy(alpha = 0.15f),
+                    unfocusedContainerColor = Color.White.copy(alpha = 0.15f),
                     focusedBorderColor = BrandIndigo,
                     unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
                     focusedTextColor = TextPrimary,
@@ -196,7 +196,7 @@ fun SellerListScreen(
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = BrandIndigo.copy(alpha = 0.25f),
                             selectedLabelColor = Color.White,
-                            containerColor = Color.Black.copy(alpha = 0.5f),
+                            containerColor = Color.White.copy(alpha = 0.1f),
                             labelColor = TextSecondary
                         ),
                         border = FilterChipDefaults.filterChipBorder(
@@ -291,7 +291,7 @@ fun SellerListScreen(
                     Text("Cancel", color = Color.White.copy(alpha = 0.8f))
                 }
             },
-            containerColor = Color.Black.copy(alpha = 0.7f),
+            containerColor = Color.White.copy(alpha = 0.2f),
             shape = RoundedCornerShape(16.dp)
         )
     }
@@ -334,7 +334,7 @@ fun SellerListScreen(
                     Text("Cancel", color = Color.White.copy(alpha = 0.8f))
                 }
             },
-            containerColor = Color.Black.copy(alpha = 0.7f),
+            containerColor = Color.White.copy(alpha = 0.2f),
             shape = RoundedCornerShape(16.dp)
         )
     }
@@ -352,7 +352,7 @@ private fun SellerCardItem(
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
         border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
         modifier = Modifier
             .fillMaxWidth()

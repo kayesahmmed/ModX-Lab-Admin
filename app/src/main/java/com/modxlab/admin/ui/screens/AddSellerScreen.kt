@@ -125,7 +125,7 @@ fun AddSellerScreen(
         // Form Card
         Card(
             shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.5f)),
+            colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
             border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -158,8 +158,8 @@ fun AddSellerScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.Black.copy(alpha = 0.7f),
-                        unfocusedContainerColor = Color.Black.copy(alpha = 0.7f),
+                        focusedContainerColor = Color.White.copy(alpha = 0.2f),
+                        unfocusedContainerColor = Color.White.copy(alpha = 0.2f),
                         focusedBorderColor = BrandIndigo,
                         unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
                         focusedTextColor = TextPrimary,
@@ -200,8 +200,8 @@ fun AddSellerScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.Black.copy(alpha = 0.7f),
-                        unfocusedContainerColor = Color.Black.copy(alpha = 0.7f),
+                        focusedContainerColor = Color.White.copy(alpha = 0.2f),
+                        unfocusedContainerColor = Color.White.copy(alpha = 0.2f),
                         focusedBorderColor = BrandIndigo,
                         unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
                         focusedTextColor = TextPrimary,
