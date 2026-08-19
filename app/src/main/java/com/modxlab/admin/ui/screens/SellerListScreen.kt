@@ -246,7 +246,11 @@ fun SellerListScreen(
                     contentPadding = PaddingValues(top = 4.dp, bottom = 96.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    itemsIndexed(sellers, key = { _, item -> item.key }) { index, sellerItem ->
+                    itemsIndexed(
+                        items = sellers,
+                        key = { _, item -> item.key },
+                        contentType = { _, _ -> "seller_card" }
+                    ) { index, sellerItem ->
                         SellerCardItem(
                             index = index + 1,
                             seller = sellerItem,

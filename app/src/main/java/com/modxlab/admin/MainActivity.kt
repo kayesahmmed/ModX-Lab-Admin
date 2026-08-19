@@ -122,9 +122,7 @@ class MainActivity : ComponentActivity() {
                         painter = painterResource(id = R.drawable.nature_bg),
                         contentDescription = "Background",
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .blur(radius = 22.dp)
+                        modifier = Modifier.fillMaxSize()
                     )
                     MainApp(viewModel = viewModel)
                 }

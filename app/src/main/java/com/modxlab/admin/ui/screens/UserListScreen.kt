@@ -251,7 +251,11 @@ fun UserListScreen(
                     contentPadding = PaddingValues(top = 4.dp, bottom = 96.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    itemsIndexed(users, key = { _, item -> item.key }) { index, userItem ->
+                    itemsIndexed(
+                        items = users,
+                        key = { _, item -> item.key },
+                        contentType = { _, _ -> "user_card" }
+                    ) { index, userItem ->
                         UserCardItem(
                             index = index + 1,
                             user = userItem,

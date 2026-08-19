@@ -312,46 +312,6 @@ fun DashboardScreen(
                 testTag = "btn_nav_sellers"
             )
         }
-
-        // Broadcast Info Card
-        if (maintenance != null) {
-            item {
-                GlassCard(
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.Campaign,
-                            contentDescription = "Announcement",
-                            tint = BrandCyan,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "Current Update (v${maintenance?.version})",
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
-                            )
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = maintenance?.message ?: "",
-                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.85f))
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = maintenance?.link ?: "",
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            color = BrandCyan,
-                            fontWeight = FontWeight.Medium
-                        )
-                    )
-                }
-            }
-        }
     }
 }
 
