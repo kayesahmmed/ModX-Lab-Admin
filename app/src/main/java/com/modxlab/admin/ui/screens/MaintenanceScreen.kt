@@ -68,6 +68,8 @@ import com.modxlab.admin.ui.theme.CyberSurfaceVariant
 import com.modxlab.admin.ui.theme.TextPrimary
 import com.modxlab.admin.ui.theme.TextSecondary
 import com.modxlab.admin.ui.theme.TextTertiary
+import com.modxlab.admin.ui.components.GlassBox
+import com.modxlab.admin.ui.components.GlassCard
 import com.modxlab.admin.ui.viewmodel.AdminViewModel
 
 @Composable
@@ -143,10 +145,8 @@ fun MaintenanceScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         // Broadcast Form Card
-        Card(
-            shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
-            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
+        GlassBox(
+            shape = RoundedCornerShape(22.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
@@ -367,10 +367,8 @@ fun MaintenanceScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Card(
-            shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.2f)),
-            border = androidx.compose.foundation.BorderStroke(1.dp, BrandCrimson.copy(alpha = 0.5f)),
+        GlassBox(
+            shape = RoundedCornerShape(22.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {

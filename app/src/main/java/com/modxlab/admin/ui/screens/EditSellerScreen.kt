@@ -82,6 +82,8 @@ import com.modxlab.admin.ui.theme.StatusInactive
 import com.modxlab.admin.ui.theme.TextPrimary
 import com.modxlab.admin.ui.theme.TextSecondary
 import com.modxlab.admin.ui.theme.TextTertiary
+import com.modxlab.admin.ui.components.GlassBox
+import com.modxlab.admin.ui.components.GlassCard
 import com.modxlab.admin.ui.viewmodel.AdminViewModel
 
 @Composable
@@ -197,10 +199,8 @@ fun EditSellerScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         // Key Banner
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-            color = CyberSurfaceVariant,
-            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
+        GlassBox(
+            shape = RoundedCornerShape(20.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -262,10 +262,8 @@ fun EditSellerScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         // Form Card
-        Card(
-            shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
-            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
+        GlassBox(
+            shape = RoundedCornerShape(22.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
@@ -375,10 +373,8 @@ fun EditSellerScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         // Activation Toggle Card
-        Card(
-            shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
-            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
+        GlassBox(
+            shape = RoundedCornerShape(22.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -438,10 +434,8 @@ fun EditSellerScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         // Hardware & Access Info
-        Card(
-            shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
-            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
+        GlassBox(
+            shape = RoundedCornerShape(22.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {

@@ -73,6 +73,10 @@ import com.modxlab.admin.ui.theme.BrandEmerald
 import com.modxlab.admin.ui.theme.BrandEmeraldLight
 import com.modxlab.admin.ui.theme.CyberBorder
 import com.modxlab.admin.ui.theme.CyberSurface
+import com.modxlab.admin.ui.components.GlassBox
+import com.modxlab.admin.ui.components.GlassCard
+import com.modxlab.admin.ui.components.GlassBackgroundBrush
+import com.modxlab.admin.ui.components.GlassBorderBrush
 import com.modxlab.admin.ui.theme.CyberSurfaceVariant
 import com.modxlab.admin.ui.theme.StatusActive
 import com.modxlab.admin.ui.theme.StatusActiveBg
@@ -81,6 +85,10 @@ import com.modxlab.admin.ui.theme.StatusInactiveBg
 import com.modxlab.admin.ui.theme.TextPrimary
 import com.modxlab.admin.ui.theme.TextSecondary
 import com.modxlab.admin.ui.theme.TextTertiary
+import com.modxlab.admin.ui.components.GlassBox
+import com.modxlab.admin.ui.components.GlassCard
+import com.modxlab.admin.ui.components.GlassBackgroundBrush
+import com.modxlab.admin.ui.components.GlassBorderBrush
 import com.modxlab.admin.ui.viewmodel.AdminViewModel
 
 @Composable
@@ -164,10 +172,10 @@ fun UserListScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(14.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White.copy(alpha = 0.15f),
-                    unfocusedContainerColor = Color.White.copy(alpha = 0.1f),
+                    focusedContainerColor = Color.White.copy(alpha = 0.22f),
+                    unfocusedContainerColor = Color.White.copy(alpha = 0.16f),
                     focusedBorderColor = BrandEmerald,
-                    unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
+                    unfocusedBorderColor = Color.White.copy(alpha = 0.35f),
                     focusedTextColor = Color.White,
                     unfocusedTextColor = Color.White
                 ),
@@ -350,10 +358,8 @@ private fun UserCardItem(
     onToggleStatusClick: () -> Unit,
     onCopyKey: () -> Unit
 ) {
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
-        border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
+    GlassBox(
+        shape = RoundedCornerShape(22.dp),
         modifier = Modifier
             .fillMaxWidth()
             .combinedClickable(

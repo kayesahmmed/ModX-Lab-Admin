@@ -7,9 +7,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -66,6 +68,8 @@ import com.modxlab.admin.ui.theme.CyberSurfaceVariant
 import com.modxlab.admin.ui.theme.TextPrimary
 import com.modxlab.admin.ui.theme.TextSecondary
 import com.modxlab.admin.ui.theme.TextTertiary
+import com.modxlab.admin.ui.components.GlassBox
+import com.modxlab.admin.ui.components.GlassCard
 import com.modxlab.admin.ui.viewmodel.AdminViewModel
 
 @Composable
@@ -132,10 +136,8 @@ fun AddUserScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         // Form Container Card
-        Card(
-            shape = RoundedCornerShape(18.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
-            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
+        GlassBox(
+            shape = RoundedCornerShape(22.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
@@ -309,25 +311,28 @@ fun AddUserScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(IntrinsicSize.Min),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     // Single Device Option
                     val isSingle = deviceAccess == "1"
                     Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = if (isSingle) BrandEmeraldDark.copy(alpha = 0.4f) else CyberSurfaceVariant,
+                        shape = RoundedCornerShape(14.dp),
+                        color = if (isSingle) Color.White.copy(alpha = 0.22f) else Color.White.copy(alpha = 0.08f),
                         border = androidx.compose.foundation.BorderStroke(
-                            1.dp,
-                            if (isSingle) BrandEmerald else CyberBorder
+                            1.5.dp,
+                            if (isSingle) BrandEmerald else Color.White.copy(alpha = 0.25f)
                         ),
                         modifier = Modifier
                             .weight(1f)
+                            .fillMaxHeight()
                             .clickable { deviceAccess = "1" }
                             .testTag("radio_single_device")
                     ) {
                         Row(
-                            modifier = Modifier.padding(12.dp),
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             RadioButton(
@@ -335,10 +340,12 @@ fun AddUserScreen(
                                 onClick = { deviceAccess = "1" },
                                 colors = RadioButtonDefaults.colors(selectedColor = BrandEmerald)
                             )
-                            Spacer(modifier = Modifier.width(4.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
                             Column {
                                 Text(
                                     text = "1 Device",
+                                    maxLines = 1,
+                                    softWrap = false,
                                     style = MaterialTheme.typography.titleMedium.copy(
                                         color = Color.White,
                                         fontWeight = FontWeight.Bold,
@@ -347,7 +354,12 @@ fun AddUserScreen(
                                 )
                                 Text(
                                     text = "HWID locked",
-                                    style = MaterialTheme.typography.labelSmall.copy(color = Color.White.copy(alpha = 0.8f))
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    style = MaterialTheme.typography.labelSmall.copy(
+                                        color = Color.White.copy(alpha = 0.85f),
+                                        fontSize = 11.sp
+                                    )
                                 )
                             }
                         }
@@ -356,19 +368,20 @@ fun AddUserScreen(
                     // Unlimited Device Option
                     val isUnlimited = deviceAccess == "∞"
                     Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = if (isUnlimited) BrandEmeraldDark.copy(alpha = 0.4f) else CyberSurfaceVariant,
+                        shape = RoundedCornerShape(14.dp),
+                        color = if (isUnlimited) Color.White.copy(alpha = 0.22f) else Color.White.copy(alpha = 0.08f),
                         border = androidx.compose.foundation.BorderStroke(
-                            1.dp,
-                            if (isUnlimited) BrandEmerald else CyberBorder
+                            1.5.dp,
+                            if (isUnlimited) BrandEmerald else Color.White.copy(alpha = 0.25f)
                         ),
                         modifier = Modifier
                             .weight(1f)
+                            .fillMaxHeight()
                             .clickable { deviceAccess = "∞" }
                             .testTag("radio_unlimited_device")
                     ) {
                         Row(
-                            modifier = Modifier.padding(12.dp),
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             RadioButton(
@@ -376,10 +389,12 @@ fun AddUserScreen(
                                 onClick = { deviceAccess = "∞" },
                                 colors = RadioButtonDefaults.colors(selectedColor = BrandEmerald)
                             )
-                            Spacer(modifier = Modifier.width(4.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
                             Column {
                                 Text(
-                                    text = "Unlimited (∞)",
+                                    text = "Unlimited",
+                                    maxLines = 1,
+                                    softWrap = false,
                                     style = MaterialTheme.typography.titleMedium.copy(
                                         color = Color.White,
                                         fontWeight = FontWeight.Bold,
@@ -388,7 +403,12 @@ fun AddUserScreen(
                                 )
                                 Text(
                                     text = "Multi-device",
-                                    style = MaterialTheme.typography.labelSmall.copy(color = Color.White.copy(alpha = 0.8f))
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    style = MaterialTheme.typography.labelSmall.copy(
+                                        color = Color.White.copy(alpha = 0.85f),
+                                        fontSize = 11.sp
+                                    )
                                 )
                             }
                         }

@@ -80,6 +80,10 @@ import com.modxlab.admin.ui.theme.StatusInactiveBg
 import com.modxlab.admin.ui.theme.TextPrimary
 import com.modxlab.admin.ui.theme.TextSecondary
 import com.modxlab.admin.ui.theme.TextTertiary
+import com.modxlab.admin.ui.components.GlassBox
+import com.modxlab.admin.ui.components.GlassCard
+import com.modxlab.admin.ui.components.GlassBackgroundBrush
+import com.modxlab.admin.ui.components.GlassBorderBrush
 import com.modxlab.admin.ui.viewmodel.AdminViewModel
 
 @Composable
@@ -349,10 +353,8 @@ private fun SellerCardItem(
     onToggleStatusClick: () -> Unit,
     onCopyKey: () -> Unit
 ) {
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f)),
-        border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
+    GlassBox(
+        shape = RoundedCornerShape(22.dp),
         modifier = Modifier
             .fillMaxWidth()
             .combinedClickable(

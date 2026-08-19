@@ -199,9 +199,9 @@ fun MainApp(viewModel: AdminViewModel) {
                 ) {
                     Surface(
                         shape = CircleShape,
-                        color = Color(0xFF0F172A).copy(alpha = 0.55f),
-                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.3f)),
-                        shadowElevation = 4.dp,
+                        color = Color.White.copy(alpha = 0.22f),
+                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.40f)),
+                        shadowElevation = 8.dp,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Row(
