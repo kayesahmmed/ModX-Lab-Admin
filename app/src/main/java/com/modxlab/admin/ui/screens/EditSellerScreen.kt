@@ -200,7 +200,7 @@ fun EditSellerScreen(
 
         // Key Banner
         GlassBox(
-            shape = RoundedCornerShape(20.dp),
+            shape = RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -263,7 +263,7 @@ fun EditSellerScreen(
 
         // Form Card
         GlassBox(
-            shape = RoundedCornerShape(22.dp),
+            shape = RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
@@ -374,7 +374,7 @@ fun EditSellerScreen(
 
         // Activation Toggle Card
         GlassBox(
-            shape = RoundedCornerShape(22.dp),
+            shape = RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -435,7 +435,7 @@ fun EditSellerScreen(
 
         // Hardware & Access Info
         GlassBox(
-            shape = RoundedCornerShape(22.dp),
+            shape = RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {

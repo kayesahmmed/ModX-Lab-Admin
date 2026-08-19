@@ -359,7 +359,7 @@ private fun UserCardItem(
     onCopyKey: () -> Unit
 ) {
     GlassBox(
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(10.dp),
         modifier = Modifier
             .fillMaxWidth()
             .combinedClickable(

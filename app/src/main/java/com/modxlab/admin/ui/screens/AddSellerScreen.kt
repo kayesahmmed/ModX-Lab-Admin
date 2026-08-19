@@ -128,7 +128,7 @@ fun AddSellerScreen(
 
         // Form Card
         GlassBox(
-            shape = RoundedCornerShape(22.dp),
+            shape = RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {

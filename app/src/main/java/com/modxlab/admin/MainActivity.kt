@@ -55,6 +55,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
@@ -121,7 +122,9 @@ class MainActivity : ComponentActivity() {
                         painter = painterResource(id = R.drawable.nature_bg),
                         contentDescription = "Background",
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .blur(radius = 22.dp)
                     )
                     MainApp(viewModel = viewModel)
                 }
@@ -200,7 +203,7 @@ fun MainApp(viewModel: AdminViewModel) {
                     Surface(
                         shape = CircleShape,
                         color = Color.White.copy(alpha = 0.22f),
-                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.40f)),
+                        border = null,
                         shadowElevation = 8.dp,
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -265,7 +268,6 @@ fun MainApp(viewModel: AdminViewModel) {
                                         .padding(horizontal = 4.dp, vertical = 2.dp)
                                         .clip(CircleShape)
                                         .background(pillBgColor)
-                                        .border(BorderStroke(1.dp, pillBorderColor), CircleShape)
                                         .clickable(
                                             interactionSource = remember { MutableInteractionSource() },
                                             indication = null

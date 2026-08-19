@@ -121,9 +121,8 @@ fun DashboardScreen(
                     }
                     Box(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(BrandEmerald.copy(alpha = 0.15f))
-                            .border(1.dp, BrandEmerald.copy(alpha = 0.4f), RoundedCornerShape(12.dp))
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(BrandEmerald.copy(alpha = 0.20f))
                             .padding(horizontal = 10.dp, vertical = 6.dp)
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -150,7 +149,7 @@ fun DashboardScreen(
         // Security Hardening Info Banner
         item {
             GlassBox(
-                shape = RoundedCornerShape(22.dp),
+                shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
@@ -160,7 +159,7 @@ fun DashboardScreen(
                     Box(
                         modifier = Modifier
                             .size(44.dp)
-                            .clip(RoundedCornerShape(14.dp))
+                            .clip(RoundedCornerShape(8.dp))
                             .background(Color.White.copy(alpha = 0.20f)),
                         contentAlignment = Alignment.Center
                     ) {
@@ -318,7 +317,7 @@ fun DashboardScreen(
         if (maintenance != null) {
             item {
                 GlassCard(
-                    shape = RoundedCornerShape(22.dp),
+                    shape = RoundedCornerShape(10.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -367,7 +366,7 @@ private fun MetricCard(
     onClick: () -> Unit = {}
 ) {
     GlassBox(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(10.dp),
         modifier = modifier.clickable(onClick = onClick)
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
@@ -432,7 +431,7 @@ private fun GradientActionCard(
     testTag: String
 ) {
     GlassCard(
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(10.dp),
         onClick = onCardClick,
         modifier = Modifier
             .fillMaxWidth()

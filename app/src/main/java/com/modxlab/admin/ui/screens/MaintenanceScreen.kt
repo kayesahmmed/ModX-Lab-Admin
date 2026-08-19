@@ -146,7 +146,7 @@ fun MaintenanceScreen(
 
         // Broadcast Form Card
         GlassBox(
-            shape = RoundedCornerShape(22.dp),
+            shape = RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
@@ -368,7 +368,7 @@ fun MaintenanceScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         GlassBox(
-            shape = RoundedCornerShape(22.dp),
+            shape = RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
