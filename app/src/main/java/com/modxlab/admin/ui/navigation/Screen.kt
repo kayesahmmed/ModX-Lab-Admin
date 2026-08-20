@@ -1,6 +1,7 @@
 package com.modxlab.admin.ui.navigation
 
 sealed class Screen(val route: String) {
+    data object Login : Screen("login")
     data object Dashboard : Screen("dashboard")
     data object Users : Screen("users")
     data object AddUser : Screen("add_user")

@@ -79,6 +79,8 @@ import com.modxlab.admin.data.repository.AdminRepository
 import com.modxlab.admin.ui.navigation.Screen
 import com.modxlab.admin.ui.screens.AddSellerScreen
 import com.modxlab.admin.ui.screens.AddUserScreen
+import com.google.firebase.auth.FirebaseAuth
+import com.modxlab.admin.ui.screens.LoginScreen
 import com.modxlab.admin.ui.screens.DashboardScreen
 import com.modxlab.admin.ui.screens.EditSellerScreen
 import com.modxlab.admin.ui.screens.EditUserScreen
@@ -318,11 +320,20 @@ fun MainApp(viewModel: AdminViewModel) {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Dashboard.route,
+            startDestination = if (FirebaseAuth.getInstance().currentUser != null) Screen.Dashboard.route else Screen.Login.route,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
+            composable(Screen.Login.route) {
+                LoginScreen(
+                    onLoginSuccess = {
+                        navController.navigate(Screen.Dashboard.route) {
+                            popUpTo(Screen.Login.route) { inclusive = true }
+                        }
+                    }
+                )
+            }
             composable(Screen.Dashboard.route) {
                 DashboardScreen(
                     viewModel = viewModel,

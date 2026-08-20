@@ -10,6 +10,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import com.modxlab.admin.ui.components.GlassBox
+import com.modxlab.admin.ui.components.GlassCard
+import com.modxlab.admin.ui.components.GlassCheckbox
+import com.modxlab.admin.ui.components.StatusBadge
+import com.modxlab.admin.ui.components.premiumClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -454,28 +459,12 @@ private fun UserCardItem(
                     }
                 }
 
-                // Status Badge (Clickable)
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(if (user.isActive) StatusActiveBg else StatusInactiveBg)
-                        .border(
-                            1.dp,
-                            if (user.isActive) StatusActive else StatusInactive,
-                            RoundedCornerShape(20.dp)
-                        )
-                        .clickable(onClick = onToggleStatusClick)
-                        .padding(horizontal = 10.dp, vertical = 4.dp)
-                ) {
-                    Text(
-                        text = if (user.isActive) "ACTIVE" else "DEACTIVATED",
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 10.sp,
-                            color = if (user.isActive) StatusActive else StatusInactive
-                        )
-                    )
-                }
+                // Status Badge (Clickable with premium glow)
+                StatusBadge(
+                    text = if (user.isActive) "ACTIVE" else "INACTIVE",
+                    isActive = user.isActive,
+                    modifier = Modifier.clickable(onClick = onToggleStatusClick)
+                )
             }
 
             Spacer(modifier = Modifier.height(10.dp))

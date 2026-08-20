@@ -1,5 +1,13 @@
 package com.modxlab.admin.ui.screens
 
+import com.modxlab.admin.ui.components.GlassBox
+import com.modxlab.admin.ui.components.GlassCard
+import com.modxlab.admin.ui.components.GlassCustomValidityDialog
+import com.modxlab.admin.ui.components.GlassDropdownMenu
+import com.modxlab.admin.ui.components.GlassPrimaryButton
+import com.modxlab.admin.ui.components.GlassTextField
+import com.modxlab.admin.ui.components.premiumClickable
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,7 +27,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -35,8 +45,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -80,9 +88,10 @@ fun AddUserScreen(
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var validityDays by remember { mutableStateOf(30) }
+    var validityHours by remember { mutableStateOf(720.0) } // Default 30 Days = 720 Hours
     var validityLabel by remember { mutableStateOf("30 Days") }
     var validityDropdownExpanded by remember { mutableStateOf(false) }
+    var showCustomValidityDialog by remember { mutableStateOf(false) }
     var deviceAccess by remember { mutableStateOf("1") } // "1" or "∞"
     var isGenerating by remember { mutableStateOf(false) }
 
@@ -223,129 +232,158 @@ fun AddUserScreen(
                         .testTag("input_password")
                 )
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(14.dp))
 
-                // Validity Period Dropdown Picker
+                // Clean Validity Period Dropdown Picker
                 Text(
-                    text = "Validity Period",
-                    style = MaterialTheme.typography.labelMedium.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White.copy(alpha = 0.8f)
+                    text = "VALIDITY PERIOD",
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color.White.copy(alpha = 0.85f),
+                        letterSpacing = 0.8.sp
                     )
                 )
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(8.dp))
+
                 Box(modifier = Modifier.fillMaxWidth()) {
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = CyberSurfaceVariant,
-                        border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.2f)),
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { validityDropdownExpanded = true }
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(Color.Black.copy(alpha = 0.50f))
+                            .border(
+                                width = 1.dp,
+                                brush = Brush.verticalGradient(
+                                    listOf(BrandEmerald.copy(alpha = 0.60f), Color.White.copy(alpha = 0.15f))
+                                ),
+                                shape = RoundedCornerShape(14.dp)
+                            )
+                            .premiumClickable { validityDropdownExpanded = true }
                             .testTag("dropdown_validity")
+                            .padding(horizontal = 16.dp, vertical = 14.dp)
                     ) {
                         Row(
-                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 14.dp),
+                            modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    imageVector = Icons.Default.AccessTime,
-                                    contentDescription = "Validity",
-                                    tint = BrandEmeraldLight,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Spacer(modifier = Modifier.width(10.dp))
+                                Box(
+                                    modifier = Modifier
+                                        .size(34.dp)
+                                        .clip(CircleShape)
+                                        .background(BrandEmerald.copy(alpha = 0.20f)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.AccessTime,
+                                        contentDescription = "Validity",
+                                        tint = BrandEmerald,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(12.dp))
                                 Text(
                                     text = validityLabel,
-                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                    style = MaterialTheme.typography.titleMedium.copy(
                                         color = Color.White,
-                                        fontWeight = FontWeight.Medium
+                                        fontWeight = FontWeight.Bold
                                     )
                                 )
                             }
                             Icon(
                                 imageVector = Icons.Default.ArrowDropDown,
                                 contentDescription = "Select",
-                                tint = TextSecondary
+                                tint = BrandEmerald,
+                                modifier = Modifier.size(26.dp)
                             )
                         }
                     }
 
-                    DropdownMenu(
+                    GlassDropdownMenu(
                         expanded = validityDropdownExpanded,
                         onDismissRequest = { validityDropdownExpanded = false },
-                        modifier = Modifier.background(CyberSurfaceVariant)
-                    ) {
-                        listOf(
-                            1 to "24 Hours (1 Day)",
-                            7 to "7 Days",
-                            15 to "15 Days",
-                            30 to "30 Days",
-                            60 to "60 Days",
-                            90 to "90 Days"
-                        ).forEach { (days, label) ->
-                            DropdownMenuItem(
-                                text = { Text(label, color = Color.White) },
-                                onClick = {
-                                    validityDays = days
-                                    validityLabel = label
-                                    validityDropdownExpanded = false
-                                }
-                            )
+                        items = listOf(
+                            24.0 to "24 Hours (1 Day)",
+                            168.0 to "7 Days",
+                            360.0 to "15 Days",
+                            720.0 to "30 Days",
+                            1440.0 to "60 Days",
+                            2160.0 to "90 Days",
+                            -1.0 to "Custom"
+                        ),
+                        selectedItem = validityHours,
+                        onItemSelected = { hours, label ->
+                            if (hours == -1.0) {
+                                showCustomValidityDialog = true
+                            } else {
+                                validityHours = hours
+                                validityLabel = label
+                            }
                         }
-                    }
+                    )
+                }
+
+                if (showCustomValidityDialog) {
+                    GlassCustomValidityDialog(
+                        onDismissRequest = { showCustomValidityDialog = false },
+                        onConfirm = { customHours, label ->
+                            validityHours = customHours
+                            validityLabel = label
+                            showCustomValidityDialog = false
+                        }
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(18.dp))
 
                 // Allowed Devices Selector
                 Text(
-                    text = "Device Access Restriction",
-                    style = MaterialTheme.typography.labelMedium.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White.copy(alpha = 0.8f)
+                    text = "DEVICE ACCESS RESTRICTION",
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color.White.copy(alpha = 0.85f),
+                        letterSpacing = 0.8.sp
                     )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(IntrinsicSize.Min),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     // Single Device Option
                     val isSingle = deviceAccess == "1"
-                    Surface(
-                        shape = RoundedCornerShape(14.dp),
-                        color = if (isSingle) Color.White.copy(alpha = 0.22f) else Color.White.copy(alpha = 0.08f),
-                        border = androidx.compose.foundation.BorderStroke(
-                            1.5.dp,
-                            if (isSingle) BrandEmerald else Color.White.copy(alpha = 0.25f)
-                        ),
+                    Box(
                         modifier = Modifier
                             .weight(1f)
-                            .fillMaxHeight()
-                            .clickable { deviceAccess = "1" }
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(
+                                if (isSingle) BrandEmerald.copy(alpha = 0.25f)
+                                else Color.Black.copy(alpha = 0.50f)
+                            )
+                            .border(
+                                width = if (isSingle) 1.5.dp else 0.8.dp,
+                                color = if (isSingle) BrandEmerald else Color.White.copy(alpha = 0.20f),
+                                shape = RoundedCornerShape(14.dp)
+                            )
+                            .premiumClickable { deviceAccess = "1" }
+                            .padding(12.dp)
                             .testTag("radio_single_device")
                     ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             RadioButton(
                                 selected = isSingle,
                                 onClick = { deviceAccess = "1" },
-                                colors = RadioButtonDefaults.colors(selectedColor = BrandEmerald)
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = BrandEmerald,
+                                    unselectedColor = Color.White.copy(alpha = 0.5f)
+                                )
                             )
-                            Spacer(modifier = Modifier.width(6.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
                             Column {
                                 Text(
                                     text = "1 Device",
-                                    maxLines = 1,
-                                    softWrap = false,
                                     style = MaterialTheme.typography.titleMedium.copy(
                                         color = Color.White,
                                         fontWeight = FontWeight.Bold,
@@ -354,10 +392,8 @@ fun AddUserScreen(
                                 )
                                 Text(
                                     text = "HWID locked",
-                                    maxLines = 1,
-                                    softWrap = false,
                                     style = MaterialTheme.typography.labelSmall.copy(
-                                        color = Color.White.copy(alpha = 0.85f),
+                                        color = Color.White.copy(alpha = 0.70f),
                                         fontSize = 11.sp
                                     )
                                 )
@@ -367,34 +403,36 @@ fun AddUserScreen(
 
                     // Unlimited Device Option
                     val isUnlimited = deviceAccess == "∞"
-                    Surface(
-                        shape = RoundedCornerShape(14.dp),
-                        color = if (isUnlimited) Color.White.copy(alpha = 0.22f) else Color.White.copy(alpha = 0.08f),
-                        border = androidx.compose.foundation.BorderStroke(
-                            1.5.dp,
-                            if (isUnlimited) BrandEmerald else Color.White.copy(alpha = 0.25f)
-                        ),
+                    Box(
                         modifier = Modifier
                             .weight(1f)
-                            .fillMaxHeight()
-                            .clickable { deviceAccess = "∞" }
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(
+                                if (isUnlimited) BrandEmerald.copy(alpha = 0.25f)
+                                else Color.Black.copy(alpha = 0.50f)
+                            )
+                            .border(
+                                width = if (isUnlimited) 1.5.dp else 0.8.dp,
+                                color = if (isUnlimited) BrandEmerald else Color.White.copy(alpha = 0.20f),
+                                shape = RoundedCornerShape(14.dp)
+                            )
+                            .premiumClickable { deviceAccess = "∞" }
+                            .padding(12.dp)
                             .testTag("radio_unlimited_device")
                     ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             RadioButton(
                                 selected = isUnlimited,
                                 onClick = { deviceAccess = "∞" },
-                                colors = RadioButtonDefaults.colors(selectedColor = BrandEmerald)
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = BrandEmerald,
+                                    unselectedColor = Color.White.copy(alpha = 0.5f)
+                                )
                             )
-                            Spacer(modifier = Modifier.width(6.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
                             Column {
                                 Text(
                                     text = "Unlimited",
-                                    maxLines = 1,
-                                    softWrap = false,
                                     style = MaterialTheme.typography.titleMedium.copy(
                                         color = Color.White,
                                         fontWeight = FontWeight.Bold,
@@ -403,10 +441,8 @@ fun AddUserScreen(
                                 )
                                 Text(
                                     text = "Multi-device",
-                                    maxLines = 1,
-                                    softWrap = false,
                                     style = MaterialTheme.typography.labelSmall.copy(
-                                        color = Color.White.copy(alpha = 0.85f),
+                                        color = Color.White.copy(alpha = 0.70f),
                                         fontSize = 11.sp
                                     )
                                 )
@@ -420,7 +456,11 @@ fun AddUserScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         // Submit Button
-        Button(
+        GlassPrimaryButton(
+            text = if (isGenerating) "Key Generating..." else "GENERATE & ACTIVATE KEY",
+            icon = Icons.Default.Key,
+            isLoading = isGenerating,
+            testTag = "btn_generate_user_key",
             onClick = {
                 var hasError = false
                 if (username.isBlank()) {
@@ -437,49 +477,15 @@ fun AddUserScreen(
                         username = username,
                         pass = password,
                         access = deviceAccess,
-                        validityDays = validityDays,
+                        validityHours = validityHours,
                         onSuccess = {
                             isGenerating = false
                             onNavigateBack()
                         }
                     )
                 }
-            },
-            enabled = !isGenerating,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = BrandEmerald,
-                contentColor = Color.Black
-            ),
-            shape = RoundedCornerShape(14.dp),
-            contentPadding = PaddingValues(vertical = 16.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .testTag("btn_generate_user_key")
-        ) {
-            if (isGenerating) {
-                CircularProgressIndicator(
-                    color = Color.Black,
-                    modifier = Modifier.size(20.dp),
-                    strokeWidth = 2.dp
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = "Key Generating...",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                )
-            } else {
-                Icon(
-                    imageVector = Icons.Default.Key,
-                    contentDescription = "Generate",
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "GENERATE & ACTIVATE KEY",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                )
             }
-        }
+        )
 
         Spacer(modifier = Modifier.height(96.dp))
     }

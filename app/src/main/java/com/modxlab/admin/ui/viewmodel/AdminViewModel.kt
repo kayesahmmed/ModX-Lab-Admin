@@ -34,7 +34,7 @@ class AdminViewModel(
     )
 
     // Maintenance
-    val maintenance: StateFlow<MaintenanceEntity?> = repository.maintenanceFlow.stateIn(
+    val maintenance: StateFlow<MaintenanceEntity?> = repository.maintenance.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = null
@@ -120,12 +120,12 @@ class AdminViewModel(
         username: String,
         pass: String,
         access: String,
-        validityDays: Int,
+        validityHours: Double,
         onSuccess: () -> Unit
     ) {
         viewModelScope.launch {
             try {
-                val created = repository.addUser(username, pass, access, validityDays)
+                val created = repository.addUser(username, pass, access, validityHours)
                 _snackbarMessage.emit("License Key Generated: ${created.key}")
                 onSuccess()
             } catch (e: Exception) {

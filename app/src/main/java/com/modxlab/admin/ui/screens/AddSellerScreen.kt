@@ -1,5 +1,7 @@
 package com.modxlab.admin.ui.screens
 
+import com.modxlab.admin.ui.components.GlassPrimaryButton
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -382,7 +384,11 @@ fun AddSellerScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         // Submit Button
-        Button(
+        GlassPrimaryButton(
+            text = if (isGenerating) "Creating Seller..." else "ONBOARD RESELLER ACCOUNT",
+            icon = Icons.Default.Storefront,
+            isLoading = isGenerating,
+            testTag = "btn_register_seller",
             onClick = {
                 var hasError = false
                 if (username.isBlank()) {
@@ -406,42 +412,8 @@ fun AddSellerScreen(
                         }
                     )
                 }
-            },
-            enabled = !isGenerating,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = BrandIndigo,
-                contentColor = Color.White
-            ),
-            shape = RoundedCornerShape(14.dp),
-            contentPadding = PaddingValues(vertical = 16.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .testTag("btn_register_seller")
-        ) {
-            if (isGenerating) {
-                CircularProgressIndicator(
-                    color = Color.White,
-                    modifier = Modifier.size(20.dp),
-                    strokeWidth = 2.dp
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = "Creating Seller...",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                )
-            } else {
-                Icon(
-                    imageVector = Icons.Default.Storefront,
-                    contentDescription = "Onboard",
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "ONBOARD RESELLER ACCOUNT",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-                )
             }
-        }
+        )
 
         Spacer(modifier = Modifier.height(96.dp))
     }

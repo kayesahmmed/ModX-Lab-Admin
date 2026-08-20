@@ -1,5 +1,8 @@
 package com.modxlab.admin
 
+import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import android.app.Application
 import android.content.Context
 import android.content.Intent
@@ -17,6 +20,11 @@ class ModXAdminApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+                FirebaseApp.initializeApp(this)
+        val firebaseAppCheck = FirebaseAppCheck.getInstance()
+        firebaseAppCheck.installAppCheckProviderFactory(
+            PlayIntegrityAppCheckProviderFactory.getInstance()
+        )
         CrashHandler.init(this)
     }
 }

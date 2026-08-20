@@ -533,28 +533,45 @@ private fun InfoRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
-            .background(CyberSurfaceVariant)
-            .padding(10.dp),
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.White.copy(alpha = 0.10f))
+            .border(
+                width = 0.8.dp,
+                color = Color.White.copy(alpha = 0.15f),
+                shape = RoundedCornerShape(12.dp)
+            )
+            .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = label,
-            tint = TextSecondary,
-            modifier = Modifier.size(18.dp)
-        )
-        Spacer(modifier = Modifier.width(10.dp))
+        Box(
+            modifier = Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .background(BrandCyan.copy(alpha = 0.18f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = label,
+                tint = BrandCyan,
+                modifier = Modifier.size(16.dp)
+            )
+        }
+        Spacer(modifier = Modifier.width(12.dp))
         Column {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelSmall.copy(color = Color.White.copy(alpha = 0.6f), fontSize = 11.sp)
+                style = MaterialTheme.typography.labelSmall.copy(
+                    color = Color.White.copy(alpha = 0.6f),
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
             )
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodyMedium.copy(
                     color = Color.White,
-                    fontWeight = FontWeight.Medium,
+                    fontWeight = FontWeight.Bold,
                     fontSize = 13.sp
                 )
             )
