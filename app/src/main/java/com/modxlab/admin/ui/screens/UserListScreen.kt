@@ -110,6 +110,7 @@ fun UserListScreen(
 
     var userToDelete by remember { mutableStateOf<UserEntity?>(null) }
     var userToToggle by remember { mutableStateOf<UserEntity?>(null) }
+    var userToResetHwid by remember { mutableStateOf<UserEntity?>(null) }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -121,7 +122,6 @@ fun UserListScreen(
                 contentColor = Color.Black,
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
-                    .padding(bottom = 72.dp)
                     .testTag("fab_add_user")
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Add User")
@@ -144,14 +144,14 @@ fun UserListScreen(
             ) {
                 Column {
                     Text(
-                        text = "Set Pass",
+                        text = if (statusFilter == "LOGGED_IN") "Logged In Users" else "Client Keys",
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
                     )
                     Text(
-                        text = "${users.size} pass records active",
+                        text = "${users.size} record(s) found",
                         style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                     )
                 }
@@ -197,9 +197,10 @@ fun UserListScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 listOf(
-                    "ALL" to "All Passes",
+                    "ALL" to "All Keys",
+                    "LOGGED_IN" to "Logged In Users",
                     "ACTIVE" to "Active Only",
-                    "INACTIVE" to "Deactivated"
+                    "INACTIVE" to "Blocked / Inactive"
                 ).forEach { (filterKey, label) ->
                     val isSelected = statusFilter == filterKey
                     FilterChip(
@@ -241,11 +242,11 @@ fun UserListScreen(
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
-                            text = if (searchQuery.isNotEmpty()) "No matching pass records found" else "No passkeys created yet",
+                            text = if (searchQuery.isNotEmpty()) "No matching records found" else "No users created yet",
                             style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
                         )
                         Text(
-                            text = "Tap the + button to create a new passkey",
+                            text = "Tap the + button to create a new key",
                             style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.7f))
                         )
                     }
@@ -267,6 +268,7 @@ fun UserListScreen(
                             onEditClick = { onNavigateToEditUser(userItem.key) },
                             onDeleteClick = { userToDelete = userItem },
                             onToggleStatusClick = { userToToggle = userItem },
+                            onResetHwidClick = { userToResetHwid = userItem },
                             onCopyKey = {
                                 val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                                 val clip = ClipData.newPlainText("ModX License Key", userItem.key)
@@ -288,7 +290,7 @@ fun UserListScreen(
             title = { Text("Delete License User", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)) },
             text = {
                 Text(
-                    "Are you sure you want to delete user \"${user.user}\" (${user.key})? This action cannot be undone.",
+                    "Are you sure you want to delete user \"${user.user}\" (${user.key})? This will remove their key and login access permanently.",
                     style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                 )
             },
@@ -321,13 +323,13 @@ fun UserListScreen(
             onDismissRequest = { userToToggle = null },
             title = {
                 Text(
-                    if (willActivate) "Activate User" else "Deactivate User",
+                    if (willActivate) "Unblock User / Key" else "Block User / Key",
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
                 )
             },
             text = {
                 Text(
-                    "Are you sure you want to ${if (willActivate) "activate" else "deactivate"} license for \"${user.user}\"?",
+                    "Are you sure you want to ${if (willActivate) "unblock / activate" else "block / deactivate"} key access for \"${user.user}\"?",
                     style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                 )
             },
@@ -340,7 +342,7 @@ fun UserListScreen(
                     modifier = Modifier.testTag("dialog_btn_confirm_toggle")
                 ) {
                     Text(
-                        if (willActivate) "Activate" else "Deactivate",
+                        if (willActivate) "Activate" else "Block User",
                         color = if (willActivate) BrandEmerald else BrandCrimson,
                         fontWeight = FontWeight.Bold
                     )
@@ -348,6 +350,38 @@ fun UserListScreen(
             },
             dismissButton = {
                 TextButton(onClick = { userToToggle = null }) {
+                    Text("Cancel", color = Color.White.copy(alpha = 0.8f))
+                }
+            },
+            containerColor = Color.White.copy(alpha = 0.2f),
+            shape = RoundedCornerShape(16.dp)
+        )
+    }
+
+    // Reset HWID Confirmation Dialog
+    if (userToResetHwid != null) {
+        val user = userToResetHwid!!
+        AlertDialog(
+            onDismissRequest = { userToResetHwid = null },
+            title = { Text("Reset Device Binding", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)) },
+            text = {
+                Text(
+                    "Reset bound device for \"${user.user}\"? This allows the user to log in on a different device.",
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.resetUserHwid(user.key)
+                        userToResetHwid = null
+                    }
+                ) {
+                    Text("Reset Device", color = BrandCyan, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { userToResetHwid = null }) {
                     Text("Cancel", color = Color.White.copy(alpha = 0.8f))
                 }
             },
@@ -365,8 +399,11 @@ private fun UserCardItem(
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onToggleStatusClick: () -> Unit,
+    onResetHwidClick: () -> Unit,
     onCopyKey: () -> Unit
 ) {
+    val isLoggedIn = user.device != "null" && user.device.isNotBlank()
+
     GlassBox(
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier
@@ -406,13 +443,13 @@ private fun UserCardItem(
                     modifier = Modifier
                         .size(38.dp)
                         .clip(RoundedCornerShape(10.dp))
-                        .background(BrandEmerald.copy(alpha = 0.15f)),
+                        .background(if (isLoggedIn) BrandCyan.copy(alpha = 0.2f) else BrandEmerald.copy(alpha = 0.15f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Person,
+                        imageVector = if (isLoggedIn) Icons.Default.Person else Icons.Default.Person,
                         contentDescription = "User",
-                        tint = BrandEmeraldLight,
+                        tint = if (isLoggedIn) BrandCyan else BrandEmeraldLight,
                         modifier = Modifier.size(22.dp)
                     )
                 }
@@ -459,15 +496,62 @@ private fun UserCardItem(
                     }
                 }
 
-                // Status Badge (Clickable with premium glow)
+                // Status Badge (Clickable with premium glow to block/unblock)
                 StatusBadge(
-                    text = if (user.isActive) "ACTIVE" else "INACTIVE",
+                    text = if (user.isActive) "ACTIVE" else "BLOCKED",
                     isActive = user.isActive,
                     modifier = Modifier.clickable(onClick = onToggleStatusClick)
                 )
             }
 
             Spacer(modifier = Modifier.height(10.dp))
+
+            // Logged in device info banner
+            if (isLoggedIn) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(BrandCyan.copy(alpha = 0.12f))
+                        .padding(horizontal = 10.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
+                        Icon(
+                            imageVector = Icons.Default.Devices,
+                            contentDescription = "Device",
+                            tint = BrandCyan,
+                            modifier = Modifier.size(14.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "Logged In HWID: ${user.device}",
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                color = Color.White,
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            maxLines = 1
+                        )
+                    }
+
+                    Text(
+                        text = "Reset HWID",
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            color = BrandCyan,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 11.sp
+                        ),
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(6.dp))
+                            .clickable(onClick = onResetHwidClick)
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+            }
 
             // Metadata Chips
             Row(
@@ -515,7 +599,7 @@ private fun UserCardItem(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = if (user.isUnlimitedDevice) "Unlimited (∞)" else "1 Device",
+                        text = if (user.isUnlimitedDevice) "Unlimited (∞)" else "${user.access} Device(s)",
                         style = MaterialTheme.typography.labelSmall.copy(
                             color = Color.White.copy(alpha = 0.8f),
                             fontSize = 11.sp
@@ -525,15 +609,15 @@ private fun UserCardItem(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                // Action Icons
+                // Action Icons: Edit & Delete
                 IconButton(
                     onClick = onEditClick,
                     modifier = Modifier.size(32.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Edit,
-                        contentDescription = "Edit User",
-                        tint = Color.White.copy(alpha = 0.8f),
+                        contentDescription = "Edit Key",
+                        tint = Color.White.copy(alpha = 0.85f),
                         modifier = Modifier.size(16.dp)
                     )
                 }
@@ -545,7 +629,7 @@ private fun UserCardItem(
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = "Delete User",
-                        tint = BrandCrimson.copy(alpha = 0.8f),
+                        tint = BrandCrimson.copy(alpha = 0.85f),
                         modifier = Modifier.size(16.dp)
                     )
                 }

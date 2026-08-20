@@ -6,8 +6,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.functions.ktx.functions
-import com.google.firebase.ktx.Firebase
 import com.modxlab.admin.data.local.MaintenanceDao
 import com.modxlab.admin.data.local.SellerDao
 import com.modxlab.admin.data.local.UserDao
@@ -41,57 +39,87 @@ class AdminRepository(
             FirebaseDatabase.getInstance()
         }
     }
-    private val functions = Firebase.functions("asia-southeast1")
-    
+
     private val userRef by lazy { firebaseDatabase.getReference("User") }
     private val sellerRef by lazy { firebaseDatabase.getReference("Seller") }
     private val maintenanceRef by lazy { firebaseDatabase.getReference("update/up") }
     private val legacyUpRef by lazy { firebaseDatabase.getReference("up") }
-    private val keysRef by lazy { firebaseDatabase.getReference("Keys") }
-    private val resellersRef by lazy { firebaseDatabase.getReference("Resellers") }
 
     val allUsers: Flow<List<UserEntity>> = userDao.getAllUsers()
     val allSellers: Flow<List<SellerEntity>> = sellerDao.getAllSellers()
-    val maintenance: Flow<MaintenanceEntity?> = maintenanceDao.getMaintenanceFlow()
+    val maintenanceFlow: Flow<MaintenanceEntity?> = maintenanceDao.getMaintenanceFlow()
 
     val dashboardStats: Flow<DashboardStats> = combine(
         allUsers,
-        allSellers
-    ) { users, sellers ->
+        allSellers,
+        maintenanceFlow
+    ) { users, sellers, maintenance ->
+        val totalKeys = users.size
+        val loggedInUsers = users.count { it.device != "null" && it.device.isNotBlank() }
+        val totalUsers = loggedInUsers
+        val activeUsers = users.count { it.isActive }
+        val inactiveUsers = totalKeys - activeUsers
+
+        val totalSellers = sellers.size
+        val activeSellers = sellers.count { it.isActive }
+        val inactiveSellers = totalSellers - activeSellers
+        val totalCredits = sellers.sumOf { it.coin.toDoubleOrNull() ?: 0.0 }
+
         DashboardStats(
-            totalUsers = users.size,
-            activeUsers = users.count { it.status == "true" },
-            inactiveUsers = users.count { it.status != "true" },
-            totalSellers = sellers.size,
-            activeSellers = sellers.count { it.status == "true" },
-            inactiveSellers = sellers.count { it.status != "true" }
+            totalUsers = totalUsers,
+            activeUsers = activeUsers,
+            inactiveUsers = inactiveUsers,
+            totalKeys = totalKeys,
+            loggedInUsers = loggedInUsers,
+            totalSellers = totalSellers,
+            activeSellers = activeSellers,
+            inactiveSellers = inactiveSellers,
+            totalCredits = totalCredits,
+            currentVersion = maintenance?.version ?: "1.0.0"
         )
     }
 
     init {
-        setupFirebaseListeners()
+        setupFirebaseRealtimeSync()
     }
 
-    private fun setupFirebaseListeners() {
+    private fun setupFirebaseRealtimeSync() {
         try {
-            val userListener = object : ValueEventListener {
+            // Sync Users from Firebase Realtime Database
+            userRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     try {
-                        if (snapshot.exists()) {
-                            val userList = mutableListOf<UserEntity>()
-                            for (child in snapshot.children) {
-                                val key = child.child("key").getValue(String::class.java) ?: continue
-                                val user = child.child("user").getValue(String::class.java) ?: continue
-                                val pass = child.child("pass").getValue(String::class.java) ?: continue
-                                val status = child.child("status").getValue(String::class.java) ?: "false"
-                                val access = child.child("access").getValue(String::class.java) ?: "1"
-                                val device = child.child("device").getValue(String::class.java) ?: "null"
-                                val version = child.child("version").getValue(String::class.java) ?: "null"
-                                val rgtime = child.child("rgtime").getValue(String::class.java) ?: ""
-                                val time = child.child("time").getValue(String::class.java) ?: ""
-                                val validity = child.child("Validity").getValue(String::class.java) ?: ""
-                                userList.add(UserEntity(key, user, pass, status, access, device, version, rgtime, time, validity))
-                            }
+                        val userList = mutableListOf<UserEntity>()
+                        for (child in snapshot.children) {
+                            val key = child.key ?: child.child("key").getValue(String::class.java) ?: continue
+                            val user = child.child("user").getValue(String::class.java) ?: ""
+                            val pass = child.child("pass").getValue(String::class.java) ?: ""
+                            val status = child.child("status").getValue(String::class.java) ?: "true"
+                            val access = child.child("access").getValue(String::class.java) ?: "1"
+                            val device = child.child("device").getValue(String::class.java) ?: "null"
+                            val version = child.child("version").getValue(String::class.java) ?: "null"
+                            val rgtime = child.child("rgtime").getValue(String::class.java) ?: ""
+                            val time = child.child("time").getValue(String::class.java) ?: ""
+                            val validity = child.child("Validity").getValue(String::class.java)
+                                ?: child.child("validity").getValue(String::class.java) ?: ""
+
+                            userList.add(
+                                UserEntity(
+                                    key = key,
+                                    user = user,
+                                    pass = pass,
+                                    status = status,
+                                    access = access,
+                                    device = device,
+                                    version = version,
+                                    rgtime = rgtime,
+                                    time = time,
+                                    validity = validity
+                                )
+                            )
+                        }
+
+                        if (userList.isNotEmpty()) {
                             scope.launch(Dispatchers.IO) {
                                 userDao.insertUsers(userList)
                                 userDao.deleteUsersNotIn(userList.map { it.key })
@@ -101,36 +129,42 @@ class AdminRepository(
                         Log.e("AdminRepository", "Error processing Firebase users: ${e.message}", e)
                     }
                 }
+
                 override fun onCancelled(error: DatabaseError) {
                     Log.w("AdminRepository", "Firebase User listener error: ${error.message}")
                 }
-            }
-            userRef.addValueEventListener(userListener)
-            keysRef.addValueEventListener(userListener)
+            })
 
-            val sellerListener = object : ValueEventListener {
+            // Sync Sellers from Firebase Realtime Database
+            sellerRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     try {
-                        if (snapshot.exists()) {
-                            val sellerList = mutableListOf<SellerEntity>()
-                            for (child in snapshot.children) {
-                                val key = child.key ?: continue
-                                val user = child.child("user").getValue(String::class.java)
-                                val username = child.child("username").getValue(String::class.java)
-                                val finalUser = user ?: username ?: continue
-                                
-                                val pass = child.child("pass").getValue(String::class.java) ?: ""
-                                val status = child.child("status").getValue(String::class.java) ?: "false"
-                                val mappedStatus = if (status == "active") "true" else if (status == "inactive") "false" else status
-                                val access = child.child("access").getValue(String::class.java) ?: "1"
-                                val device = child.child("device").getValue(String::class.java) ?: "null"
-                                val version = child.child("version").getValue(String::class.java) ?: "null"
-                                val coinVal = child.child("coin").getValue(String::class.java)
-                                val creditsVal = child.child("credits").getValue(Any::class.java)?.toString()
-                                val finalCoin = coinVal ?: creditsVal ?: "0"
+                        val sellerList = mutableListOf<SellerEntity>()
+                        for (child in snapshot.children) {
+                            val key = child.key ?: child.child("key").getValue(String::class.java) ?: continue
+                            val user = child.child("user").getValue(String::class.java) ?: ""
+                            val pass = child.child("pass").getValue(String::class.java) ?: ""
+                            val status = child.child("status").getValue(String::class.java) ?: "true"
+                            val access = child.child("access").getValue(String::class.java) ?: "1"
+                            val device = child.child("device").getValue(String::class.java) ?: "null"
+                            val version = child.child("version").getValue(String::class.java) ?: "null"
+                            val coin = child.child("coin").getValue(String::class.java) ?: "0"
 
-                                sellerList.add(SellerEntity(key, finalUser, pass, mappedStatus, access, device, version, finalCoin))
-                            }
+                            sellerList.add(
+                                SellerEntity(
+                                    key = key,
+                                    user = user,
+                                    pass = pass,
+                                    status = status,
+                                    access = access,
+                                    device = device,
+                                    version = version,
+                                    coin = coin
+                                )
+                            )
+                        }
+
+                        if (sellerList.isNotEmpty()) {
                             scope.launch(Dispatchers.IO) {
                                 sellerDao.insertSellers(sellerList)
                                 sellerDao.deleteSellersNotIn(sellerList.map { it.key })
@@ -140,13 +174,13 @@ class AdminRepository(
                         Log.e("AdminRepository", "Error processing Firebase sellers: ${e.message}", e)
                     }
                 }
+
                 override fun onCancelled(error: DatabaseError) {
                     Log.w("AdminRepository", "Firebase Seller listener error: ${error.message}")
                 }
-            }
-            sellerRef.addValueEventListener(sellerListener)
-            resellersRef.addValueEventListener(sellerListener)
+            })
 
+            // Sync Maintenance from Firebase Realtime Database
             val maintenanceListener = object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     try {
@@ -154,18 +188,29 @@ class AdminRepository(
                             val version = snapshot.child("version").getValue(String::class.java) ?: "1.0.0"
                             val message = snapshot.child("message").getValue(String::class.java) ?: ""
                             val link = snapshot.child("link").getValue(String::class.java) ?: ""
+
                             scope.launch(Dispatchers.IO) {
-                                maintenanceDao.insertOrUpdate(MaintenanceEntity(id = "up", version = version, message = message, link = link, updatedAt = System.currentTimeMillis()))
+                                maintenanceDao.insertOrUpdate(
+                                    MaintenanceEntity(
+                                        id = "up",
+                                        version = version,
+                                        message = message,
+                                        link = link,
+                                        updatedAt = System.currentTimeMillis()
+                                    )
+                                )
                             }
                         }
                     } catch (e: Exception) {
                         Log.e("AdminRepository", "Error processing Firebase maintenance: ${e.message}", e)
                     }
                 }
+
                 override fun onCancelled(error: DatabaseError) {
                     Log.w("AdminRepository", "Firebase Maintenance listener error: ${error.message}")
                 }
             }
+
             maintenanceRef.addValueEventListener(maintenanceListener)
             legacyUpRef.addValueEventListener(maintenanceListener)
         } catch (e: Exception) {
@@ -178,23 +223,24 @@ class AdminRepository(
         return sdf.format(date)
     }
 
+    private fun generateKey(prefix: String): String {
+        val randomPart = UUID.randomUUID().toString().replace("-", "").take(8).uppercase()
+        return "-Nox$prefix$randomPart"
+    }
+
     suspend fun getUserByKey(key: String): UserEntity? = userDao.getUserByKey(key)
 
-    suspend fun addUser(username: String, password: String, access: String, validityHours: Double): UserEntity {
-        val data = hashMapOf(
-            "user" to username.trim(),
-            "pass" to password.trim(),
-            "access" to access,
-            "validityHours" to validityHours
-        )
-        val result = functions.getHttpsCallable("addUser").call(data).awaitTask()
-        val resultData = result.getData() as Map<String, Any>
-        val key = resultData["key"] as String
-        
+    suspend fun addUser(
+        username: String,
+        password: String,
+        access: String,
+        validityHours: Double
+    ): UserEntity {
         val now = System.currentTimeMillis()
         val expiryMillis = now + (validityHours * 3600_000.0).toLong()
+        val generatedKey = generateKey("User")
         val newUser = UserEntity(
-            key = key,
+            key = generatedKey,
             user = username.trim(),
             pass = password.trim(),
             status = "true",
@@ -205,50 +251,123 @@ class AdminRepository(
             time = expiryMillis.toString(),
             validity = nowStamp(Date(expiryMillis))
         )
+
+        // Save locally in Room
         userDao.insertUser(newUser)
+
+        // Save directly in Firebase Realtime Database
+        val map = hashMapOf<String, Any>(
+            "user" to newUser.user,
+            "pass" to newUser.pass,
+            "status" to "true",
+            "access" to newUser.access,
+            "key" to newUser.key,
+            "device" to "null",
+            "version" to "null",
+            "rgtime" to newUser.rgtime,
+            "time" to newUser.time,
+            "Validity" to newUser.validity
+        )
+
+        try {
+            userRef.child(generatedKey).setValue(map).awaitTask()
+        } catch (e: Exception) {
+            Log.e("AdminRepository", "Failed to write user to Firebase: ${e.message}", e)
+        }
+
         return newUser
     }
 
     suspend fun updateUserCredentials(key: String, username: String, password: String) {
         userDao.updateUserCredentials(key, username.trim(), password.trim())
-        val data = hashMapOf("key" to key, "user" to username.trim(), "pass" to password.trim())
+
+        val updates = mapOf<String, Any>(
+            "user" to username.trim(),
+            "pass" to password.trim()
+        )
         try {
-            functions.getHttpsCallable("updateUserCredentials").call(data).awaitTask()
-        } catch (e: Exception) { Log.e("AdminRepo", e.message.toString()) }
+            userRef.child(key).updateChildren(updates).awaitTask()
+        } catch (e: Exception) {
+            Log.e("AdminRepository", "Failed to update user in Firebase: ${e.message}", e)
+        }
+    }
+
+    suspend fun updateUserFull(
+        key: String,
+        username: String,
+        password: String,
+        access: String,
+        status: String,
+        resetDevice: Boolean
+    ) {
+        val existing = userDao.getUserByKey(key) ?: return
+        val updatedDevice = if (resetDevice) "null" else existing.device
+        val updatedUser = existing.copy(
+            user = username.trim(),
+            pass = password.trim(),
+            access = access.trim(),
+            status = status.trim(),
+            device = updatedDevice
+        )
+
+        userDao.updateUser(updatedUser)
+
+        val updates = hashMapOf<String, Any>(
+            "user" to username.trim(),
+            "pass" to password.trim(),
+            "access" to access.trim(),
+            "status" to status.trim(),
+            "device" to updatedDevice
+        )
+        try {
+            userRef.child(key).updateChildren(updates).awaitTask()
+        } catch (e: Exception) {
+            Log.e("AdminRepository", "Failed to full-update user in Firebase: ${e.message}", e)
+        }
+    }
+
+    suspend fun resetUserHwid(key: String) {
+        userDao.resetHwid(key)
+
+        try {
+            userRef.child(key).child("device").setValue("null").awaitTask()
+        } catch (e: Exception) {
+            Log.e("AdminRepository", "Failed to reset HWID in Firebase: ${e.message}", e)
+        }
     }
 
     suspend fun toggleUserStatus(key: String, activate: Boolean) {
         val statusVal = if (activate) "true" else "false"
         userDao.toggleUserStatus(key, statusVal)
-        val data = hashMapOf("key" to key, "status" to statusVal)
+
         try {
-            functions.getHttpsCallable("toggleUserStatus").call(data).awaitTask()
-        } catch (e: Exception) { Log.e("AdminRepo", e.message.toString()) }
+            userRef.child(key).child("status").setValue(statusVal).awaitTask()
+        } catch (e: Exception) {
+            Log.e("AdminRepository", "Failed to toggle user status in Firebase: ${e.message}", e)
+        }
     }
 
     suspend fun deleteUser(key: String) {
         userDao.deleteByKey(key)
-        val data = hashMapOf("key" to key)
+
         try {
-            functions.getHttpsCallable("deleteUser").call(data).awaitTask()
-        } catch (e: Exception) { Log.e("AdminRepo", e.message.toString()) }
+            userRef.child(key).removeValue().awaitTask()
+        } catch (e: Exception) {
+            Log.e("AdminRepository", "Failed to delete user in Firebase: ${e.message}", e)
+        }
     }
 
     suspend fun getSellerByKey(key: String): SellerEntity? = sellerDao.getSellerByKey(key)
 
-    suspend fun addSeller(username: String, password: String, access: String, coin: String): SellerEntity {
-        val data = hashMapOf(
-            "username" to username.trim(),
-            "password" to password.trim(),
-            "access" to access,
-            "coin" to coin.trim()
-        )
-        val result = functions.getHttpsCallable("createReseller").call(data).awaitTask()
-        val resultData = result.getData() as Map<String, Any>
-        val uid = resultData["uid"] as String
-        
+    suspend fun addSeller(
+        username: String,
+        password: String,
+        access: String,
+        coin: String
+    ): SellerEntity {
+        val generatedKey = generateKey("Seller")
         val newSeller = SellerEntity(
-            key = uid,
+            key = generatedKey,
             user = username.trim(),
             pass = password.trim(),
             status = "true",
@@ -257,33 +376,62 @@ class AdminRepository(
             version = "null",
             coin = coin.trim()
         )
+
         sellerDao.insertSeller(newSeller)
+
+        val map = hashMapOf<String, Any>(
+            "user" to newSeller.user,
+            "pass" to newSeller.pass,
+            "status" to "true",
+            "access" to newSeller.access,
+            "key" to newSeller.key,
+            "device" to "null",
+            "version" to "null",
+            "coin" to newSeller.coin
+        )
+
+        try {
+            sellerRef.child(generatedKey).setValue(map).awaitTask()
+        } catch (e: Exception) {
+            Log.e("AdminRepository", "Failed to write seller to Firebase: ${e.message}", e)
+        }
+
         return newSeller
     }
 
     suspend fun updateSellerCredentials(key: String, username: String, password: String) {
         sellerDao.updateSellerCredentials(key, username.trim(), password.trim())
-        val data = hashMapOf("key" to key, "user" to username.trim(), "pass" to password.trim())
+
+        val updates = mapOf<String, Any>(
+            "user" to username.trim(),
+            "pass" to password.trim()
+        )
         try {
-            functions.getHttpsCallable("updateSellerCredentials").call(data).awaitTask()
-        } catch (e: Exception) { Log.e("AdminRepo", e.message.toString()) }
+            sellerRef.child(key).updateChildren(updates).awaitTask()
+        } catch (e: Exception) {
+            Log.e("AdminRepository", "Failed to update seller in Firebase: ${e.message}", e)
+        }
     }
 
     suspend fun toggleSellerStatus(key: String, activate: Boolean) {
         val statusVal = if (activate) "true" else "false"
         sellerDao.toggleSellerStatus(key, statusVal)
-        val data = hashMapOf("key" to key, "status" to statusVal)
+
         try {
-            functions.getHttpsCallable("toggleSellerStatus").call(data).awaitTask()
-        } catch (e: Exception) { Log.e("AdminRepo", e.message.toString()) }
+            sellerRef.child(key).child("status").setValue(statusVal).awaitTask()
+        } catch (e: Exception) {
+            Log.e("AdminRepository", "Failed to toggle seller status in Firebase: ${e.message}", e)
+        }
     }
 
     suspend fun deleteSeller(key: String) {
         sellerDao.deleteByKey(key)
-        val data = hashMapOf("key" to key)
+
         try {
-            functions.getHttpsCallable("deleteSeller").call(data).awaitTask()
-        } catch (e: Exception) { Log.e("AdminRepo", e.message.toString()) }
+            sellerRef.child(key).removeValue().awaitTask()
+        } catch (e: Exception) {
+            Log.e("AdminRepository", "Failed to delete seller in Firebase: ${e.message}", e)
+        }
     }
 
     suspend fun setMaintenanceUpdate(version: String, message: String, link: String) {
@@ -295,10 +443,19 @@ class AdminRepository(
             updatedAt = System.currentTimeMillis()
         )
         maintenanceDao.insertOrUpdate(entity)
-        val data = hashMapOf("version" to version.trim(), "message" to message.trim(), "link" to link.trim())
+
+        val map = hashMapOf<String, Any>(
+            "version" to version.trim(),
+            "message" to message.trim(),
+            "link" to link.trim()
+        )
+
         try {
-            functions.getHttpsCallable("setMaintenanceUpdate").call(data).awaitTask()
-        } catch (e: Exception) { Log.e("AdminRepo", e.message.toString()) }
+            maintenanceRef.setValue(map).awaitTask()
+            legacyUpRef.setValue(map).awaitTask()
+        } catch (e: Exception) {
+            Log.e("AdminRepository", "Failed to write maintenance to Firebase: ${e.message}", e)
+        }
     }
 
     private suspend fun <T> Task<T>.awaitTask(): T = suspendCancellableCoroutine { continuation ->

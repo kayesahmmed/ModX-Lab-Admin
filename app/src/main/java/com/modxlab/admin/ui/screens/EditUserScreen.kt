@@ -99,8 +99,11 @@ fun EditUserScreen(
 
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var accessLimit by remember { mutableStateOf("1") }
+    var customAccessText by remember { mutableStateOf("") }
     var isSaving by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
+    var showResetHwidDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(userKey) {
         val u = viewModel.getUser(userKey)
@@ -108,6 +111,13 @@ fun EditUserScreen(
             userEntity = u
             username = u.user
             password = u.pass
+            val acc = u.access
+            if (acc == "1" || acc == "0" || acc == "unlimited") {
+                accessLimit = if (acc == "0" || acc == "unlimited") "unlimited" else "1"
+            } else {
+                accessLimit = "custom"
+                customAccessText = acc
+            }
         }
         isLoading = false
     }
@@ -135,6 +145,7 @@ fun EditUserScreen(
     }
 
     val user = userEntity!!
+    val isDeviceBound = user.device != "null" && user.device.isNotBlank()
 
     Column(
         modifier = modifier
@@ -167,14 +178,14 @@ fun EditUserScreen(
                 Spacer(modifier = Modifier.width(12.dp))
                 Column {
                     Text(
-                        text = "Edit Passkey",
+                        text = "Edit Key Settings",
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
                     )
                     Text(
-                        text = "Manage credentials, HWID binding & status",
+                        text = "Manage credentials, device limit & status",
                         style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                     )
                 }
@@ -339,16 +350,146 @@ fun EditUserScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Device Access Limit in one line
+                Text(
+                    text = "Device Access Limit",
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.White.copy(alpha = 0.8f)
+                    )
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val isOne = accessLimit == "1"
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(if (isOne) BrandEmerald.copy(alpha = 0.25f) else Color.White.copy(alpha = 0.10f))
+                            .border(
+                                width = if (isOne) 1.2.dp else 0.8.dp,
+                                color = if (isOne) BrandEmerald else Color.White.copy(alpha = 0.20f),
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                            .clickable { accessLimit = "1" }
+                            .padding(vertical = 12.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "1 Device",
+                            style = MaterialTheme.typography.labelMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = if (isOne) BrandEmeraldLight else Color.White.copy(alpha = 0.85f)
+                            ),
+                            maxLines = 1
+                        )
+                    }
+
+                    val isUnlimited = accessLimit == "unlimited"
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(if (isUnlimited) BrandEmerald.copy(alpha = 0.25f) else Color.White.copy(alpha = 0.10f))
+                            .border(
+                                width = if (isUnlimited) 1.2.dp else 0.8.dp,
+                                color = if (isUnlimited) BrandEmerald else Color.White.copy(alpha = 0.20f),
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                            .clickable { accessLimit = "unlimited" }
+                            .padding(vertical = 12.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Unlimited (∞)",
+                            style = MaterialTheme.typography.labelMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = if (isUnlimited) BrandEmeraldLight else Color.White.copy(alpha = 0.85f)
+                            ),
+                            maxLines = 1
+                        )
+                    }
+
+                    val isCustom = accessLimit == "custom"
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(if (isCustom) BrandEmerald.copy(alpha = 0.25f) else Color.White.copy(alpha = 0.10f))
+                            .border(
+                                width = if (isCustom) 1.2.dp else 0.8.dp,
+                                color = if (isCustom) BrandEmerald else Color.White.copy(alpha = 0.20f),
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                            .clickable { accessLimit = "custom" }
+                            .padding(vertical = 12.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (isCustom) {
+                            androidx.compose.foundation.text.BasicTextField(
+                                value = customAccessText,
+                                onValueChange = { customAccessText = it.filter { ch -> ch.isDigit() } },
+                                singleLine = true,
+                                textStyle = MaterialTheme.typography.labelMedium.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = BrandEmeraldLight,
+                                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                                ),
+                                keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                                    keyboardType = androidx.compose.ui.text.input.KeyboardType.Number
+                                ),
+                                decorationBox = { innerTextField ->
+                                    if (customAccessText.isEmpty()) {
+                                        Text(
+                                            text = "Custom",
+                                            style = MaterialTheme.typography.labelMedium.copy(
+                                                color = Color.White.copy(alpha = 0.6f),
+                                                fontWeight = FontWeight.Bold,
+                                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                                            )
+                                        )
+                                    }
+                                    innerTextField()
+                                }
+                            )
+                        } else {
+                            Text(
+                                text = "Custom",
+                                style = MaterialTheme.typography.labelMedium.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White.copy(alpha = 0.85f)
+                                ),
+                                maxLines = 1
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Button(
                     onClick = {
                         isSaving = true
-                        viewModel.updateUserCredentials(
+                        val finalAccess = when (accessLimit) {
+                            "unlimited" -> "unlimited"
+                            "custom" -> if (customAccessText.isNotBlank()) customAccessText else "1"
+                            else -> "1"
+                        }
+                        viewModel.updateUserFull(
                             key = user.key,
                             user = username,
                             pass = password,
+                            access = finalAccess,
+                            status = user.status,
+                            resetDevice = false,
                             onSuccess = {
                                 isSaving = false
-                                userEntity = userEntity?.copy(user = username, pass = password)
+                                userEntity = userEntity?.copy(user = username, pass = password, access = finalAccess)
                             }
                         )
                     },
@@ -372,7 +513,7 @@ fun EditUserScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Activation Toggle Card
+        // Activation Toggle Card (Block / Unblock)
         GlassBox(
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth()
@@ -401,14 +542,14 @@ fun EditUserScreen(
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text(
-                            text = if (user.isActive) "License Active" else "License Deactivated",
+                            text = if (user.isActive) "License Active" else "User Blocked",
                             style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.Bold,
                                 color = if (user.isActive) StatusActive else StatusInactive
                             )
                         )
                         Text(
-                            text = if (user.isActive) "Client can login & authenticate" else "Client access blocked",
+                            text = if (user.isActive) "Client can login & authenticate" else "Client key is blocked",
                             style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.85f), fontSize = 12.sp)
                         )
                     }
@@ -433,26 +574,46 @@ fun EditUserScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Hardware & Session Telemetry Card
+        // Hardware & Session Telemetry Card with Reset HWID
         GlassBox(
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
-                Text(
-                    text = "Hardware & Telemetry Info",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Hardware & Telemetry Info",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
                     )
-                )
+
+                    if (isDeviceBound) {
+                        Button(
+                            onClick = { showResetHwidDialog = true },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = BrandCyan.copy(alpha = 0.2f),
+                                contentColor = BrandCyan
+                            ),
+                            shape = RoundedCornerShape(8.dp),
+                            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp)
+                        ) {
+                            Text("Reset HWID", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold))
+                        }
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(14.dp))
 
                 InfoRow(
                     icon = Icons.Default.Smartphone,
                     label = "Bound Hardware Device",
-                    value = if (user.device == "null" || user.device.isBlank()) "Not Authorized Yet (null)" else user.device
+                    value = if (!isDeviceBound) "Not Bound (Ready to login)" else user.device
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -484,12 +645,43 @@ fun EditUserScreen(
                 InfoRow(
                     icon = Icons.Default.Devices,
                     label = "Hardware Access Restriction",
-                    value = if (user.isUnlimitedDevice) "Unlimited Devices (∞)" else "1 Device HWID Locked"
+                    value = if (user.isUnlimitedDevice) "Unlimited Devices (∞)" else "${user.access} Device(s) Allowed"
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(96.dp))
+    }
+
+    if (showResetHwidDialog) {
+        AlertDialog(
+            onDismissRequest = { showResetHwidDialog = false },
+            title = { Text("Reset Bound Device", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)) },
+            text = {
+                Text(
+                    "Reset bound device for \"${user.user}\"? This clears the hardware lock and allows login from a new device.",
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.resetUserHwid(user.key)
+                        userEntity = userEntity?.copy(device = "null")
+                        showResetHwidDialog = false
+                    }
+                ) {
+                    Text("Reset Device", color = BrandCyan, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showResetHwidDialog = false }) {
+                    Text("Cancel", color = Color.White.copy(alpha = 0.8f))
+                }
+            },
+            containerColor = Color.White.copy(alpha = 0.2f),
+            shape = RoundedCornerShape(16.dp)
+        )
     }
 
     if (showDeleteDialog) {
@@ -498,7 +690,7 @@ fun EditUserScreen(
             title = { Text("Delete License User", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)) },
             text = {
                 Text(
-                    "Are you sure you want to permanently delete user \"${user.user}\"? All device bindings will be purged.",
+                    "Are you sure you want to permanently delete user \"${user.user}\"? All credentials and device bindings will be purged.",
                     style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
                 )
             },

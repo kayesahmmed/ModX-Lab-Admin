@@ -48,6 +48,8 @@ data class DashboardStats(
     val totalUsers: Int = 0,
     val activeUsers: Int = 0,
     val inactiveUsers: Int = 0,
+    val totalKeys: Int = 0,
+    val loggedInUsers: Int = 0,
     val totalSellers: Int = 0,
     val activeSellers: Int = 0,
     val inactiveSellers: Int = 0,

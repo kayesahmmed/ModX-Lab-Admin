@@ -34,7 +34,7 @@ class AdminViewModel(
     )
 
     // Maintenance
-    val maintenance: StateFlow<MaintenanceEntity?> = repository.maintenance.stateIn(
+    val maintenance: StateFlow<MaintenanceEntity?> = repository.maintenanceFlow.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = null
@@ -60,6 +60,7 @@ class AdminViewModel(
             val matchesFilter = when (filter) {
                 "ACTIVE" -> user.isActive
                 "INACTIVE" -> !user.isActive
+                "LOGGED_IN" -> user.device != "null" && user.device.isNotBlank()
                 else -> true
             }
             matchesQuery && matchesFilter
@@ -142,6 +143,44 @@ class AdminViewModel(
                 onSuccess()
             } catch (e: Exception) {
                 _snackbarMessage.emit("Update failed: ${e.message}")
+            }
+        }
+    }
+
+    fun updateUserFull(
+        key: String,
+        user: String,
+        pass: String,
+        access: String,
+        status: String,
+        resetDevice: Boolean,
+        onSuccess: () -> Unit
+    ) {
+        viewModelScope.launch {
+            try {
+                repository.updateUserFull(
+                    key = key,
+                    username = user,
+                    password = pass,
+                    access = access,
+                    status = status,
+                    resetDevice = resetDevice
+                )
+                _snackbarMessage.emit("Passkey settings saved successfully")
+                onSuccess()
+            } catch (e: Exception) {
+                _snackbarMessage.emit("Save failed: ${e.message}")
+            }
+        }
+    }
+
+    fun resetUserHwid(key: String) {
+        viewModelScope.launch {
+            try {
+                repository.resetUserHwid(key)
+                _snackbarMessage.emit("Hardware binding cleared! Device reset.")
+            } catch (e: Exception) {
+                _snackbarMessage.emit("Device reset failed: ${e.message}")
             }
         }
     }

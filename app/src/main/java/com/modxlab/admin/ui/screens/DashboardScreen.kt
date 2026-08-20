@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Campaign
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Group
+import androidx.compose.material.icons.filled.VpnKey
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Paid
@@ -80,8 +81,6 @@ fun DashboardScreen(
     viewModel: AdminViewModel,
     onNavigateToUsers: () -> Unit,
     onNavigateToAddUser: () -> Unit,
-    onNavigateToSellers: () -> Unit,
-    onNavigateToAddSeller: () -> Unit,
     onNavigateToMaintenance: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -208,221 +207,197 @@ fun DashboardScreen(
             ) {
                 MetricCard(
                     title = "Total Users",
-                    value = stats.totalUsers.toString(),
-                    subtitle = "${stats.activeUsers} active",
+                    value = stats.loggedInUsers.toString(),
+                    subtitle = "${stats.loggedInUsers} Logged In",
                     icon = Icons.Default.Group,
                     color = BrandEmerald,
                     modifier = Modifier.weight(1f),
-                    onClick = onNavigateToUsers
+                    onClick = {
+                        viewModel.setUserStatusFilter("LOGGED_IN")
+                        onNavigateToUsers()
+                    }
                 )
-                MetricCard(
-                    title = "Resellers",
-                    value = stats.totalSellers.toString(),
-                    subtitle = "${stats.activeSellers} active",
-                    icon = Icons.Default.Storefront,
-                    color = BrandIndigo,
-                    modifier = Modifier.weight(1f),
-                    onClick = onNavigateToSellers
-                )
-            }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
                 MetricCard(
-                    title = "Reseller Credits",
-                    value = "$${stats.totalCredits.toInt()}",
-                    subtitle = "Allocated Balance",
-                    icon = Icons.Default.Paid,
-                    color = BrandAmber,
-                    modifier = Modifier.weight(1f),
-                    onClick = onNavigateToSellers
-                )
-                MetricCard(
-                    title = "App Version",
-                    value = stats.currentVersion,
-                    subtitle = "Broadcast Online",
-                    icon = Icons.Default.SystemUpdate,
+                    title = "Total Keys",
+                    value = stats.totalKeys.toString(),
+                    subtitle = "${stats.activeUsers} Active / Set",
+                    icon = Icons.Default.VpnKey,
                     color = BrandCyan,
                     modifier = Modifier.weight(1f),
-                    onClick = onNavigateToMaintenance
+                    onClick = {
+                        viewModel.setUserStatusFilter("ALL")
+                        onNavigateToUsers()
+                    }
                 )
             }
         }
 
-        // Main Navigation Gradient Cards (Directly matching original Sketchware architecture with modern Compose Polish)
+        // Quick Actions section
         item {
             Text(
-                text = "Management",
+                text = "Quick Actions",
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 ),
                 modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
             )
-        }
+            
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                QuickActionCard(
+                    title = "Client Access",
+                    subtitle = "Generate & manage client keys",
+                    icon = Icons.Default.Key,
+                    badgeText = "${stats.totalUsers} Active",
+                    onCardClick = onNavigateToUsers,
+                    onActionClick = onNavigateToAddUser,
+                    actionLabel = "Add Client",
+                    color1 = BrandEmerald,
+                    color2 = BrandCyan
+                )
 
-        // 1. User Pass Management Card (Green gradient in original)
-        item {
-            GradientActionCard(
-                title = "Set Pass & Keys",
-                subtitle = "Manage user accounts, passkeys & device HWID binding",
-                icon = Icons.Default.Key,
-                startColor = Color(0xFF00875A),
-                endColor = Color(0xFF00C853),
-                badgeText = "${stats.totalUsers} Keys",
-                onCardClick = onNavigateToUsers,
-                onActionClick = onNavigateToAddUser,
-                actionLabel = "Add Pass",
-                testTag = "btn_nav_users"
-            )
-        }
-
-        // 2. Maintenance & Updates (Red gradient in original)
-        item {
-            GradientActionCard(
-                title = "System Update",
-                subtitle = "Broadcast update announcements, version & download links",
-                icon = Icons.Default.Campaign,
-                startColor = Color(0xFFC62828),
-                endColor = Color(0xFFFF1744),
-                badgeText = "v${stats.currentVersion}",
-                onCardClick = onNavigateToMaintenance,
-                onActionClick = onNavigateToMaintenance,
-                actionLabel = "Update",
-                testTag = "btn_nav_maintenance"
-            )
-        }
-
-        // 3. Resellers / Sellers (Indigo gradient in original)
-        item {
-            GradientActionCard(
-                title = "Seller Management",
-                subtitle = "Manage sellers and credit allocations",
-                icon = Icons.Default.Storefront,
-                startColor = Color(0xFF3949AB),
-                endColor = Color(0xFF5C6BC0),
-                badgeText = "${stats.totalSellers} Sellers",
-                onCardClick = onNavigateToSellers,
-                onActionClick = onNavigateToAddSeller,
-                actionLabel = "Add Seller",
-                testTag = "btn_nav_sellers"
-            )
+                QuickActionCard(
+                    title = "Maintenance",
+                    subtitle = "App update & announcements",
+                    icon = Icons.Default.SystemUpdate,
+                    badgeText = maintenance?.version ?: "V1.0",
+                    onCardClick = onNavigateToMaintenance,
+                    onActionClick = onNavigateToMaintenance,
+                    actionLabel = "Configure",
+                    color1 = BrandAmber,
+                    color2 = BrandCrimson
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun MetricCard(
+fun MetricCard(
     title: String,
     value: String,
     subtitle: String,
     icon: ImageVector,
     color: Color,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit
 ) {
-    GlassBox(
-        shape = RoundedCornerShape(10.dp),
-        modifier = modifier.clickable(onClick = onClick)
+    GlassCard(
+        modifier = modifier.fillMaxWidth(),
+        onClick = onClick
     ) {
-        Column(modifier = Modifier.padding(14.dp)) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = Color.White.copy(alpha = 0.85f),
-                        fontSize = 13.sp
-                    )
-                )
                 Box(
                     modifier = Modifier
-                        .size(30.dp)
+                        .size(36.dp)
                         .clip(CircleShape)
-                        .background(color.copy(alpha = 0.25f)),
+                        .background(color.copy(alpha = 0.20f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = icon,
                         contentDescription = title,
                         tint = color,
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(18.dp)
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(14.dp))
             Text(
                 text = value,
                 style = MaterialTheme.typography.headlineMedium.copy(
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Black,
                     color = Color.White
                 )
             )
-            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White.copy(alpha = 0.9f)
+                ),
+                modifier = Modifier.padding(top = 2.dp)
+            )
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.labelSmall.copy(
-                    color = color,
-                    fontWeight = FontWeight.Medium
-                )
+                    color = color
+                ),
+                modifier = Modifier.padding(top = 2.dp)
             )
         }
     }
 }
 
 @Composable
-private fun GradientActionCard(
+fun QuickActionCard(
     title: String,
     subtitle: String,
     icon: ImageVector,
-    startColor: Color,
-    endColor: Color,
     badgeText: String,
     onCardClick: () -> Unit,
     onActionClick: () -> Unit,
     actionLabel: String,
-    testTag: String
+    color1: Color,
+    color2: Color
 ) {
     GlassCard(
-        shape = RoundedCornerShape(10.dp),
-        onClick = onCardClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag(testTag)
+        modifier = Modifier.fillMaxWidth(),
+        onClick = onCardClick
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(42.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color.White.copy(alpha = 0.25f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = title,
-                        tint = Color.White,
-                        modifier = Modifier.size(24.dp)
+            Box(
+                modifier = Modifier
+                    .size(52.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(
+                        brush = Brush.linearGradient(
+                            colors = listOf(color1.copy(alpha = 0.25f), color2.copy(alpha = 0.15f))
+                        )
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = title,
+                    tint = color1,
+                    modifier = Modifier.size(26.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.width(14.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
                     )
                 }
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
+                    text = subtitle,
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        color = Color.White.copy(alpha = 0.75f)
                     )
                 )
             }
@@ -430,54 +405,16 @@ private fun GradientActionCard(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
-                    .background(Color.White.copy(alpha = 0.20f))
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                    .background(Color.White.copy(alpha = 0.15f))
+                    .testTag("action_$title")
             ) {
                 Text(
-                    text = badgeText,
+                    text = actionLabel,
                     style = MaterialTheme.typography.labelSmall.copy(
                         fontWeight = FontWeight.Bold,
                         color = Color.White
-                    )
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Text(
-            text = subtitle,
-            style = MaterialTheme.typography.bodyMedium.copy(
-                color = Color.White.copy(alpha = 0.85f),
-                fontSize = 13.sp
-            )
-        )
-
-        Spacer(modifier = Modifier.height(14.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            Button(
-                onClick = onActionClick,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = startColor
-                ),
-                shape = RoundedCornerShape(10.dp),
-                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp),
-                modifier = Modifier.testTag("${testTag}_action")
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = actionLabel,
-                    modifier = Modifier.size(16.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = actionLabel,
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                    ),
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                 )
             }
         }

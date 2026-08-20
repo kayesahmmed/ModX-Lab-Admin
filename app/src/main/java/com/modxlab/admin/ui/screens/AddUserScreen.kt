@@ -53,6 +53,8 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Surface
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -350,143 +352,130 @@ fun AddUserScreen(
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     // Single Device Option
                     val isSingle = deviceAccess == "1"
                     Box(
                         modifier = Modifier
                             .weight(1f)
-                            .clip(RoundedCornerShape(14.dp))
-                            .background(
-                                if (isSingle) BrandEmerald.copy(alpha = 0.25f)
-                                else Color.Black.copy(alpha = 0.50f)
-                            )
-                            .border(
-                                width = if (isSingle) 1.5.dp else 0.8.dp,
-                                color = if (isSingle) BrandEmerald else Color.White.copy(alpha = 0.20f),
-                                shape = RoundedCornerShape(14.dp)
-                            )
-                            .premiumClickable { deviceAccess = "1" }
-                            .padding(12.dp)
-                            .testTag("radio_single_device")
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(if (isSingle) BrandEmerald else Color.White.copy(alpha = 0.05f))
+                            .clickable { deviceAccess = "1" }
+                            .padding(vertical = 12.dp),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            RadioButton(
-                                selected = isSingle,
-                                onClick = { deviceAccess = "1" },
-                                colors = RadioButtonDefaults.colors(
-                                    selectedColor = BrandEmerald,
-                                    unselectedColor = Color.White.copy(alpha = 0.5f)
-                                )
+                        Text(
+                            text = "1 Device",
+                            style = MaterialTheme.typography.titleSmall.copy(
+                                color = if (isSingle) Color.Black else Color.White,
+                                fontWeight = FontWeight.Bold
                             )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Column {
-                                Text(
-                                    text = "1 Device",
-                                    style = MaterialTheme.typography.titleMedium.copy(
-                                        color = Color.White,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 14.sp
-                                    )
-                                )
-                                Text(
-                                    text = "HWID locked",
-                                    style = MaterialTheme.typography.labelSmall.copy(
-                                        color = Color.White.copy(alpha = 0.70f),
-                                        fontSize = 11.sp
-                                    )
-                                )
-                            }
-                        }
+                        )
                     }
 
-                    // Unlimited Device Option
+                    // Unlimited Option
                     val isUnlimited = deviceAccess == "∞"
                     Box(
                         modifier = Modifier
                             .weight(1f)
-                            .clip(RoundedCornerShape(14.dp))
-                            .background(
-                                if (isUnlimited) BrandEmerald.copy(alpha = 0.25f)
-                                else Color.Black.copy(alpha = 0.50f)
-                            )
-                            .border(
-                                width = if (isUnlimited) 1.5.dp else 0.8.dp,
-                                color = if (isUnlimited) BrandEmerald else Color.White.copy(alpha = 0.20f),
-                                shape = RoundedCornerShape(14.dp)
-                            )
-                            .premiumClickable { deviceAccess = "∞" }
-                            .padding(12.dp)
-                            .testTag("radio_unlimited_device")
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(if (isUnlimited) BrandEmerald else Color.White.copy(alpha = 0.05f))
+                            .clickable { deviceAccess = "∞" }
+                            .padding(vertical = 12.dp),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            RadioButton(
-                                selected = isUnlimited,
-                                onClick = { deviceAccess = "∞" },
-                                colors = RadioButtonDefaults.colors(
-                                    selectedColor = BrandEmerald,
-                                    unselectedColor = Color.White.copy(alpha = 0.5f)
-                                )
+                        Text(
+                            text = "Unlimited",
+                            style = MaterialTheme.typography.titleSmall.copy(
+                                color = if (isUnlimited) Color.Black else Color.White,
+                                fontWeight = FontWeight.Bold
                             )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Column {
-                                Text(
-                                    text = "Unlimited",
-                                    style = MaterialTheme.typography.titleMedium.copy(
-                                        color = Color.White,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 14.sp
-                                    )
-                                )
-                                Text(
-                                    text = "Multi-device",
-                                    style = MaterialTheme.typography.labelSmall.copy(
-                                        color = Color.White.copy(alpha = 0.70f),
-                                        fontSize = 11.sp
-                                    )
-                                )
+                        )
+                    }
+
+                    // Custom Input Option
+                    val isCustom = !isSingle && !isUnlimited
+                    OutlinedTextField(
+                        value = if (isCustom) deviceAccess else "",
+                        onValueChange = { newValue -> 
+                            // Only allow numbers
+                            if (newValue.all { it.isDigit() }) {
+                                deviceAccess = if (newValue.isEmpty()) "2" else newValue
                             }
-                        }
+                        },
+                        placeholder = { 
+                            Text("Custom", color = Color.White.copy(alpha = 0.4f), fontSize = 12.sp) 
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier
+                            .weight(1.2f)
+                            .height(48.dp),
+                        textStyle = androidx.compose.ui.text.TextStyle(
+                            color = Color.White,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        ),
+                        singleLine = true,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = BrandEmerald,
+                            unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
+                            focusedContainerColor = Color.White.copy(alpha = 0.05f),
+                            unfocusedContainerColor = Color.White.copy(alpha = 0.05f)
+                        ),
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                }
+
+
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                // Action Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Button(
+                        onClick = onNavigateBack,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.White.copy(alpha = 0.1f),
+                            contentColor = Color.White
+                        ),
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(56.dp)
+                    ) {
+                        Text("Cancel", fontWeight = FontWeight.Bold)
+                    }
+
+                    Button(
+                        onClick = {
+                            viewModel.addUser(
+                                username = username,
+                                pass = password,
+                                access = deviceAccess,
+                                validityHours = validityHours,
+                                onSuccess = onNavigateBack
+                            )
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = BrandEmerald,
+                            contentColor = Color.Black
+                        ),
+                        shape = RoundedCornerShape(12.dp),
+                        enabled = username.isNotBlank() && password.isNotBlank(),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(56.dp)
+                    ) {
+                        Text("Create Key", fontWeight = FontWeight.Bold)
                     }
                 }
             }
         }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Submit Button
-        GlassPrimaryButton(
-            text = if (isGenerating) "Key Generating..." else "GENERATE & ACTIVATE KEY",
-            icon = Icons.Default.Key,
-            isLoading = isGenerating,
-            testTag = "btn_generate_user_key",
-            onClick = {
-                var hasError = false
-                if (username.isBlank()) {
-                    usernameError = "User cannot be blank!"
-                    hasError = true
-                }
-                if (password.isBlank()) {
-                    passwordError = "Enter a password / token!"
-                    hasError = true
-                }
-                if (!hasError) {
-                    isGenerating = true
-                    viewModel.addUser(
-                        username = username,
-                        pass = password,
-                        access = deviceAccess,
-                        validityHours = validityHours,
-                        onSuccess = {
-                            isGenerating = false
-                            onNavigateBack()
-                        }
-                    )
-                }
-            }
-        )
-
-        Spacer(modifier = Modifier.height(96.dp))
     }
 }
