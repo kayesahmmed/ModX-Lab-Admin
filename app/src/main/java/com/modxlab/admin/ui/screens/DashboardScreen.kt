@@ -116,25 +116,35 @@ fun DashboardScreen(
                             maxLines = 1
                         )
                     }
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(BrandEmerald.copy(alpha = 0.20f))
-                            .padding(horizontal = 10.dp, vertical = 6.dp)
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        color = com.modxlab.admin.ui.theme.AppSurface,
+                        border = androidx.compose.foundation.BorderStroke(
+                            width = 1.2.dp,
+                            color = com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.6f)
+                        ),
+                        shadowElevation = 4.dp
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                        Row(
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp, vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Box(
                                 modifier = Modifier
-                                    .size(8.dp)
+                                    .size(10.dp)
                                     .clip(CircleShape)
-                                    .background(BrandEmerald)
+                                    .background(com.modxlab.admin.ui.theme.BrandSage)
+                                    .border(2.dp, com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.35f), CircleShape)
                             )
-                            Spacer(modifier = Modifier.width(6.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
                             Text(
                                 text = "ADMIN ACTIVE",
                                 style = MaterialTheme.typography.labelSmall.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    color = BrandEmeraldLight
+                                    fontWeight = FontWeight.ExtraBold,
+                                    fontSize = 11.sp,
+                                    letterSpacing = 0.8.sp,
+                                    color = com.modxlab.admin.ui.theme.BrandSage
                                 )
                             )
                         }

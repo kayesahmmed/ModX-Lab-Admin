@@ -207,6 +207,19 @@ class AdminViewModel(
         }
     }
 
+    fun deleteMultipleUsers(keys: Set<String>) {
+        viewModelScope.launch {
+            try {
+                keys.forEach { key ->
+                    repository.deleteUser(key)
+                }
+                _snackbarMessage.emit("${keys.size} license key(s) deleted")
+            } catch (e: Exception) {
+                _snackbarMessage.emit("Bulk deletion failed: ${e.message}")
+            }
+        }
+    }
+
     fun addSeller(
         username: String,
         pass: String,
@@ -278,6 +291,12 @@ class AdminViewModel(
 
     suspend fun getUser(key: String): UserEntity? = repository.getUserByKey(key)
     suspend fun getSeller(key: String): SellerEntity? = repository.getSellerByKey(key)
+
+    fun showToastMessage(message: String) {
+        viewModelScope.launch {
+            _snackbarMessage.emit(message)
+        }
+    }
 }
 
 class AdminViewModelFactory(

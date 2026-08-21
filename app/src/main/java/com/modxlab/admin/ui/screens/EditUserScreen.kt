@@ -267,7 +267,7 @@ fun EditUserScreen(
                         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val clip = ClipData.newPlainText("ModX License Key", user.key)
                         clipboard.setPrimaryClip(clip)
-                        Toast.makeText(context, "Key copied to clipboard", Toast.LENGTH_SHORT).show()
+                        viewModel.showToastMessage("Key copied to clipboard")
                     }
                 ) {
                     Icon(
@@ -522,62 +522,104 @@ fun EditUserScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Activation Toggle Card (Block / Unblock)
-        GlassBox(
-            shape = RoundedCornerShape(10.dp),
+        // Activation Toggle Card (Block / Unblock) - Premium Styled
+        val activeColor = com.modxlab.admin.ui.theme.BrandSage
+        val inactiveColor = BrandCrimson
+        val currentStatusColor = if (user.isActive) activeColor else inactiveColor
+
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = com.modxlab.admin.ui.theme.AppSurface,
+            border = androidx.compose.foundation.BorderStroke(
+                width = 1.2.dp,
+                color = currentStatusColor.copy(alpha = 0.45f)
+            ),
+            shadowElevation = 4.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Row(
+            Column(
                 modifier = Modifier
-                    .padding(18.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                            .background(if (user.isActive) BrandEmerald.copy(alpha = 0.2f) else BrandCrimson.copy(alpha = 0.2f)),
-                        contentAlignment = Alignment.Center
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        modifier = Modifier.weight(1f),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.PowerSettingsNew,
-                            contentDescription = "Status",
-                            tint = if (user.isActive) BrandEmeraldLight else BrandCrimson
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Column {
-                        Text(
-                            text = if (user.isActive) "License Active" else "User Blocked",
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontWeight = FontWeight.Bold,
-                                color = if (user.isActive) StatusActive else StatusInactive
+                        // Glowing Dual Ring Icon Container
+                        Box(
+                            modifier = Modifier
+                                .size(44.dp)
+                                .clip(CircleShape)
+                                .background(currentStatusColor.copy(alpha = 0.12f))
+                                .border(1.dp, currentStatusColor.copy(alpha = 0.35f), CircleShape),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.PowerSettingsNew,
+                                contentDescription = "Status",
+                                tint = currentStatusColor,
+                                modifier = Modifier.size(22.dp)
                             )
-                        )
-                        Text(
-                            text = if (user.isActive) "Client can login & authenticate" else "Client key is blocked",
-                            style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary, fontSize = 12.sp)
-                        )
+                        }
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Column(modifier = Modifier.weight(1f)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = if (user.isActive) "License Active" else "User Blocked",
+                                    style = MaterialTheme.typography.titleMedium.copy(
+                                        fontWeight = FontWeight.Bold,
+                                        color = TextPrimary
+                                    )
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                // Status Pill Badge
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(20.dp))
+                                        .background(currentStatusColor.copy(alpha = 0.15f))
+                                        .padding(horizontal = 8.dp, vertical = 2.dp)
+                                ) {
+                                    Text(
+                                        text = if (user.isActive) "ACTIVE" else "BLOCKED",
+                                        style = MaterialTheme.typography.labelSmall.copy(
+                                            color = currentStatusColor,
+                                            fontWeight = FontWeight.ExtraBold,
+                                            fontSize = 9.sp
+                                        )
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = if (user.isActive) "Client can login & authenticate" else "Client key is blocked from login",
+                                style = MaterialTheme.typography.bodySmall.copy(color = TextSecondary)
+                            )
+                        }
                     }
-                }
 
-                Switch(
-                    checked = user.isActive,
-                    onCheckedChange = { willActivate ->
-                        viewModel.toggleUserStatus(user.key, willActivate)
-                        userEntity = userEntity?.copy(status = if (willActivate) "true" else "false")
-                    },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = com.modxlab.admin.ui.theme.BrandSage,
-                        checkedTrackColor = com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.3f),
-                        uncheckedThumbColor = BrandCrimson,
-                        uncheckedTrackColor = BrandCrimson.copy(alpha = 0.3f)
-                    ),
-                    modifier = Modifier.testTag("switch_user_status")
-                )
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Switch(
+                        checked = user.isActive,
+                        onCheckedChange = { willActivate ->
+                            viewModel.toggleUserStatus(user.key, willActivate)
+                            userEntity = userEntity?.copy(status = if (willActivate) "true" else "false")
+                        },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = activeColor,
+                            checkedTrackColor = activeColor.copy(alpha = 0.3f),
+                            uncheckedThumbColor = inactiveColor,
+                            uncheckedTrackColor = inactiveColor.copy(alpha = 0.3f)
+                        ),
+                        modifier = Modifier.testTag("switch_user_status")
+                    )
+                }
             }
         }
 

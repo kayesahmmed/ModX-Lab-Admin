@@ -167,7 +167,7 @@ fun MaintenanceScreen(
                     }
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(
-                        text = "Global Broadcast Node (/update/up)",
+                        text = "App Update Announcement",
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold,
                             color = TextPrimary
@@ -192,7 +192,7 @@ fun MaintenanceScreen(
                         version = it
                         if (versionError != null) versionError = null
                     },
-                    placeholder = { Text("e.g. 2.4.2", color = TextSecondary.copy(alpha = 0.6f)) },
+                    placeholder = { Text("1.0", color = TextSecondary.copy(alpha = 0.6f)) },
                     leadingIcon = {
                         Icon(Icons.Default.SystemUpdate, contentDescription = "Version", tint = BrandCrimson)
                     },
@@ -234,7 +234,7 @@ fun MaintenanceScreen(
                         message = it
                         if (messageError != null) messageError = null
                     },
-                    placeholder = { Text("Enter the notice displayed to clients", color = TextSecondary.copy(alpha = 0.6f)) },
+                    placeholder = { Text("Enter the notice displayed to users", color = TextSecondary.copy(alpha = 0.6f)) },
                     leadingIcon = {
                         Icon(Icons.AutoMirrored.Filled.Message, contentDescription = "Message", tint = BrandCrimson)
                     },
@@ -244,8 +244,7 @@ fun MaintenanceScreen(
                             Text(messageError!!, color = MaterialTheme.colorScheme.error)
                         }
                     },
-                    minLines = 3,
-                    maxLines = 5,
+                    singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,

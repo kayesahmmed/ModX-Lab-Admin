@@ -181,6 +181,12 @@ fun MainApp(viewModel: AdminViewModel) {
 
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val appBrandingToast = "created by ModX Lab"
+
+    LaunchedEffect(Unit) {
+        viewModel.showToastMessage(appBrandingToast)
+    }
+
     LaunchedEffect(viewModel) {
         viewModel.snackbarMessage.collectLatest { message ->
             snackbarHostState.showSnackbar(message)
@@ -197,7 +203,11 @@ fun MainApp(viewModel: AdminViewModel) {
 
     Scaffold(
         containerColor = Color.Transparent,
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState) { snackbarData ->
+                com.modxlab.admin.ui.components.PremiumSnackbarHost(snackbarData = snackbarData)
+            }
+        },
         bottomBar = {
             AnimatedVisibility(
                 visible = isTopLevelDestination,

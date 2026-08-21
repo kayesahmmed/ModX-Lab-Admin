@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -56,6 +57,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -108,19 +110,24 @@ fun UserListScreen(
     var userToToggle by remember { mutableStateOf<UserEntity?>(null) }
     var userToResetHwid by remember { mutableStateOf<UserEntity?>(null) }
 
+    var isSelectionMode by remember { mutableStateOf(false) }
+    var selectedKeys by remember { mutableStateOf<Set<String>>(emptySet()) }
+    var showBulkDeleteDialog by remember { mutableStateOf(false) }
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = Color.Transparent,
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = onNavigateToAddUser,
-                containerColor = BrandEmerald,
-                contentColor = Color.Black,
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    .testTag("fab_add_user")
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add User")
+            if (!isSelectionMode) {
+                FloatingActionButton(
+                    onClick = onNavigateToAddUser,
+                    containerColor = BrandEmerald,
+                    contentColor = Color.Black,
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier.testTag("fab_add_user")
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = "Add User")
+                }
             }
         }
     ) { paddingValues ->
@@ -132,24 +139,117 @@ fun UserListScreen(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Header Title
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(
-                        text = if (statusFilter == "LOGGED_IN") "Logged In Users" else "Client Keys",
-                        style = MaterialTheme.typography.headlineMedium.copy(
-                            fontWeight = FontWeight.Bold,
-                            color = TextPrimary
+            // Header Title / Selection Action Bar
+            if (isSelectionMode) {
+                Surface(
+                    shape = RoundedCornerShape(16.dp),
+                    color = com.modxlab.admin.ui.theme.AppSurface,
+                    border = androidx.compose.foundation.BorderStroke(
+                        1.2.dp,
+                        com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.8f)
+                    ),
+                    shadowElevation = 6.dp,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            IconButton(
+                                onClick = {
+                                    isSelectionMode = false
+                                    selectedKeys = emptySet()
+                                },
+                                modifier = Modifier.size(32.dp)
+                            ) {
+                                Icon(Icons.Default.Clear, contentDescription = "Cancel Selection", tint = TextPrimary)
+                            }
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = "${selectedKeys.size} / ${users.size} Selected",
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = TextPrimary
+                                )
+                            )
+                        }
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            TextButton(
+                                onClick = {
+                                    if (selectedKeys.size == users.size) {
+                                        selectedKeys = emptySet()
+                                    } else {
+                                        selectedKeys = users.map { it.key }.toSet()
+                                    }
+                                }
+                            ) {
+                                Text(
+                                    text = if (selectedKeys.size == users.size) "Deselect All" else "Select All",
+                                    style = MaterialTheme.typography.labelLarge.copy(
+                                        color = com.modxlab.admin.ui.theme.BrandSage,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                )
+                            }
+
+                            IconButton(
+                                onClick = {
+                                    if (selectedKeys.isNotEmpty()) {
+                                        showBulkDeleteDialog = true
+                                    }
+                                },
+                                enabled = selectedKeys.isNotEmpty()
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "Delete Selected Keys",
+                                    tint = if (selectedKeys.isNotEmpty()) BrandCrimson else TextSecondary.copy(alpha = 0.4f)
+                                )
+                            }
+                        }
+                    }
+                }
+            } else {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(
+                            text = if (statusFilter == "LOGGED_IN") "Logged In Users" else "Client Keys",
+                            style = MaterialTheme.typography.headlineMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = TextPrimary
+                            )
                         )
-                    )
-                    Text(
-                        text = "${users.size} record(s) found",
-                        style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
-                    )
+                        Text(
+                            text = "${users.size} record(s) found",
+                            style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                        )
+                    }
+
+                    if (users.isNotEmpty()) {
+                        TextButton(
+                            onClick = {
+                                isSelectionMode = true
+                                selectedKeys = users.map { it.key }.toSet()
+                            }
+                        ) {
+                            Text(
+                                text = "Select All",
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    color = com.modxlab.admin.ui.theme.BrandSage,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            )
+                        }
+                    }
                 }
             }
 
@@ -268,9 +368,35 @@ fun UserListScreen(
                         key = { _, item -> item.key },
                         contentType = { _, _ -> "user_card" }
                     ) { index, userItem ->
+                        val isSelected = selectedKeys.contains(userItem.key)
                         UserCardItem(
                             index = index + 1,
                             user = userItem,
+                            isSelectionMode = isSelectionMode,
+                            isSelected = isSelected,
+                            onItemClick = {
+                                if (isSelectionMode) {
+                                    selectedKeys = if (isSelected) {
+                                        selectedKeys - userItem.key
+                                    } else {
+                                        selectedKeys + userItem.key
+                                    }
+                                } else {
+                                    onNavigateToEditUser(userItem.key)
+                                }
+                            },
+                            onLongClick = {
+                                if (!isSelectionMode) {
+                                    isSelectionMode = true
+                                    selectedKeys = users.map { it.key }.toSet()
+                                } else {
+                                    selectedKeys = if (isSelected) {
+                                        selectedKeys - userItem.key
+                                    } else {
+                                        selectedKeys + userItem.key
+                                    }
+                                }
+                            },
                             onEditClick = { onNavigateToEditUser(userItem.key) },
                             onDeleteClick = { userToDelete = userItem },
                             onToggleStatusClick = { userToToggle = userItem },
@@ -279,7 +405,7 @@ fun UserListScreen(
                                 val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                                 val clip = ClipData.newPlainText("ModX License Key", userItem.key)
                                 clipboard.setPrimaryClip(clip)
-                                Toast.makeText(context, "License Key Copied", Toast.LENGTH_SHORT).show()
+                                viewModel.showToastMessage("License Key Copied")
                             }
                         )
                     }
@@ -395,6 +521,47 @@ fun UserListScreen(
             shape = RoundedCornerShape(16.dp)
         )
     }
+
+    // Bulk Delete Confirmation Dialog
+    if (showBulkDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showBulkDeleteDialog = false },
+            title = {
+                Text(
+                    "Delete Selected Keys (${selectedKeys.size})",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = TextPrimary
+                    )
+                )
+            },
+            text = {
+                Text(
+                    "Are you sure you want to delete ${selectedKeys.size} selected key(s)? This action cannot be undone.",
+                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.deleteMultipleUsers(selectedKeys)
+                        showBulkDeleteDialog = false
+                        isSelectionMode = false
+                        selectedKeys = emptySet()
+                    }
+                ) {
+                    Text("Delete All (${selectedKeys.size})", color = BrandCrimson, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showBulkDeleteDialog = false }) {
+                    Text("Cancel", color = TextSecondary)
+                }
+            },
+            containerColor = com.modxlab.admin.ui.theme.AppSurface,
+            shape = RoundedCornerShape(16.dp)
+        )
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -402,6 +569,10 @@ fun UserListScreen(
 private fun UserCardItem(
     index: Int,
     user: UserEntity,
+    isSelectionMode: Boolean = false,
+    isSelected: Boolean = false,
+    onItemClick: () -> Unit = {},
+    onLongClick: () -> Unit = {},
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onToggleStatusClick: () -> Unit,
@@ -410,13 +581,19 @@ private fun UserCardItem(
 ) {
     val isLoggedIn = user.device != "null" && user.device.isNotBlank()
 
-    GlassBox(
-        shape = RoundedCornerShape(10.dp),
+    Surface(
+        shape = RoundedCornerShape(12.dp),
+        color = if (isSelected) com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.10f) else com.modxlab.admin.ui.theme.AppSurface,
+        border = androidx.compose.foundation.BorderStroke(
+            width = if (isSelected) 1.5.dp else 1.dp,
+            color = if (isSelected) com.modxlab.admin.ui.theme.BrandSage else com.modxlab.admin.ui.theme.AppBorder
+        ),
+        shadowElevation = 2.dp,
         modifier = Modifier
             .fillMaxWidth()
             .combinedClickable(
-                onClick = onEditClick,
-                onLongClick = onToggleStatusClick
+                onClick = onItemClick,
+                onLongClick = onLongClick
             )
             .testTag("user_item_${user.key}")
     ) {
@@ -425,6 +602,14 @@ private fun UserCardItem(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                if (isSelectionMode) {
+                    GlassCheckbox(
+                        checked = isSelected,
+                        onCheckedChange = { onItemClick() }
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                }
+
                 // Index badge
                 Box(
                     modifier = Modifier
