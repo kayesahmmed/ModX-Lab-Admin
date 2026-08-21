@@ -161,13 +161,16 @@ fun EditUserScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.weight(1f),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 IconButton(
                     onClick = onNavigateBack,
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(38.dp)
                         .clip(RoundedCornerShape(12.dp))
-                        .background(CyberSurfaceVariant)
+                        .background(com.modxlab.admin.ui.theme.AppSurfaceVariant)
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -175,26 +178,32 @@ fun EditUserScreen(
                         tint = TextPrimary
                     )
                 }
-                Spacer(modifier = Modifier.width(12.dp))
-                Column {
+                Spacer(modifier = Modifier.width(10.dp))
+                Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = "Edit Key Settings",
-                        style = MaterialTheme.typography.titleLarge.copy(
+                        style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold,
                             color = TextPrimary
-                        )
+                        ),
+                        maxLines = 1,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                     )
                     Text(
-                        text = "Manage credentials, device limit & status",
-                        style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
+                        text = "Manage credentials & status",
+                        style = MaterialTheme.typography.bodySmall.copy(color = TextSecondary),
+                        maxLines = 1,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                     )
                 }
             }
 
+            Spacer(modifier = Modifier.width(8.dp))
+
             IconButton(
                 onClick = { showDeleteDialog = true },
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(38.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .background(BrandCrimson.copy(alpha = 0.15f))
                     .testTag("btn_delete_user_screen")
@@ -550,7 +559,7 @@ fun EditUserScreen(
                         )
                         Text(
                             text = if (user.isActive) "Client can login & authenticate" else "Client key is blocked",
-                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.85f), fontSize = 12.sp)
+                            style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary, fontSize = 12.sp)
                         )
                     }
                 }
@@ -562,8 +571,8 @@ fun EditUserScreen(
                         userEntity = userEntity?.copy(status = if (willActivate) "true" else "false")
                     },
                     colors = SwitchDefaults.colors(
-                        checkedThumbColor = BrandEmerald,
-                        checkedTrackColor = BrandEmerald.copy(alpha = 0.3f),
+                        checkedThumbColor = com.modxlab.admin.ui.theme.BrandSage,
+                        checkedTrackColor = com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.3f),
                         uncheckedThumbColor = BrandCrimson,
                         uncheckedTrackColor = BrandCrimson.copy(alpha = 0.3f)
                     ),
@@ -589,7 +598,7 @@ fun EditUserScreen(
                         text = "Hardware & Telemetry Info",
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = TextPrimary
                         )
                     )
 
@@ -597,8 +606,8 @@ fun EditUserScreen(
                         Button(
                             onClick = { showResetHwidDialog = true },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = BrandCyan.copy(alpha = 0.2f),
-                                contentColor = BrandCyan
+                                containerColor = com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.15f),
+                                contentColor = com.modxlab.admin.ui.theme.BrandSage
                             ),
                             shape = RoundedCornerShape(8.dp),
                             contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp)
@@ -656,11 +665,11 @@ fun EditUserScreen(
     if (showResetHwidDialog) {
         AlertDialog(
             onDismissRequest = { showResetHwidDialog = false },
-            title = { Text("Reset Bound Device", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)) },
+            title = { Text("Reset Bound Device", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold, color = TextPrimary)) },
             text = {
                 Text(
                     "Reset bound device for \"${user.user}\"? This clears the hardware lock and allows login from a new device.",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
+                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
                 )
             },
             confirmButton = {
@@ -671,15 +680,15 @@ fun EditUserScreen(
                         showResetHwidDialog = false
                     }
                 ) {
-                    Text("Reset Device", color = BrandCyan, fontWeight = FontWeight.Bold)
+                    Text("Reset Device", color = com.modxlab.admin.ui.theme.BrandSage, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showResetHwidDialog = false }) {
-                    Text("Cancel", color = Color.White.copy(alpha = 0.8f))
+                    Text("Cancel", color = TextSecondary)
                 }
             },
-            containerColor = Color.White.copy(alpha = 0.2f),
+            containerColor = com.modxlab.admin.ui.theme.AppSurface,
             shape = RoundedCornerShape(16.dp)
         )
     }
@@ -687,11 +696,11 @@ fun EditUserScreen(
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Delete License User", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)) },
+            title = { Text("Delete License User", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold, color = TextPrimary)) },
             text = {
                 Text(
                     "Are you sure you want to permanently delete user \"${user.user}\"? All credentials and device bindings will be purged.",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
+                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
                 )
             },
             confirmButton = {
@@ -707,10 +716,10 @@ fun EditUserScreen(
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancel", color = Color.White.copy(alpha = 0.8f))
+                    Text("Cancel", color = TextSecondary)
                 }
             },
-            containerColor = Color.White.copy(alpha = 0.2f),
+            containerColor = com.modxlab.admin.ui.theme.AppSurface,
             shape = RoundedCornerShape(16.dp)
         )
     }
@@ -726,10 +735,10 @@ private fun InfoRow(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .background(Color.White.copy(alpha = 0.10f))
+            .background(com.modxlab.admin.ui.theme.AppSurfaceVariant)
             .border(
                 width = 0.8.dp,
-                color = Color.White.copy(alpha = 0.15f),
+                color = com.modxlab.admin.ui.theme.AppBorder,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(12.dp),
@@ -739,13 +748,13 @@ private fun InfoRow(
             modifier = Modifier
                 .size(32.dp)
                 .clip(CircleShape)
-                .background(BrandCyan.copy(alpha = 0.18f)),
+                .background(com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.15f)),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = label,
-                tint = BrandCyan,
+                tint = com.modxlab.admin.ui.theme.BrandSage,
                 modifier = Modifier.size(16.dp)
             )
         }
@@ -754,7 +763,7 @@ private fun InfoRow(
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall.copy(
-                    color = Color.White.copy(alpha = 0.6f),
+                    color = TextSecondary,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -762,7 +771,7 @@ private fun InfoRow(
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    color = Color.White,
+                    color = TextPrimary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 13.sp
                 )

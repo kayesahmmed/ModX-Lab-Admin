@@ -10,6 +10,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import com.modxlab.admin.ui.components.GlassBox
 import com.modxlab.admin.ui.components.GlassCard
 import com.modxlab.admin.ui.components.GlassCheckbox
@@ -157,7 +159,14 @@ fun UserListScreen(
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { viewModel.setUserSearchQuery(it) },
-                placeholder = { Text("Search by user, key, or device...", color = TextSecondary.copy(alpha = 0.6f)) },
+                placeholder = {
+                    Text(
+                        text = "Search key or user...",
+                        color = TextSecondary.copy(alpha = 0.6f),
+                        maxLines = 1,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                    )
+                },
                 leadingIcon = {
                     Icon(Icons.Default.Search, contentDescription = "Search", tint = TextSecondary)
                 },
@@ -169,6 +178,7 @@ fun UserListScreen(
                     }
                 },
                 singleLine = true,
+                maxLines = 1,
                 shape = RoundedCornerShape(14.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = com.modxlab.admin.ui.theme.AppSurface,
@@ -185,16 +195,18 @@ fun UserListScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Filter Chips
+            // Filter Chips (Scrollable Row to prevent vertical overflow/stretching)
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 listOf(
                     "ALL" to "All Keys",
-                    "LOGGED_IN" to "Logged In Users",
+                    "LOGGED_IN" to "Logged In",
                     "ACTIVE" to "Active Only",
-                    "INACTIVE" to "Blocked / Inactive"
+                    "INACTIVE" to "Blocked"
                 ).forEach { (filterKey, label) ->
                     val isSelected = statusFilter == filterKey
                     FilterChip(
@@ -547,85 +559,101 @@ private fun UserCardItem(
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            // Metadata Chips
+            // Metadata Chips & Action Buttons
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Validity chip
+                // Left Metadata Chips
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(com.modxlab.admin.ui.theme.AppSurfaceVariant)
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                    modifier = Modifier.weight(1f),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Timer,
-                        contentDescription = "Validity",
-                        tint = TextSecondary,
-                        modifier = Modifier.size(12.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = user.validity.ifEmpty { "Expires in 30 Days" },
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            color = TextSecondary,
-                            fontSize = 11.sp
+                    // Validity chip
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(com.modxlab.admin.ui.theme.AppSurfaceVariant)
+                            .padding(horizontal = 6.dp, vertical = 4.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Timer,
+                            contentDescription = "Validity",
+                            tint = TextSecondary,
+                            modifier = Modifier.size(12.dp)
                         )
-                    )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = user.validity.ifEmpty { "30 Days" },
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                color = TextSecondary,
+                                fontSize = 10.sp
+                            ),
+                            maxLines = 1,
+                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                        )
+                    }
+
+                    // Device Chip
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(com.modxlab.admin.ui.theme.AppSurfaceVariant)
+                            .padding(horizontal = 6.dp, vertical = 4.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Devices,
+                            contentDescription = "Device Access",
+                            tint = TextSecondary,
+                            modifier = Modifier.size(12.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = if (user.isUnlimitedDevice) "Unlimited (∞)" else "${user.access} Device",
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                color = TextSecondary,
+                                fontSize = 10.sp
+                            ),
+                            maxLines = 1,
+                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                        )
+                    }
                 }
 
-                // Device Chip
+                Spacer(modifier = Modifier.width(6.dp))
+
+                // Action Icons: Edit & Delete (Guaranteed visible)
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(com.modxlab.admin.ui.theme.AppSurfaceVariant)
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                    horizontalArrangement = Arrangement.spacedBy(2.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Devices,
-                        contentDescription = "Device Access",
-                        tint = TextSecondary,
-                        modifier = Modifier.size(12.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = if (user.isUnlimitedDevice) "Unlimited (∞)" else "${user.access} Device(s)",
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            color = TextSecondary,
-                            fontSize = 11.sp
+                    IconButton(
+                        onClick = onEditClick,
+                        modifier = Modifier.size(30.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Edit Key",
+                            tint = TextSecondary,
+                            modifier = Modifier.size(15.dp)
                         )
-                    )
-                }
+                    }
 
-                Spacer(modifier = Modifier.weight(1f))
-
-                // Action Icons: Edit & Delete
-                IconButton(
-                    onClick = onEditClick,
-                    modifier = Modifier.size(32.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = "Edit Key",
-                        tint = TextSecondary,
-                        modifier = Modifier.size(16.dp)
-                    )
-                }
-
-                IconButton(
-                    onClick = onDeleteClick,
-                    modifier = Modifier.size(32.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete User",
-                        tint = BrandCrimson.copy(alpha = 0.85f),
-                        modifier = Modifier.size(16.dp)
-                    )
+                    IconButton(
+                        onClick = onDeleteClick,
+                        modifier = Modifier.size(30.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete User",
+                            tint = BrandCrimson,
+                            modifier = Modifier.size(15.dp)
+                        )
+                    }
                 }
             }
         }
