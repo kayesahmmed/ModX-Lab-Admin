@@ -229,7 +229,7 @@ fun DashboardScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 MetricCard(
-                    title = "Total Users",
+                    title = "Total Keys",
                     value = stats.totalKeys.toString(),
                     subtitle = "${stats.activeUsers} Active",
                     color = BrandEmerald,
@@ -241,7 +241,7 @@ fun DashboardScreen(
                 )
 
                 MetricCard(
-                    title = "Logged In",
+                    title = "Total Users",
                     value = stats.loggedInUsers.toString(),
                     subtitle = "Active on device",
                     color = BrandCyan,
