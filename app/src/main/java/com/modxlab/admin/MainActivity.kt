@@ -40,12 +40,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Add
-
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.SystemUpdate
+import androidx.compose.material.icons.filled.CloudSync
+import androidx.compose.material.icons.filled.SpaceDashboard
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.SystemUpdate
+import androidx.compose.material.icons.outlined.CloudSync
+import androidx.compose.material.icons.outlined.SpaceDashboard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -213,8 +216,13 @@ fun MainApp(viewModel: AdminViewModel) {
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(60.dp),
-                        shape = com.modxlab.admin.ui.components.BottomNavShape(cradleRadius = 36.dp, cornerRadius = 24.dp),
+                            .height(62.dp),
+                        shape = com.modxlab.admin.ui.components.BottomNavShape(
+                            cradleRadius = 24.dp,
+                            cradleMargin = 6.dp,
+                            cornerRadius = 14.dp,
+                            cradleDepth = 24.dp
+                        ),
                         color = Color(0xFF1E1E1E),
                         shadowElevation = 12.dp
                     ) {
@@ -225,7 +233,7 @@ fun MainApp(viewModel: AdminViewModel) {
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            // Home Button
+                            // Home Button (Classic Home with Emerald Fill Animation)
                             val homeSelected = currentRoute == Screen.Dashboard.route
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -248,20 +256,21 @@ fun MainApp(viewModel: AdminViewModel) {
                                     selectedIcon = Icons.Filled.Home,
                                     unselectedIcon = Icons.Outlined.Home,
                                     selectedColor = BrandEmerald,
-                                    unselectedColor = Color.White.copy(alpha = 0.6f),
+                                    unselectedColor = Color.White,
                                     modifier = Modifier.size(28.dp)
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = "Home",
                                     style = MaterialTheme.typography.labelSmall.copy(
-                                        color = if (homeSelected) Color.White else Color.White.copy(alpha = 0.6f),
-                                        fontSize = 12.sp
+                                        color = if (homeSelected) BrandEmerald else Color.White.copy(alpha = 0.85f),
+                                        fontSize = 12.sp,
+                                        fontWeight = if (homeSelected) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Normal
                                     )
                                 )
                             }
 
-                            // Update Button
+                            // Update Button (Classic SystemUpdate with Emerald Fill Animation)
                             val updateSelected = currentRoute == Screen.Maintenance.route
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -284,27 +293,28 @@ fun MainApp(viewModel: AdminViewModel) {
                                     selectedIcon = Icons.Filled.SystemUpdate,
                                     unselectedIcon = Icons.Outlined.SystemUpdate,
                                     selectedColor = BrandEmerald,
-                                    unselectedColor = Color.White.copy(alpha = 0.6f),
+                                    unselectedColor = Color.White,
                                     modifier = Modifier.size(28.dp)
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = "Update",
                                     style = MaterialTheme.typography.labelSmall.copy(
-                                        color = if (updateSelected) Color.White else Color.White.copy(alpha = 0.6f),
-                                        fontSize = 12.sp
+                                        color = if (updateSelected) BrandEmerald else Color.White.copy(alpha = 0.85f),
+                                        fontSize = 12.sp,
+                                        fontWeight = if (updateSelected) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Normal
                                     )
                                 )
                             }
                         }
                     }
 
-                    // Center Floating Button
+                    // Center Floating Button closely connected to cradle
                     val setPassSelected = currentRoute?.startsWith(Screen.AddUser.route) == true
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .offset(y = (-4).dp)
+                            .offset(y = (-16).dp)
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null
@@ -319,12 +329,12 @@ fun MainApp(viewModel: AdminViewModel) {
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(56.dp)
+                                .size(48.dp)
                                 .clip(CircleShape)
-                                .background(Color(0xFF2D2D2D))
+                                .background(Color(0xFF2B2B2B))
                                 .border(
-                                    width = 2.dp,
-                                    color = if (setPassSelected) BrandEmerald else Color.Transparent,
+                                    width = 1.5.dp,
+                                    color = if (setPassSelected) BrandEmerald else Color.White.copy(alpha = 0.4f),
                                     shape = CircleShape
                                 ),
                             contentAlignment = Alignment.Center
@@ -333,15 +343,16 @@ fun MainApp(viewModel: AdminViewModel) {
                                 imageVector = Icons.Filled.Add,
                                 contentDescription = "Set Pass",
                                 tint = if (setPassSelected) BrandEmerald else Color.White,
-                                modifier = Modifier.size(32.dp)
+                                modifier = Modifier.size(26.dp)
                             )
                         }
-                        Spacer(modifier = Modifier.height(2.dp))
+                        Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = "Set Pass",
                             style = MaterialTheme.typography.labelSmall.copy(
-                                color = if (setPassSelected) Color.White else Color.White.copy(alpha = 0.6f),
-                                fontSize = 12.sp
+                                color = if (setPassSelected) BrandEmerald else Color.White.copy(alpha = 0.85f),
+                                fontSize = 11.sp,
+                                fontWeight = if (setPassSelected) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Normal
                             )
                         )
                     }

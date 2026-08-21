@@ -209,7 +209,6 @@ fun DashboardScreen(
                     title = "Total Users",
                     value = stats.loggedInUsers.toString(),
                     subtitle = "${stats.loggedInUsers} Logged In",
-                    icon = Icons.Default.Group,
                     color = BrandEmerald,
                     modifier = Modifier.weight(1f),
                     onClick = {
@@ -222,7 +221,6 @@ fun DashboardScreen(
                     title = "Total Keys",
                     value = stats.totalKeys.toString(),
                     subtitle = "${stats.activeUsers} Active / Set",
-                    icon = Icons.Default.VpnKey,
                     color = BrandCyan,
                     modifier = Modifier.weight(1f),
                     onClick = {
@@ -281,7 +279,6 @@ fun MetricCard(
     title: String,
     value: String,
     subtitle: String,
-    icon: ImageVector,
     color: Color,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
@@ -293,46 +290,26 @@ fun MetricCard(
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(36.dp)
-                        .clip(CircleShape)
-                        .background(color.copy(alpha = 0.20f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = title,
-                        tint = color,
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(14.dp))
             Text(
                 text = value,
-                style = MaterialTheme.typography.headlineMedium.copy(
+                style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.Black,
                     color = Color.White
                 )
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = title,
-                style = MaterialTheme.typography.labelMedium.copy(
+                style = MaterialTheme.typography.titleSmall.copy(
                     fontWeight = FontWeight.Bold,
                     color = Color.White.copy(alpha = 0.9f)
-                ),
-                modifier = Modifier.padding(top = 2.dp)
+                )
             )
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.labelSmall.copy(
-                    color = color
+                    color = color,
+                    fontWeight = FontWeight.SemiBold
                 ),
                 modifier = Modifier.padding(top = 2.dp)
             )
