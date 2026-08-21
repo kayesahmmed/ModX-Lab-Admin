@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import com.modxlab.admin.ui.theme.BrandEmerald
 import com.modxlab.admin.ui.theme.BrandSage
 import com.modxlab.admin.ui.theme.TextPrimary
+import androidx.compose.animation.animateContentSize
 
 @Composable
 fun PremiumToast(
@@ -44,94 +45,118 @@ fun PremiumToast(
 ) {
     Surface(
         shape = RoundedCornerShape(24.dp),
-        color = com.modxlab.admin.ui.theme.AppSurface,
+        color = com.modxlab.admin.ui.theme.AppSurface.copy(alpha = 0.95f),
         border = BorderStroke(
-            width = 1.5.dp,
-            brush = Brush.horizontalGradient(
+            width = 1.dp,
+            brush = Brush.linearGradient(
                 colors = listOf(
-                    BrandSage,
-                    BrandEmerald.copy(alpha = 0.5f),
+                    BrandSage.copy(alpha = 0.7f),
+                    BrandEmerald.copy(alpha = 0.3f),
+                    BrandSage.copy(alpha = 0.1f),
                     BrandSage.copy(alpha = 0.8f)
                 )
             )
         ),
-        shadowElevation = 12.dp,
+        shadowElevation = 16.dp,
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 10.dp)
+            .padding(horizontal = 20.dp, vertical = 12.dp)
+            .animateContentSize()
     ) {
-        Row(
-            modifier = Modifier
-                .background(
-                    brush = Brush.horizontalGradient(
-                        colors = listOf(
-                            BrandSage.copy(alpha = 0.12f),
-                            Color.Transparent,
-                            BrandSage.copy(alpha = 0.05f)
+        Box(modifier = Modifier.fillMaxWidth()) {
+            // Subtle Top-Left Glow
+            Box(
+                modifier = Modifier
+                    .size(60.dp)
+                    .background(
+                        brush = Brush.radialGradient(
+                            colors = listOf(BrandEmerald.copy(alpha = 0.15f), Color.Transparent)
                         )
                     )
-                )
-                .padding(horizontal = 14.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Neon Glow Left Pill Indicator Bar
-            Box(
-                modifier = Modifier
-                    .width(4.dp)
-                    .height(26.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(BrandSage)
             )
-
-            Spacer(modifier = Modifier.width(10.dp))
-
-            // Glowing Dual-Ring Badge Icon
-            Box(
+            
+            Row(
                 modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .background(BrandSage.copy(alpha = 0.18f))
-                    .border(1.dp, BrandSage.copy(alpha = 0.5f), CircleShape),
-                contentAlignment = Alignment.Center
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                BrandSage.copy(alpha = 0.15f),
+                                Color.Transparent,
+                                BrandSage.copy(alpha = 0.08f)
+                            )
+                        )
+                    )
+                    .padding(horizontal = 16.dp, vertical = 14.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = if (message.contains("ModX", ignoreCase = true)) Icons.Default.AutoAwesome else Icons.Default.CheckCircle,
-                    contentDescription = "Notification",
-                    tint = BrandSage,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Text(
-                text = message,
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = TextPrimary,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 13.sp,
-                    letterSpacing = 0.3.sp
-                ),
-                modifier = Modifier.weight(1f)
-            )
-
-            if (actionLabel != null && onActionClick != null) {
-                Spacer(modifier = Modifier.width(8.dp))
-                TextButton(
-                    onClick = onActionClick,
-                    shape = RoundedCornerShape(12.dp),
+                // Neon Glow Left Pill Indicator Bar
+                Box(
                     modifier = Modifier
-                        .background(BrandSage.copy(alpha = 0.15f))
-                        .border(1.dp, BrandSage.copy(alpha = 0.4f), RoundedCornerShape(12.dp))
-                ) {
-                    Text(
-                        text = actionLabel,
-                        style = MaterialTheme.typography.labelMedium.copy(
-                            color = BrandSage,
-                            fontWeight = FontWeight.ExtraBold,
-                            letterSpacing = 0.5.sp
+                        .width(4.dp)
+                        .height(28.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(BrandEmerald, BrandSage)
+                            )
                         )
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                // Glowing Dual-Ring Badge Icon
+                Box(
+                    modifier = Modifier
+                        .size(38.dp)
+                        .clip(CircleShape)
+                        .background(
+                            brush = Brush.linearGradient(
+                                colors = listOf(BrandSage.copy(alpha = 0.2f), BrandEmerald.copy(alpha = 0.05f))
+                            )
+                        )
+                        .border(1.dp, BrandSage.copy(alpha = 0.6f), CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = if (message.contains("ModX", ignoreCase = true)) Icons.Default.AutoAwesome else Icons.Default.CheckCircle,
+                        contentDescription = "Notification",
+                        tint = BrandSage,
+                        modifier = Modifier.size(20.dp)
                     )
+                }
+
+                Spacer(modifier = Modifier.width(14.dp))
+
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = TextPrimary,
+                        fontWeight = FontWeight.W600,
+                        fontSize = 14.sp,
+                        letterSpacing = 0.5.sp
+                    ),
+                    modifier = Modifier.weight(1f)
+                )
+
+                if (actionLabel != null && onActionClick != null) {
+                    Spacer(modifier = Modifier.width(12.dp))
+                    TextButton(
+                        onClick = onActionClick,
+                        shape = RoundedCornerShape(14.dp),
+                        modifier = Modifier
+                            .background(BrandSage.copy(alpha = 0.12f), RoundedCornerShape(14.dp))
+                            .border(1.dp, BrandSage.copy(alpha = 0.5f), RoundedCornerShape(14.dp))
+                            .height(36.dp)
+                    ) {
+                        Text(
+                            text = actionLabel,
+                            style = MaterialTheme.typography.labelLarge.copy(
+                                color = BrandSage,
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 0.5.sp
+                            )
+                        )
+                    }
                 }
             }
         }

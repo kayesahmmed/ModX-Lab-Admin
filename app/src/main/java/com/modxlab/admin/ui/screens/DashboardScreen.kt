@@ -104,30 +104,45 @@ fun DashboardScreen(
                         Text(
                             text = "Admin Panel",
                             style = MaterialTheme.typography.displayLarge.copy(
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = TextPrimary
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Black,
+                                color = TextPrimary,
+                                letterSpacing = (-0.5).sp
                             ),
                             maxLines = 1
                         )
                         Text(
-                            text = "System Overview",
-                            style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary),
+                            text = "System Overview & Controls",
+                            style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary, fontWeight = FontWeight.Medium),
                             maxLines = 1
                         )
                     }
                     Surface(
-                        shape = RoundedCornerShape(20.dp),
-                        color = com.modxlab.admin.ui.theme.AppSurface,
+                        shape = RoundedCornerShape(24.dp),
+                        color = Color.Transparent,
                         border = androidx.compose.foundation.BorderStroke(
-                            width = 1.2.dp,
-                            color = com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.6f)
+                            width = 1.dp,
+                            brush = Brush.linearGradient(
+                                colors = listOf(
+                                    com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.8f),
+                                    com.modxlab.admin.ui.theme.BrandEmerald.copy(alpha = 0.3f),
+                                    com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.8f)
+                                )
+                            )
                         ),
-                        shadowElevation = 4.dp
+                        shadowElevation = 8.dp
                     ) {
                         Row(
                             modifier = Modifier
-                                .padding(horizontal = 12.dp, vertical = 6.dp),
+                                .background(
+                                    brush = Brush.horizontalGradient(
+                                        colors = listOf(
+                                            com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.15f),
+                                            com.modxlab.admin.ui.theme.BrandEmerald.copy(alpha = 0.05f)
+                                        )
+                                    )
+                                )
+                                .padding(horizontal = 14.dp, vertical = 8.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Box(
@@ -135,7 +150,7 @@ fun DashboardScreen(
                                     .size(10.dp)
                                     .clip(CircleShape)
                                     .background(com.modxlab.admin.ui.theme.BrandSage)
-                                    .border(2.dp, com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.35f), CircleShape)
+                                    .border(2.dp, com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.4f), CircleShape)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
@@ -143,7 +158,7 @@ fun DashboardScreen(
                                 style = MaterialTheme.typography.labelSmall.copy(
                                     fontWeight = FontWeight.ExtraBold,
                                     fontSize = 11.sp,
-                                    letterSpacing = 0.8.sp,
+                                    letterSpacing = 1.sp,
                                     color = com.modxlab.admin.ui.theme.BrandSage
                                 )
                             )

@@ -2,8 +2,6 @@ package com.modxlab.admin
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.viewModels
-import com.modxlab.admin.ui.viewmodel.AuthViewModel
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -107,11 +105,9 @@ import com.modxlab.admin.ui.viewmodel.AdminViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 
 class MainActivity : ComponentActivity() {
-    private val authViewModel: AuthViewModel by viewModels()
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
-                super.onCreate(savedInstanceState)
-        authViewModel.silentLogin()
+        super.onCreate(savedInstanceState)
         
         // Runtime Security Check to prevent repackaging
         if (packageName != "com.kayesahmmed.admin") {
@@ -181,7 +177,7 @@ fun MainApp(viewModel: AdminViewModel) {
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val appBrandingToast = "created by ModX Lab"
+    val appBrandingToast = com.modxlab.admin.core.SecurityCore.getSignatureMessage()
 
     LaunchedEffect(Unit) {
         viewModel.showToastMessage(appBrandingToast)
