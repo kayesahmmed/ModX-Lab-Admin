@@ -15,7 +15,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -28,7 +27,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -37,14 +35,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Diamond
-import androidx.compose.material.icons.filled.FlashOn
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.RocketLaunch
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -61,35 +52,29 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.modxlab.admin.R
+import com.modxlab.admin.ui.theme.AppBg
+import com.modxlab.admin.ui.theme.AppBorder
+import com.modxlab.admin.ui.theme.AppSurface
+import com.modxlab.admin.ui.theme.AppSurfaceVariant
 import com.modxlab.admin.ui.theme.BrandCrimson
-import com.modxlab.admin.ui.theme.BrandCyan
-import com.modxlab.admin.ui.theme.BrandEmerald
+import com.modxlab.admin.ui.theme.BrandDarkCharcoal
+import com.modxlab.admin.ui.theme.BrandSage
+import com.modxlab.admin.ui.theme.BrandSageLight
+import com.modxlab.admin.ui.theme.TextPrimary
+import com.modxlab.admin.ui.theme.TextSecondary
 
 // Reusable Premium Bouncy Scale Click Modifier
 fun Modifier.premiumClickable(
@@ -123,99 +108,31 @@ fun Modifier.premiumClickable(
         )
 }
 
-// Modern Frosted Glass Color Tokens (50% Opacity)
-val GlassBackgroundTop = Color.Black.copy(alpha = 0.50f)
-val GlassBackgroundBottom = Color.Black.copy(alpha = 0.50f)
-val GlassTint = Color.Black.copy(alpha = 0.50f)
-
-val GlassBorderTop = Color.White.copy(alpha = 0.35f)
-val GlassBorderBottom = Color.White.copy(alpha = 0.12f)
-
-val GlassBorderBrush = Brush.verticalGradient(
-    colors = listOf(GlassBorderTop, GlassBorderBottom)
-)
-
-val GlassBackgroundBrush = Brush.verticalGradient(
-    colors = listOf(GlassBackgroundTop, GlassBackgroundBottom)
-)
-
 @Composable
 fun GlassBox(
     modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(10.dp),
-    elevation: Dp = 4.dp,
+    shape: Shape = RoundedCornerShape(14.dp),
+    elevation: Dp = 2.dp,
     content: @Composable BoxScope.() -> Unit
 ) {
-    val configuration = LocalConfiguration.current
-    val density = LocalDensity.current
-    val screenWidthPx = with(density) { configuration.screenWidthDp.dp.toPx() }
-    val screenHeightPx = with(density) { configuration.screenHeightDp.dp.toPx() }
-
-    var positionInRoot by remember { mutableStateOf(Offset.Zero) }
-
     Box(
         modifier = modifier
-            .shadow(elevation = elevation, shape = shape, spotColor = Color.Black.copy(alpha = 0.25f))
+            .shadow(elevation = elevation, shape = shape, spotColor = BrandDarkCharcoal.copy(alpha = 0.08f))
             .clip(shape)
-            .onGloballyPositioned { coordinates ->
-                positionInRoot = coordinates.positionInRoot()
-            }
-    ) {
-        // Position-aligned blurred background image window (50% opacity)
-        Image(
-            painter = painterResource(id = R.drawable.nature_bg),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .blur(radius = 32.dp)
-                .alpha(0.50f)
-                .layout { measurable, constraints ->
-                    val placeable = measurable.measure(
-                        Constraints.fixed(screenWidthPx.toInt(), screenHeightPx.toInt())
-                    )
-                    layout(constraints.minWidth, constraints.minHeight) {
-                        placeable.placeRelative(
-                            x = -positionInRoot.x.toInt(),
-                            y = -positionInRoot.y.toInt()
-                        )
-                    }
-                }
-        )
-
-        // Frosted glass 50% opacity background tint overlay
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .background(Color.Black.copy(alpha = 0.50f))
-                .border(
-                    width = 0.8.dp,
-                    brush = Brush.verticalGradient(
-                        listOf(Color.White.copy(alpha = 0.35f), Color.White.copy(alpha = 0.12f))
-                    ),
-                    shape = shape
-                )
-        )
-
-        // Box Content
-        Box(content = content)
-    }
+            .background(AppSurface)
+            .border(width = 0.8.dp, color = AppBorder, shape = shape),
+        content = content
+    )
 }
 
 @Composable
 fun GlassCard(
     modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(10.dp),
-    elevation: Dp = 4.dp,
+    shape: Shape = RoundedCornerShape(14.dp),
+    elevation: Dp = 2.dp,
     onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val configuration = LocalConfiguration.current
-    val density = LocalDensity.current
-    val screenWidthPx = with(density) { configuration.screenWidthDp.dp.toPx() }
-    val screenHeightPx = with(density) { configuration.screenHeightDp.dp.toPx() }
-
-    var positionInRoot by remember { mutableStateOf(Offset.Zero) }
-
     val clickModifier = if (onClick != null) {
         Modifier.premiumClickable(onClick = onClick)
     } else {
@@ -224,49 +141,12 @@ fun GlassCard(
 
     Box(
         modifier = modifier
-            .shadow(elevation = elevation, shape = shape, spotColor = Color.Black.copy(alpha = 0.25f))
+            .shadow(elevation = elevation, shape = shape, spotColor = BrandDarkCharcoal.copy(alpha = 0.08f))
             .clip(shape)
-            .onGloballyPositioned { coordinates ->
-                positionInRoot = coordinates.positionInRoot()
-            }
+            .background(AppSurface)
+            .border(width = 0.8.dp, color = AppBorder, shape = shape)
             .then(clickModifier)
     ) {
-        // Position-aligned blurred background image window (50% opacity)
-        Image(
-            painter = painterResource(id = R.drawable.nature_bg),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .blur(radius = 32.dp)
-                .alpha(0.50f)
-                .layout { measurable, constraints ->
-                    val placeable = measurable.measure(
-                        Constraints.fixed(screenWidthPx.toInt(), screenHeightPx.toInt())
-                    )
-                    layout(constraints.minWidth, constraints.minHeight) {
-                        placeable.placeRelative(
-                            x = -positionInRoot.x.toInt(),
-                            y = -positionInRoot.y.toInt()
-                        )
-                    }
-                }
-        )
-
-        // Frosted glass 50% opacity background tint overlay
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .background(Color.Black.copy(alpha = 0.50f))
-                .border(
-                    width = 0.8.dp,
-                    brush = Brush.verticalGradient(
-                        listOf(Color.White.copy(alpha = 0.35f), Color.White.copy(alpha = 0.12f))
-                    ),
-                    shape = shape
-                )
-        )
-
-        // Card Content
         Column(
             modifier = Modifier.padding(16.dp),
             content = content
@@ -274,14 +154,14 @@ fun GlassCard(
     }
 }
 
-// Premium Custom Glowing Checkbox Component
+// Organic Sage Custom Checkbox Component
 @Composable
 fun GlassCheckbox(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    activeColor: Color = BrandEmerald
+    activeColor: Color = BrandSage
 ) {
     val scale by animateFloatAsState(
         targetValue = if (checked) 1f else 0.9f,
@@ -301,11 +181,11 @@ fun GlassCheckbox(
             }
             .clip(RoundedCornerShape(6.dp))
             .background(
-                if (checked) activeColor else Color.White.copy(alpha = 0.15f)
+                if (checked) activeColor else AppSurfaceVariant
             )
             .border(
                 width = 1.5.dp,
-                color = if (checked) activeColor else Color.White.copy(alpha = 0.40f),
+                color = if (checked) activeColor else AppBorder,
                 shape = RoundedCornerShape(6.dp)
             )
             .clickable(enabled = enabled && onCheckedChange != null) {
@@ -321,20 +201,20 @@ fun GlassCheckbox(
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = "Checked",
-                tint = Color.Black,
+                tint = Color.White,
                 modifier = Modifier.size(16.dp)
             )
         }
     }
 }
 
-// Premium Glowing Status Badge Chip
+// Organic Status Badge Chip
 @Composable
 fun StatusBadge(
     text: String,
     isActive: Boolean,
     modifier: Modifier = Modifier,
-    activeColor: Color = BrandEmerald,
+    activeColor: Color = BrandSage,
     inactiveColor: Color = BrandCrimson
 ) {
     val badgeColor = if (isActive) activeColor else inactiveColor
@@ -342,10 +222,10 @@ fun StatusBadge(
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
-            .background(badgeColor.copy(alpha = 0.22f))
+            .background(badgeColor.copy(alpha = 0.15f))
             .border(
                 width = 0.8.dp,
-                color = badgeColor.copy(alpha = 0.50f),
+                color = badgeColor.copy(alpha = 0.40f),
                 shape = RoundedCornerShape(8.dp)
             )
             .padding(horizontal = 10.dp, vertical = 4.dp),
@@ -361,8 +241,10 @@ fun StatusBadge(
         Spacer(modifier = Modifier.width(6.dp))
         Text(
             text = text.uppercase(),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.labelSmall.copy(
-                fontWeight = FontWeight.ExtraBold,
+                fontWeight = FontWeight.Bold,
                 color = badgeColor,
                 letterSpacing = 0.5.sp
             )
@@ -370,7 +252,7 @@ fun StatusBadge(
     }
 }
 
-// Ultra-Premium Glass Dropdown Menu
+// Organic Light Dropdown Menu
 @Composable
 fun <T> GlassDropdownMenu(
     expanded: Boolean,
@@ -386,12 +268,10 @@ fun <T> GlassDropdownMenu(
         modifier = modifier
             .width(260.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFF101424).copy(alpha = 0.96f))
+            .background(AppBg)
             .border(
                 width = 1.dp,
-                brush = Brush.verticalGradient(
-                    listOf(BrandEmerald.copy(alpha = 0.60f), Color.White.copy(alpha = 0.18f))
-                ),
+                color = AppBorder,
                 shape = RoundedCornerShape(16.dp)
             )
             .padding(vertical = 6.dp, horizontal = 6.dp)
@@ -407,8 +287,10 @@ fun <T> GlassDropdownMenu(
                     ) {
                         Text(
                             text = label,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.bodyMedium.copy(
-                                color = if (isSelected) Color.White else Color.White.copy(alpha = 0.85f),
+                                color = if (isSelected) TextPrimary else TextSecondary,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                             )
                         )
@@ -416,7 +298,7 @@ fun <T> GlassDropdownMenu(
                             Icon(
                                 imageVector = Icons.Default.Check,
                                 contentDescription = "Selected",
-                                tint = BrandEmerald,
+                                tint = BrandSage,
                                 modifier = Modifier.size(18.dp)
                             )
                         }
@@ -430,14 +312,14 @@ fun <T> GlassDropdownMenu(
                     .padding(vertical = 2.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(
-                        if (isSelected) BrandEmerald.copy(alpha = 0.22f) else Color.Transparent
+                        if (isSelected) BrandSage.copy(alpha = 0.15f) else Color.Transparent
                     )
             )
         }
     }
 }
 
-// Ultra-Premium Glass Input Field
+// Organic Light Input Field (matching reference image)
 @Composable
 fun GlassTextField(
     value: String,
@@ -453,9 +335,11 @@ fun GlassTextField(
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = label.uppercase(),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.labelSmall.copy(
-                fontWeight = FontWeight.ExtraBold,
-                color = Color.White.copy(alpha = 0.85f),
+                fontWeight = FontWeight.Bold,
+                color = TextSecondary,
                 letterSpacing = 0.8.sp
             )
         )
@@ -463,17 +347,24 @@ fun GlassTextField(
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
-            placeholder = { Text(placeholder, color = Color.White.copy(alpha = 0.40f)) },
+            placeholder = { 
+                Text(
+                    placeholder, 
+                    color = TextSecondary.copy(alpha = 0.60f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                ) 
+            },
             leadingIcon = {
                 Box(
                     modifier = Modifier
                         .padding(start = 6.dp)
                         .size(32.dp)
                         .clip(CircleShape)
-                        .background(BrandEmerald.copy(alpha = 0.18f)),
+                        .background(BrandSage.copy(alpha = 0.15f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(leadingIcon, contentDescription = label, tint = BrandEmerald, modifier = Modifier.size(18.dp))
+                    Icon(leadingIcon, contentDescription = label, tint = BrandSage, modifier = Modifier.size(18.dp))
                 }
             },
             trailingIcon = trailingIcon,
@@ -481,12 +372,12 @@ fun GlassTextField(
             singleLine = true,
             shape = RoundedCornerShape(14.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = Color.Black.copy(alpha = 0.50f),
-                unfocusedContainerColor = Color.Black.copy(alpha = 0.50f),
-                focusedBorderColor = BrandEmerald,
-                unfocusedBorderColor = Color.White.copy(alpha = 0.20f),
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White
+                focusedContainerColor = AppSurface,
+                unfocusedContainerColor = AppSurface,
+                focusedBorderColor = BrandSage,
+                unfocusedBorderColor = AppBorder,
+                focusedTextColor = TextPrimary,
+                unfocusedTextColor = TextPrimary
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -495,7 +386,7 @@ fun GlassTextField(
     }
 }
 
-// Ultra-Premium Primary Action Button
+// Organic Sage Primary Action Button
 @Composable
 fun GlassPrimaryButton(
     text: String,
@@ -510,23 +401,19 @@ fun GlassPrimaryButton(
             .fillMaxWidth()
             .height(52.dp)
             .shadow(
-                elevation = 8.dp,
+                elevation = 4.dp,
                 shape = RoundedCornerShape(14.dp),
-                spotColor = BrandEmerald.copy(alpha = 0.5f)
+                spotColor = BrandDarkCharcoal.copy(alpha = 0.15f)
             )
             .clip(RoundedCornerShape(14.dp))
-            .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(BrandEmerald, BrandCyan)
-                )
-            )
+            .background(BrandSage)
             .premiumClickable(enabled = !isLoading, onClick = onClick)
             .testTag(testTag),
         contentAlignment = Alignment.Center
     ) {
         if (isLoading) {
             CircularProgressIndicator(
-                color = Color.Black,
+                color = Color.White,
                 modifier = Modifier.size(22.dp),
                 strokeWidth = 2.5.dp
             )
@@ -539,17 +426,19 @@ fun GlassPrimaryButton(
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        tint = Color.Black,
+                        tint = Color.White,
                         modifier = Modifier.size(20.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                 }
                 Text(
-                    text = text.uppercase(),
+                    text = text,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.ExtraBold,
-                        color = Color.Black,
-                        letterSpacing = 1.sp
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        letterSpacing = 0.5.sp
                     )
                 )
             }
@@ -557,7 +446,7 @@ fun GlassPrimaryButton(
     }
 }
 
-// Ultra-Premium Custom Validity Dialog
+// Organic Custom Validity Dialog
 @Composable
 fun GlassCustomValidityDialog(
     onDismissRequest: () -> Unit,
@@ -604,22 +493,24 @@ fun GlassCustomValidityDialog(
                             modifier = Modifier
                                 .size(36.dp)
                                 .clip(CircleShape)
-                                .background(BrandEmerald.copy(alpha = 0.20f)),
+                                .background(BrandSage.copy(alpha = 0.15f)),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = Icons.Default.EditCalendar,
                                 contentDescription = "Custom Validity",
-                                tint = BrandEmerald,
+                                tint = BrandSage,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
                         Spacer(modifier = Modifier.width(10.dp))
                         Text(
                             text = "CUSTOM VALIDITY",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.titleMedium.copy(
-                                fontWeight = FontWeight.ExtraBold,
-                                color = Color.White
+                                fontWeight = FontWeight.Bold,
+                                color = TextPrimary
                             )
                         )
                     }
@@ -628,14 +519,14 @@ fun GlassCustomValidityDialog(
                         modifier = Modifier
                             .size(32.dp)
                             .clip(CircleShape)
-                            .background(Color.White.copy(alpha = 0.10f))
+                            .background(AppSurfaceVariant)
                             .premiumClickable { onDismissRequest() },
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Close",
-                            tint = Color.White.copy(alpha = 0.8f),
+                            tint = TextSecondary,
                             modifier = Modifier.size(18.dp)
                         )
                     }
@@ -648,8 +539,8 @@ fun GlassCustomValidityDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
-                        .background(Color.Black.copy(alpha = 0.50f))
-                        .border(1.dp, Color.White.copy(alpha = 0.15f), RoundedCornerShape(12.dp))
+                        .background(AppSurfaceVariant)
+                        .border(1.dp, AppBorder, RoundedCornerShape(12.dp))
                         .padding(4.dp),
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
@@ -659,7 +550,7 @@ fun GlassCustomValidityDialog(
                             .weight(1f)
                             .clip(RoundedCornerShape(10.dp))
                             .background(
-                                if (isHours) BrandEmerald else Color.Transparent
+                                if (isHours) BrandSage else Color.Transparent
                             )
                             .premiumClickable { unitMode = "HOURS" }
                             .padding(vertical = 10.dp),
@@ -667,9 +558,11 @@ fun GlassCustomValidityDialog(
                     ) {
                         Text(
                             text = "⏳ HOURS",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.labelMedium.copy(
                                 fontWeight = FontWeight.Bold,
-                                color = if (isHours) Color.Black else Color.White.copy(alpha = 0.80f)
+                                color = if (isHours) Color.White else TextSecondary
                             )
                         )
                     }
@@ -680,7 +573,7 @@ fun GlassCustomValidityDialog(
                             .weight(1f)
                             .clip(RoundedCornerShape(10.dp))
                             .background(
-                                if (isDays) BrandEmerald else Color.Transparent
+                                if (isDays) BrandSage else Color.Transparent
                             )
                             .premiumClickable { unitMode = "DAYS" }
                             .padding(vertical = 10.dp),
@@ -688,9 +581,11 @@ fun GlassCustomValidityDialog(
                     ) {
                         Text(
                             text = "📅 DAYS",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.labelMedium.copy(
                                 fontWeight = FontWeight.Bold,
-                                color = if (isDays) Color.Black else Color.White.copy(alpha = 0.80f)
+                                color = if (isDays) Color.White else TextSecondary
                             )
                         )
                     }
@@ -705,30 +600,32 @@ fun GlassCustomValidityDialog(
                         inputValue = it.filter { char -> char.isDigit() }
                         if (errorText != null) errorText = null
                     },
-                    label = { Text("ENTER ${unitMode.uppercase()} AMOUNT", color = Color.White.copy(alpha = 0.7f)) },
-                    placeholder = { Text(if (unitMode == "HOURS") "e.g. 12" else "e.g. 45", color = Color.White.copy(alpha = 0.35f)) },
+                    label = { Text("ENTER ${unitMode.uppercase()} AMOUNT", color = TextSecondary, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                    placeholder = { Text(if (unitMode == "HOURS") "e.g. 12" else "e.g. 45", color = TextSecondary.copy(alpha = 0.5f), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     isError = errorText != null,
                     supportingText = {
                         if (errorText != null) {
-                            Text(errorText!!, color = MaterialTheme.colorScheme.error)
+                            Text(errorText!!, color = MaterialTheme.colorScheme.error, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         } else {
                             Text(
                                 text = "Preview: $calculatedLabel",
-                                color = BrandEmerald,
+                                color = BrandSage,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
                                 style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
                             )
                         }
                     },
                     shape = RoundedCornerShape(14.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.Black.copy(alpha = 0.50f),
-                        unfocusedContainerColor = Color.Black.copy(alpha = 0.50f),
-                        focusedBorderColor = BrandEmerald,
-                        unfocusedBorderColor = Color.White.copy(alpha = 0.20f),
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White
+                        focusedContainerColor = AppSurface,
+                        unfocusedContainerColor = AppSurface,
+                        focusedBorderColor = BrandSage,
+                        unfocusedBorderColor = AppBorder,
+                        focusedTextColor = TextPrimary,
+                        unfocusedTextColor = TextPrimary
                     ),
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -747,16 +644,18 @@ fun GlassCustomValidityDialog(
                             .weight(1f)
                             .height(48.dp)
                             .clip(RoundedCornerShape(14.dp))
-                            .background(Color.White.copy(alpha = 0.10f))
-                            .border(1.dp, Color.White.copy(alpha = 0.20f), RoundedCornerShape(14.dp))
+                            .background(AppSurfaceVariant)
+                            .border(1.dp, AppBorder, RoundedCornerShape(14.dp))
                             .premiumClickable { onDismissRequest() },
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = "CANCEL",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White.copy(alpha = 0.90f),
+                                color = TextPrimary,
                                 fontSize = 14.sp
                             )
                         )
@@ -768,16 +667,12 @@ fun GlassCustomValidityDialog(
                             .weight(1.3f)
                             .height(48.dp)
                             .shadow(
-                                elevation = 8.dp,
+                                elevation = 4.dp,
                                 shape = RoundedCornerShape(14.dp),
-                                spotColor = BrandEmerald.copy(alpha = 0.5f)
+                                spotColor = BrandDarkCharcoal.copy(alpha = 0.15f)
                             )
                             .clip(RoundedCornerShape(14.dp))
-                            .background(
-                                brush = Brush.horizontalGradient(
-                                    colors = listOf(BrandEmerald, BrandCyan)
-                                )
-                            )
+                            .background(BrandSage)
                             .premiumClickable {
                                 val num = inputValue.toDoubleOrNull()
                                 if (num == null || num <= 0) {
@@ -795,15 +690,17 @@ fun GlassCustomValidityDialog(
                             Icon(
                                 imageVector = Icons.Default.Check,
                                 contentDescription = null,
-                                tint = Color.Black,
+                                tint = Color.White,
                                 modifier = Modifier.size(18.dp)
                             )
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = "APPLY",
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
                                 style = MaterialTheme.typography.titleMedium.copy(
-                                    fontWeight = FontWeight.ExtraBold,
-                                    color = Color.Black,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
                                     fontSize = 14.sp,
                                     letterSpacing = 0.5.sp
                                 )
@@ -815,3 +712,4 @@ fun GlassCustomValidityDialog(
         }
     }
 }
+

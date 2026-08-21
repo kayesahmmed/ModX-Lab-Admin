@@ -134,12 +134,12 @@ fun AddUserScreen(
                     text = "Create Passkey",
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = TextPrimary
                     )
                 )
                 Text(
                     text = "Generate and configure user access pass",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
+                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
                 )
             }
         }
@@ -148,7 +148,7 @@ fun AddUserScreen(
 
         // Form Container Card
         GlassBox(
-            shape = RoundedCornerShape(10.dp),
+            shape = RoundedCornerShape(14.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
@@ -157,7 +157,7 @@ fun AddUserScreen(
                     text = "Username",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.White.copy(alpha = 0.8f)
+                        color = TextPrimary
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -167,9 +167,9 @@ fun AddUserScreen(
                         username = it
                         if (usernameError != null) usernameError = null
                     },
-                    placeholder = { Text("Enter client username", color = Color.White.copy(alpha = 0.6f)) },
+                    placeholder = { Text("Enter client username", color = TextSecondary.copy(alpha = 0.6f)) },
                     leadingIcon = {
-                        Icon(Icons.Default.Person, contentDescription = "Username", tint = BrandEmeraldLight)
+                        Icon(Icons.Default.Person, contentDescription = "Username", tint = com.modxlab.admin.ui.theme.BrandSage)
                     },
                     isError = usernameError != null,
                     supportingText = {
@@ -180,10 +180,10 @@ fun AddUserScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.White.copy(alpha = 0.2f),
-                        unfocusedContainerColor = Color.White.copy(alpha = 0.2f),
-                        focusedBorderColor = BrandEmerald,
-                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
+                        focusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
+                        unfocusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
+                        focusedBorderColor = com.modxlab.admin.ui.theme.BrandSage,
+                        unfocusedBorderColor = com.modxlab.admin.ui.theme.AppBorder,
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary
                     ),
@@ -199,7 +199,7 @@ fun AddUserScreen(
                     text = "Password / Token",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.White.copy(alpha = 0.8f)
+                        color = TextPrimary
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -209,9 +209,9 @@ fun AddUserScreen(
                         password = it
                         if (passwordError != null) passwordError = null
                     },
-                    placeholder = { Text("Enter client password / token", color = Color.White.copy(alpha = 0.6f)) },
+                    placeholder = { Text("Enter client password / token", color = TextSecondary.copy(alpha = 0.6f)) },
                     leadingIcon = {
-                        Icon(Icons.Default.Lock, contentDescription = "Password", tint = BrandEmeraldLight)
+                        Icon(Icons.Default.Lock, contentDescription = "Password", tint = com.modxlab.admin.ui.theme.BrandSage)
                     },
                     isError = passwordError != null,
                     supportingText = {
@@ -222,10 +222,10 @@ fun AddUserScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.White.copy(alpha = 0.2f),
-                        unfocusedContainerColor = Color.White.copy(alpha = 0.2f),
-                        focusedBorderColor = BrandEmerald,
-                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
+                        focusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
+                        unfocusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
+                        focusedBorderColor = com.modxlab.admin.ui.theme.BrandSage,
+                        unfocusedBorderColor = com.modxlab.admin.ui.theme.AppBorder,
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary
                     ),
@@ -241,7 +241,7 @@ fun AddUserScreen(
                     text = "VALIDITY PERIOD",
                     style = MaterialTheme.typography.labelSmall.copy(
                         fontWeight = FontWeight.ExtraBold,
-                        color = Color.White.copy(alpha = 0.85f),
+                        color = TextSecondary,
                         letterSpacing = 0.8.sp
                     )
                 )
@@ -252,12 +252,10 @@ fun AddUserScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(14.dp))
-                            .background(Color.Black.copy(alpha = 0.50f))
+                            .background(com.modxlab.admin.ui.theme.AppSurfaceVariant)
                             .border(
                                 width = 1.dp,
-                                brush = Brush.verticalGradient(
-                                    listOf(BrandEmerald.copy(alpha = 0.60f), Color.White.copy(alpha = 0.15f))
-                                ),
+                                color = com.modxlab.admin.ui.theme.AppBorder,
                                 shape = RoundedCornerShape(14.dp)
                             )
                             .premiumClickable { validityDropdownExpanded = true }
@@ -274,13 +272,13 @@ fun AddUserScreen(
                                     modifier = Modifier
                                         .size(34.dp)
                                         .clip(CircleShape)
-                                        .background(BrandEmerald.copy(alpha = 0.20f)),
+                                        .background(com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.15f)),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.AccessTime,
                                         contentDescription = "Validity",
-                                        tint = BrandEmerald,
+                                        tint = com.modxlab.admin.ui.theme.BrandSage,
                                         modifier = Modifier.size(18.dp)
                                     )
                                 }
@@ -288,7 +286,7 @@ fun AddUserScreen(
                                 Text(
                                     text = validityLabel,
                                     style = MaterialTheme.typography.titleMedium.copy(
-                                        color = Color.White,
+                                        color = TextPrimary,
                                         fontWeight = FontWeight.Bold
                                     )
                                 )
@@ -296,7 +294,7 @@ fun AddUserScreen(
                             Icon(
                                 imageVector = Icons.Default.ArrowDropDown,
                                 contentDescription = "Select",
-                                tint = BrandEmerald,
+                                tint = com.modxlab.admin.ui.theme.BrandSage,
                                 modifier = Modifier.size(26.dp)
                             )
                         }
@@ -337,14 +335,12 @@ fun AddUserScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(18.dp))
-
-                // Allowed Devices Selector
+                Spacer(modifier = Modifier.height(18.dp))                // Allowed Devices Selector
                 Text(
                     text = "DEVICE ACCESS RESTRICTION",
                     style = MaterialTheme.typography.labelSmall.copy(
                         fontWeight = FontWeight.ExtraBold,
-                        color = Color.White.copy(alpha = 0.85f),
+                        color = TextSecondary,
                         letterSpacing = 0.8.sp
                     )
                 )
@@ -361,7 +357,8 @@ fun AddUserScreen(
                         modifier = Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(if (isSingle) BrandEmerald else Color.White.copy(alpha = 0.05f))
+                            .background(if (isSingle) com.modxlab.admin.ui.theme.BrandSage else com.modxlab.admin.ui.theme.AppSurfaceVariant)
+                            .border(width = 1.dp, color = if (isSingle) com.modxlab.admin.ui.theme.BrandSage else com.modxlab.admin.ui.theme.AppBorder, shape = RoundedCornerShape(10.dp))
                             .clickable { deviceAccess = "1" }
                             .padding(vertical = 12.dp),
                         contentAlignment = Alignment.Center
@@ -369,7 +366,7 @@ fun AddUserScreen(
                         Text(
                             text = "1 Device",
                             style = MaterialTheme.typography.titleSmall.copy(
-                                color = if (isSingle) Color.Black else Color.White,
+                                color = if (isSingle) Color.White else TextPrimary,
                                 fontWeight = FontWeight.Bold
                             )
                         )
@@ -381,7 +378,8 @@ fun AddUserScreen(
                         modifier = Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(if (isUnlimited) BrandEmerald else Color.White.copy(alpha = 0.05f))
+                            .background(if (isUnlimited) com.modxlab.admin.ui.theme.BrandSage else com.modxlab.admin.ui.theme.AppSurfaceVariant)
+                            .border(width = 1.dp, color = if (isUnlimited) com.modxlab.admin.ui.theme.BrandSage else com.modxlab.admin.ui.theme.AppBorder, shape = RoundedCornerShape(10.dp))
                             .clickable { deviceAccess = "∞" }
                             .padding(vertical = 12.dp),
                         contentAlignment = Alignment.Center
@@ -389,7 +387,7 @@ fun AddUserScreen(
                         Text(
                             text = "Unlimited",
                             style = MaterialTheme.typography.titleSmall.copy(
-                                color = if (isUnlimited) Color.Black else Color.White,
+                                color = if (isUnlimited) Color.White else TextPrimary,
                                 fontWeight = FontWeight.Bold
                             )
                         )
@@ -400,36 +398,33 @@ fun AddUserScreen(
                     OutlinedTextField(
                         value = if (isCustom) deviceAccess else "",
                         onValueChange = { newValue -> 
-                            // Only allow numbers
                             if (newValue.all { it.isDigit() }) {
                                 deviceAccess = if (newValue.isEmpty()) "2" else newValue
                             }
                         },
                         placeholder = { 
-                            Text("Custom", color = Color.White.copy(alpha = 0.4f), fontSize = 12.sp) 
+                            Text("Custom", color = TextSecondary.copy(alpha = 0.6f), fontSize = 12.sp) 
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         modifier = Modifier
                             .weight(1.2f)
                             .height(48.dp),
                         textStyle = androidx.compose.ui.text.TextStyle(
-                            color = Color.White,
+                            color = TextPrimary,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
                             textAlign = androidx.compose.ui.text.style.TextAlign.Center
                         ),
                         singleLine = true,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = BrandEmerald,
-                            unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
-                            focusedContainerColor = Color.White.copy(alpha = 0.05f),
-                            unfocusedContainerColor = Color.White.copy(alpha = 0.05f)
+                            focusedBorderColor = com.modxlab.admin.ui.theme.BrandSage,
+                            unfocusedBorderColor = com.modxlab.admin.ui.theme.AppBorder,
+                            focusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
+                            unfocusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant
                         ),
                         shape = RoundedCornerShape(10.dp)
                     )
                 }
-
-
 
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -441,8 +436,8 @@ fun AddUserScreen(
                     Button(
                         onClick = onNavigateBack,
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.White.copy(alpha = 0.1f),
-                            contentColor = Color.White
+                            containerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
+                            contentColor = TextPrimary
                         ),
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier
@@ -463,8 +458,8 @@ fun AddUserScreen(
                             )
                         },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = BrandEmerald,
-                            contentColor = Color.Black
+                            containerColor = com.modxlab.admin.ui.theme.BrandSage,
+                            contentColor = Color.White
                         ),
                         shape = RoundedCornerShape(12.dp),
                         enabled = username.isNotBlank() && password.isNotBlank(),

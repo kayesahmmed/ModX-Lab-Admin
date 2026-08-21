@@ -80,8 +80,6 @@ import com.modxlab.admin.ui.theme.CyberBorder
 import com.modxlab.admin.ui.theme.CyberSurface
 import com.modxlab.admin.ui.components.GlassBox
 import com.modxlab.admin.ui.components.GlassCard
-import com.modxlab.admin.ui.components.GlassBackgroundBrush
-import com.modxlab.admin.ui.components.GlassBorderBrush
 import com.modxlab.admin.ui.theme.CyberSurfaceVariant
 import com.modxlab.admin.ui.theme.StatusActive
 import com.modxlab.admin.ui.theme.StatusActiveBg
@@ -90,10 +88,6 @@ import com.modxlab.admin.ui.theme.StatusInactiveBg
 import com.modxlab.admin.ui.theme.TextPrimary
 import com.modxlab.admin.ui.theme.TextSecondary
 import com.modxlab.admin.ui.theme.TextTertiary
-import com.modxlab.admin.ui.components.GlassBox
-import com.modxlab.admin.ui.components.GlassCard
-import com.modxlab.admin.ui.components.GlassBackgroundBrush
-import com.modxlab.admin.ui.components.GlassBorderBrush
 import com.modxlab.admin.ui.viewmodel.AdminViewModel
 
 @Composable
@@ -147,12 +141,12 @@ fun UserListScreen(
                         text = if (statusFilter == "LOGGED_IN") "Logged In Users" else "Client Keys",
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = TextPrimary
                         )
                     )
                     Text(
                         text = "${users.size} record(s) found",
-                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
+                        style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
                     )
                 }
             }
@@ -163,26 +157,26 @@ fun UserListScreen(
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { viewModel.setUserSearchQuery(it) },
-                placeholder = { Text("Search by user, key, or device...", color = Color.White.copy(alpha = 0.6f)) },
+                placeholder = { Text("Search by user, key, or device...", color = TextSecondary.copy(alpha = 0.6f)) },
                 leadingIcon = {
-                    Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.White.copy(alpha = 0.7f))
+                    Icon(Icons.Default.Search, contentDescription = "Search", tint = TextSecondary)
                 },
                 trailingIcon = {
                     if (searchQuery.isNotEmpty()) {
                         IconButton(onClick = { viewModel.setUserSearchQuery("") }) {
-                            Icon(Icons.Default.Clear, contentDescription = "Clear", tint = Color.White.copy(alpha = 0.7f))
+                            Icon(Icons.Default.Clear, contentDescription = "Clear", tint = TextSecondary)
                         }
                     }
                 },
                 singleLine = true,
                 shape = RoundedCornerShape(14.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White.copy(alpha = 0.22f),
-                    unfocusedContainerColor = Color.White.copy(alpha = 0.16f),
-                    focusedBorderColor = BrandEmerald,
-                    unfocusedBorderColor = Color.White.copy(alpha = 0.35f),
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White
+                    focusedContainerColor = com.modxlab.admin.ui.theme.AppSurface,
+                    unfocusedContainerColor = com.modxlab.admin.ui.theme.AppSurface,
+                    focusedBorderColor = com.modxlab.admin.ui.theme.BrandSage,
+                    unfocusedBorderColor = com.modxlab.admin.ui.theme.AppBorder,
+                    focusedTextColor = TextPrimary,
+                    unfocusedTextColor = TextPrimary
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -208,16 +202,16 @@ fun UserListScreen(
                         onClick = { viewModel.setUserStatusFilter(filterKey) },
                         label = { Text(label, style = MaterialTheme.typography.labelSmall) },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = BrandEmerald.copy(alpha = 0.4f),
+                            selectedContainerColor = com.modxlab.admin.ui.theme.BrandSage,
                             selectedLabelColor = Color.White,
-                            containerColor = Color.White.copy(alpha = 0.1f),
-                            labelColor = Color.White.copy(alpha = 0.8f)
+                            containerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
+                            labelColor = TextPrimary
                         ),
                         border = FilterChipDefaults.filterChipBorder(
                             enabled = true,
                             selected = isSelected,
-                            selectedBorderColor = BrandEmerald,
-                            borderColor = Color.White.copy(alpha = 0.2f)
+                            selectedBorderColor = com.modxlab.admin.ui.theme.BrandSage,
+                            borderColor = com.modxlab.admin.ui.theme.AppBorder
                         )
                     )
                 }
@@ -243,11 +237,11 @@ fun UserListScreen(
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
                             text = if (searchQuery.isNotEmpty()) "No matching records found" else "No users created yet",
-                            style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
+                            style = MaterialTheme.typography.bodyLarge.copy(color = TextPrimary)
                         )
                         Text(
                             text = "Tap the + button to create a new key",
-                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.7f))
+                            style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
                         )
                     }
                 }
@@ -287,11 +281,11 @@ fun UserListScreen(
         val user = userToDelete!!
         AlertDialog(
             onDismissRequest = { userToDelete = null },
-            title = { Text("Delete License User", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)) },
+            title = { Text("Delete License User", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold, color = TextPrimary)) },
             text = {
                 Text(
                     "Are you sure you want to delete user \"${user.user}\" (${user.key})? This will remove their key and login access permanently.",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
+                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
                 )
             },
             confirmButton = {
@@ -307,10 +301,10 @@ fun UserListScreen(
             },
             dismissButton = {
                 TextButton(onClick = { userToDelete = null }) {
-                    Text("Cancel", color = Color.White.copy(alpha = 0.8f))
+                    Text("Cancel", color = TextSecondary)
                 }
             },
-            containerColor = Color.White.copy(alpha = 0.2f),
+            containerColor = com.modxlab.admin.ui.theme.AppSurface,
             shape = RoundedCornerShape(16.dp)
         )
     }
@@ -324,13 +318,13 @@ fun UserListScreen(
             title = {
                 Text(
                     if (willActivate) "Unblock User / Key" else "Block User / Key",
-                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold, color = TextPrimary)
                 )
             },
             text = {
                 Text(
                     "Are you sure you want to ${if (willActivate) "unblock / activate" else "block / deactivate"} key access for \"${user.user}\"?",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
+                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
                 )
             },
             confirmButton = {
@@ -343,17 +337,17 @@ fun UserListScreen(
                 ) {
                     Text(
                         if (willActivate) "Activate" else "Block User",
-                        color = if (willActivate) BrandEmerald else BrandCrimson,
+                        color = if (willActivate) com.modxlab.admin.ui.theme.BrandSage else BrandCrimson,
                         fontWeight = FontWeight.Bold
                     )
                 }
             },
             dismissButton = {
                 TextButton(onClick = { userToToggle = null }) {
-                    Text("Cancel", color = Color.White.copy(alpha = 0.8f))
+                    Text("Cancel", color = TextSecondary)
                 }
             },
-            containerColor = Color.White.copy(alpha = 0.2f),
+            containerColor = com.modxlab.admin.ui.theme.AppSurface,
             shape = RoundedCornerShape(16.dp)
         )
     }
@@ -363,11 +357,11 @@ fun UserListScreen(
         val user = userToResetHwid!!
         AlertDialog(
             onDismissRequest = { userToResetHwid = null },
-            title = { Text("Reset Device Binding", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)) },
+            title = { Text("Reset Device Binding", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold, color = TextPrimary)) },
             text = {
                 Text(
                     "Reset bound device for \"${user.user}\"? This allows the user to log in on a different device.",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
+                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
                 )
             },
             confirmButton = {
@@ -377,15 +371,15 @@ fun UserListScreen(
                         userToResetHwid = null
                     }
                 ) {
-                    Text("Reset Device", color = BrandCyan, fontWeight = FontWeight.Bold)
+                    Text("Reset Device", color = com.modxlab.admin.ui.theme.BrandSage, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { userToResetHwid = null }) {
-                    Text("Cancel", color = Color.White.copy(alpha = 0.8f))
+                    Text("Cancel", color = TextSecondary)
                 }
             },
-            containerColor = Color.White.copy(alpha = 0.2f),
+            containerColor = com.modxlab.admin.ui.theme.AppSurface,
             shape = RoundedCornerShape(16.dp)
         )
     }
@@ -424,14 +418,14 @@ private fun UserCardItem(
                     modifier = Modifier
                         .size(28.dp)
                         .clip(CircleShape)
-                        .background(Color.White.copy(alpha = 0.1f)),
+                        .background(com.modxlab.admin.ui.theme.AppSurfaceVariant),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = index.toString(),
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Bold,
-                            color = Color.White.copy(alpha = 0.8f)
+                            color = TextSecondary
                         )
                     )
                 }
@@ -443,13 +437,13 @@ private fun UserCardItem(
                     modifier = Modifier
                         .size(38.dp)
                         .clip(RoundedCornerShape(10.dp))
-                        .background(if (isLoggedIn) BrandCyan.copy(alpha = 0.2f) else BrandEmerald.copy(alpha = 0.15f)),
+                        .background(if (isLoggedIn) com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.2f) else com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.15f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = if (isLoggedIn) Icons.Default.Person else Icons.Default.Person,
                         contentDescription = "User",
-                        tint = if (isLoggedIn) BrandCyan else BrandEmeraldLight,
+                        tint = com.modxlab.admin.ui.theme.BrandSage,
                         modifier = Modifier.size(22.dp)
                     )
                 }
@@ -466,7 +460,7 @@ private fun UserCardItem(
                             text = user.user,
                             style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White
+                                color = TextPrimary
                             )
                         )
                     }
@@ -478,7 +472,7 @@ private fun UserCardItem(
                         Text(
                             text = user.key,
                             style = MaterialTheme.typography.labelSmall.copy(
-                                color = BrandCyan,
+                                color = com.modxlab.admin.ui.theme.BrandSage,
                                 fontWeight = FontWeight.Medium
                             )
                         )
@@ -489,7 +483,7 @@ private fun UserCardItem(
                             Icon(
                                 imageVector = Icons.Default.ContentCopy,
                                 contentDescription = "Copy Key",
-                                tint = Color.White.copy(alpha = 0.6f),
+                                tint = TextSecondary,
                                 modifier = Modifier.size(12.dp)
                             )
                         }
@@ -512,7 +506,7 @@ private fun UserCardItem(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(8.dp))
-                        .background(BrandCyan.copy(alpha = 0.12f))
+                        .background(com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.12f))
                         .padding(horizontal = 10.dp, vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -521,14 +515,14 @@ private fun UserCardItem(
                         Icon(
                             imageVector = Icons.Default.Devices,
                             contentDescription = "Device",
-                            tint = BrandCyan,
+                            tint = com.modxlab.admin.ui.theme.BrandSage,
                             modifier = Modifier.size(14.dp)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             text = "Logged In HWID: ${user.device}",
                             style = MaterialTheme.typography.labelSmall.copy(
-                                color = Color.White,
+                                color = TextPrimary,
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.SemiBold
                             ),
@@ -539,7 +533,7 @@ private fun UserCardItem(
                     Text(
                         text = "Reset HWID",
                         style = MaterialTheme.typography.labelSmall.copy(
-                            color = BrandCyan,
+                            color = com.modxlab.admin.ui.theme.BrandSage,
                             fontWeight = FontWeight.Bold,
                             fontSize = 11.sp
                         ),
@@ -564,20 +558,20 @@ private fun UserCardItem(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(Color.White.copy(alpha = 0.1f))
+                        .background(com.modxlab.admin.ui.theme.AppSurfaceVariant)
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Timer,
                         contentDescription = "Validity",
-                        tint = Color.White.copy(alpha = 0.7f),
+                        tint = TextSecondary,
                         modifier = Modifier.size(12.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = user.validity.ifEmpty { "Expires in 30 Days" },
                         style = MaterialTheme.typography.labelSmall.copy(
-                            color = Color.White.copy(alpha = 0.8f),
+                            color = TextSecondary,
                             fontSize = 11.sp
                         )
                     )
@@ -588,20 +582,20 @@ private fun UserCardItem(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(Color.White.copy(alpha = 0.1f))
+                        .background(com.modxlab.admin.ui.theme.AppSurfaceVariant)
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Devices,
                         contentDescription = "Device Access",
-                        tint = Color.White.copy(alpha = 0.7f),
+                        tint = TextSecondary,
                         modifier = Modifier.size(12.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = if (user.isUnlimitedDevice) "Unlimited (∞)" else "${user.access} Device(s)",
                         style = MaterialTheme.typography.labelSmall.copy(
-                            color = Color.White.copy(alpha = 0.8f),
+                            color = TextSecondary,
                             fontSize = 11.sp
                         )
                     )
@@ -617,7 +611,7 @@ private fun UserCardItem(
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Edit Key",
-                        tint = Color.White.copy(alpha = 0.85f),
+                        tint = TextSecondary,
                         modifier = Modifier.size(16.dp)
                     )
                 }

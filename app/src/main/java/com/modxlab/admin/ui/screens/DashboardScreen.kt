@@ -72,8 +72,6 @@ import com.modxlab.admin.ui.theme.TextSecondary
 import com.modxlab.admin.ui.theme.TextTertiary
 import com.modxlab.admin.ui.components.GlassBox
 import com.modxlab.admin.ui.components.GlassCard
-import com.modxlab.admin.ui.components.GlassBackgroundBrush
-import com.modxlab.admin.ui.components.GlassBorderBrush
 import com.modxlab.admin.ui.viewmodel.AdminViewModel
 
 @Composable
@@ -108,13 +106,13 @@ fun DashboardScreen(
                             style = MaterialTheme.typography.displayLarge.copy(
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.ExtraBold,
-                                color = Color.White
+                                color = TextPrimary
                             ),
                             maxLines = 1
                         )
                         Text(
                             text = "System Overview",
-                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f)),
+                            style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary),
                             maxLines = 1
                         )
                     }
@@ -159,13 +157,13 @@ fun DashboardScreen(
                         modifier = Modifier
                             .size(44.dp)
                             .clip(RoundedCornerShape(8.dp))
-                            .background(Color.White.copy(alpha = 0.20f)),
+                            .background(BrandEmerald.copy(alpha = 0.15f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Default.Security,
                             contentDescription = "Security",
-                            tint = Color.White
+                            tint = BrandEmerald
                         )
                     }
                     Spacer(modifier = Modifier.width(12.dp))
@@ -174,7 +172,7 @@ fun DashboardScreen(
                             text = "Backend Security",
                             style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White
+                                color = TextPrimary
                             ),
                             maxLines = 1
                         )
@@ -182,7 +180,7 @@ fun DashboardScreen(
                             text = "System database is secure and protected.",
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontSize = 12.sp,
-                                color = Color.White.copy(alpha = 0.85f)
+                                color = TextSecondary
                             )
                         )
                     }
@@ -196,7 +194,7 @@ fun DashboardScreen(
                 text = "Live Overview",
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = TextPrimary
                 ),
                 modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
             )
@@ -237,7 +235,7 @@ fun DashboardScreen(
                 text = "Quick Actions",
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = TextPrimary
                 ),
                 modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
             )
@@ -294,7 +292,7 @@ fun MetricCard(
                 text = value,
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.Black,
-                    color = Color.White
+                    color = TextPrimary
                 )
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -302,7 +300,7 @@ fun MetricCard(
                 text = title,
                 style = MaterialTheme.typography.titleSmall.copy(
                     fontWeight = FontWeight.Bold,
-                    color = Color.White.copy(alpha = 0.9f)
+                    color = TextSecondary
                 )
             )
             Text(
@@ -366,7 +364,7 @@ fun QuickActionCard(
                         text = title,
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = TextPrimary
                         )
                     )
                 }
@@ -374,7 +372,7 @@ fun QuickActionCard(
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.labelMedium.copy(
-                        color = Color.White.copy(alpha = 0.75f)
+                        color = TextSecondary
                     )
                 )
             }
@@ -382,14 +380,14 @@ fun QuickActionCard(
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(8.dp))
-                    .background(Color.White.copy(alpha = 0.15f))
+                    .background(color1.copy(alpha = 0.15f))
                     .testTag("action_$title")
             ) {
                 Text(
                     text = actionLabel,
                     style = MaterialTheme.typography.labelSmall.copy(
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = color1
                     ),
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                 )

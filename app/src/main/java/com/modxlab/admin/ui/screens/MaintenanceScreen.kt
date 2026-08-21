@@ -132,12 +132,12 @@ fun MaintenanceScreen(
                     text = "System Update",
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = TextPrimary
                     )
                 )
                 Text(
                     text = "Broadcast announcements and updates",
-                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
+                    style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
                 )
             }
         }
@@ -146,7 +146,7 @@ fun MaintenanceScreen(
 
         // Broadcast Form Card
         GlassBox(
-            shape = RoundedCornerShape(10.dp),
+            shape = RoundedCornerShape(14.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
@@ -170,7 +170,7 @@ fun MaintenanceScreen(
                         text = "Global Broadcast Node (/update/up)",
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = TextPrimary
                         )
                     )
                 }
@@ -182,7 +182,7 @@ fun MaintenanceScreen(
                     text = "App Target Version",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.White.copy(alpha = 0.8f)
+                        color = TextPrimary
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -192,7 +192,7 @@ fun MaintenanceScreen(
                         version = it
                         if (versionError != null) versionError = null
                     },
-                    placeholder = { Text("e.g. 2.4.2", color = Color.White.copy(alpha = 0.6f)) },
+                    placeholder = { Text("e.g. 2.4.2", color = TextSecondary.copy(alpha = 0.6f)) },
                     leadingIcon = {
                         Icon(Icons.Default.SystemUpdate, contentDescription = "Version", tint = BrandCrimson)
                     },
@@ -205,12 +205,12 @@ fun MaintenanceScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color(0xFF0F172A).copy(alpha = 0.6f),
-                        unfocusedContainerColor = Color(0xFF0F172A).copy(alpha = 0.4f),
+                        focusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
+                        unfocusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
                         focusedBorderColor = BrandCrimson,
-                        unfocusedBorderColor = Color.White.copy(alpha = 0.25f),
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White
+                        unfocusedBorderColor = com.modxlab.admin.ui.theme.AppBorder,
+                        focusedTextColor = TextPrimary,
+                        unfocusedTextColor = TextPrimary
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -224,7 +224,7 @@ fun MaintenanceScreen(
                     text = "Announcement Message",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.White.copy(alpha = 0.8f)
+                        color = TextPrimary
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -234,7 +234,7 @@ fun MaintenanceScreen(
                         message = it
                         if (messageError != null) messageError = null
                     },
-                    placeholder = { Text("Enter the notice displayed to clients", color = Color.White.copy(alpha = 0.6f)) },
+                    placeholder = { Text("Enter the notice displayed to clients", color = TextSecondary.copy(alpha = 0.6f)) },
                     leadingIcon = {
                         Icon(Icons.AutoMirrored.Filled.Message, contentDescription = "Message", tint = BrandCrimson)
                     },
@@ -248,12 +248,12 @@ fun MaintenanceScreen(
                     maxLines = 5,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color(0xFF0F172A).copy(alpha = 0.6f),
-                        unfocusedContainerColor = Color(0xFF0F172A).copy(alpha = 0.4f),
+                        focusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
+                        unfocusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
                         focusedBorderColor = BrandCrimson,
-                        unfocusedBorderColor = Color.White.copy(alpha = 0.25f),
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White
+                        unfocusedBorderColor = com.modxlab.admin.ui.theme.AppBorder,
+                        focusedTextColor = TextPrimary,
+                        unfocusedTextColor = TextPrimary
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -267,7 +267,7 @@ fun MaintenanceScreen(
                     text = "Update Direct Download Link",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.White.copy(alpha = 0.8f)
+                        color = TextPrimary
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -277,7 +277,7 @@ fun MaintenanceScreen(
                         link = it
                         if (linkError != null) linkError = null
                     },
-                    placeholder = { Text("https://example.com/modx-latest.apk", color = Color.White.copy(alpha = 0.6f)) },
+                    placeholder = { Text("https://example.com/modx-latest.apk", color = TextSecondary.copy(alpha = 0.6f)) },
                     leadingIcon = {
                         Icon(Icons.Default.Link, contentDescription = "Link", tint = BrandCrimson)
                     },
@@ -290,12 +290,12 @@ fun MaintenanceScreen(
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color(0xFF0F172A).copy(alpha = 0.6f),
-                        unfocusedContainerColor = Color(0xFF0F172A).copy(alpha = 0.4f),
+                        focusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
+                        unfocusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
                         focusedBorderColor = BrandCrimson,
-                        unfocusedBorderColor = Color.White.copy(alpha = 0.25f),
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White
+                        unfocusedBorderColor = com.modxlab.admin.ui.theme.AppBorder,
+                        focusedTextColor = TextPrimary,
+                        unfocusedTextColor = TextPrimary
                     ),
                     modifier = Modifier
                         .fillMaxWidth()

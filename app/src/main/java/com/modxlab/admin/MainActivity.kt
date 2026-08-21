@@ -73,6 +73,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -131,13 +132,10 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ModXAdminTheme {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Image(
-                        painter = painterResource(id = R.drawable.nature_bg),
-                        contentDescription = "Background",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                    )
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = com.modxlab.admin.ui.theme.AppBg
+                ) {
                     MainApp(viewModel = viewModel)
                 }
             }
@@ -213,28 +211,32 @@ fun MainApp(viewModel: AdminViewModel) {
                         .height(82.dp),
                     contentAlignment = Alignment.BottomCenter
                 ) {
-                    // The dark background with cutout
+                    // The light sage background with cutout and clear border stroke matching organic palette
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(60.dp),
+                            .height(62.dp),
                         shape = com.modxlab.admin.ui.components.BottomNavShape(
                             cradleRadius = 27.dp,
                             shoulderRadius = 12.dp,
                             cradleDepth = 30.dp,
-                            cornerRadius = 16.dp
+                            cornerRadius = 18.dp
                         ),
-                        color = Color(0xFF1E1E1E),
-                        shadowElevation = 12.dp
+                        color = com.modxlab.admin.ui.theme.AppSurface,
+                        border = androidx.compose.foundation.BorderStroke(
+                            width = 1.2.dp,
+                            color = com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.60f)
+                        ),
+                        shadowElevation = 10.dp
                     ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 28.dp),
+                                .padding(horizontal = 36.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            // Home Button (Classic Home with Emerald Fill Animation)
+                            // Home Button
                             val homeSelected = currentRoute == Screen.Dashboard.route
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -256,22 +258,24 @@ fun MainApp(viewModel: AdminViewModel) {
                                     selected = homeSelected,
                                     selectedIcon = Icons.Filled.Home,
                                     unselectedIcon = Icons.Outlined.Home,
-                                    selectedColor = BrandEmerald,
-                                    unselectedColor = Color.White,
-                                    modifier = Modifier.size(26.dp)
+                                    selectedColor = com.modxlab.admin.ui.theme.BrandSage,
+                                    unselectedColor = com.modxlab.admin.ui.theme.TextSecondary,
+                                    modifier = Modifier.size(24.dp)
                                 )
-                                Spacer(modifier = Modifier.height(3.dp))
+                                Spacer(modifier = Modifier.height(2.dp))
                                 Text(
                                     text = "Home",
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
                                     style = MaterialTheme.typography.labelSmall.copy(
-                                        color = Color.White,
+                                        color = if (homeSelected) com.modxlab.admin.ui.theme.TextPrimary else com.modxlab.admin.ui.theme.TextSecondary,
                                         fontSize = 11.sp,
-                                        fontWeight = if (homeSelected) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Normal
+                                        fontWeight = if (homeSelected) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Medium
                                     )
                                 )
                             }
 
-                            // Update Button (Classic SystemUpdate with Emerald Fill Animation)
+                            // Update Button
                             val updateSelected = currentRoute == Screen.Maintenance.route
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -293,24 +297,26 @@ fun MainApp(viewModel: AdminViewModel) {
                                     selected = updateSelected,
                                     selectedIcon = Icons.Filled.SystemUpdate,
                                     unselectedIcon = Icons.Outlined.SystemUpdate,
-                                    selectedColor = BrandEmerald,
-                                    unselectedColor = Color.White,
-                                    modifier = Modifier.size(26.dp)
+                                    selectedColor = com.modxlab.admin.ui.theme.BrandSage,
+                                    unselectedColor = com.modxlab.admin.ui.theme.TextSecondary,
+                                    modifier = Modifier.size(24.dp)
                                 )
-                                Spacer(modifier = Modifier.height(3.dp))
+                                Spacer(modifier = Modifier.height(2.dp))
                                 Text(
                                     text = "Update",
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
                                     style = MaterialTheme.typography.labelSmall.copy(
-                                        color = Color.White,
+                                        color = if (updateSelected) com.modxlab.admin.ui.theme.TextPrimary else com.modxlab.admin.ui.theme.TextSecondary,
                                         fontSize = 11.sp,
-                                        fontWeight = if (updateSelected) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Normal
+                                        fontWeight = if (updateSelected) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Medium
                                     )
                                 )
                             }
                         }
                     }
 
-                    // Center Section: Floating FAB + "Set Pass" Label
+                    // Center Section: Floating FAB + Elevated "Set Pass" Label
                     val setPassSelected = currentRoute?.startsWith(Screen.AddUser.route) == true
                     
                     // Floating Action Button docked into top cutout
@@ -319,22 +325,12 @@ fun MainApp(viewModel: AdminViewModel) {
                             .align(Alignment.TopCenter)
                             .offset(y = 2.dp)
                             .size(46.dp)
-                            .shadow(8.dp, CircleShape)
+                            .shadow(6.dp, CircleShape)
                             .clip(CircleShape)
-                            .background(
-                                if (setPassSelected) {
-                                    Brush.verticalGradient(
-                                        listOf(BrandEmerald, BrandEmerald.copy(alpha = 0.85f))
-                                    )
-                                } else {
-                                    Brush.verticalGradient(
-                                        listOf(Color(0xFF333333), Color(0xFF222222))
-                                    )
-                                }
-                            )
+                            .background(com.modxlab.admin.ui.theme.BrandDarkCharcoal)
                             .border(
-                                width = 1.5.dp,
-                                color = if (setPassSelected) BrandEmerald else Color.White.copy(alpha = 0.35f),
+                                width = 1.8.dp,
+                                color = com.modxlab.admin.ui.theme.BrandSage,
                                 shape = CircleShape
                             )
                             .clickable(
@@ -358,17 +354,19 @@ fun MainApp(viewModel: AdminViewModel) {
                         )
                     }
 
-                    // "Set Pass" Label positioned clearly inside bottom bar
+                    // "Set Pass" Label positioned higher up inside bottom bar
                     Text(
                         text = "Set Pass",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.labelSmall.copy(
-                            color = Color.White,
+                            color = if (setPassSelected) com.modxlab.admin.ui.theme.TextPrimary else com.modxlab.admin.ui.theme.TextSecondary,
                             fontSize = 11.sp,
-                            fontWeight = if (setPassSelected) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Normal
+                            fontWeight = if (setPassSelected) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Medium
                         ),
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
-                            .padding(bottom = 10.dp)
+                            .padding(bottom = 12.dp)
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null

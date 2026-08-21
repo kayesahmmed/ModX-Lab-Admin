@@ -181,12 +181,12 @@ fun EditUserScreen(
                         text = "Edit Key Settings",
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = TextPrimary
                         )
                     )
                     Text(
                         text = "Manage credentials, device limit & status",
-                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.8f))
+                        style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
                     )
                 }
             }
@@ -211,7 +211,7 @@ fun EditUserScreen(
 
         // License Key Display Banner
         GlassBox(
-            shape = RoundedCornerShape(10.dp),
+            shape = RoundedCornerShape(14.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -224,13 +224,13 @@ fun EditUserScreen(
                         modifier = Modifier
                             .size(36.dp)
                             .clip(CircleShape)
-                            .background(BrandCyan.copy(alpha = 0.2f)),
+                            .background(com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.15f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Default.Key,
                             contentDescription = "Key",
-                            tint = BrandCyan,
+                            tint = com.modxlab.admin.ui.theme.BrandSage,
                             modifier = Modifier.size(18.dp)
                         )
                     }
@@ -239,7 +239,7 @@ fun EditUserScreen(
                         Text(
                             text = "LICENSE KEY",
                             style = MaterialTheme.typography.labelSmall.copy(
-                                color = Color.White.copy(alpha = 0.6f),
+                                color = TextSecondary,
                                 fontWeight = FontWeight.Bold
                             )
                         )
@@ -247,7 +247,7 @@ fun EditUserScreen(
                             text = user.key,
                             style = MaterialTheme.typography.titleMedium.copy(
                                 fontWeight = FontWeight.Bold,
-                                color = BrandCyan
+                                color = com.modxlab.admin.ui.theme.BrandSage
                             )
                         )
                     }
@@ -274,7 +274,7 @@ fun EditUserScreen(
 
         // Edit Credentials Form Card
         GlassBox(
-            shape = RoundedCornerShape(10.dp),
+            shape = RoundedCornerShape(14.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
@@ -282,7 +282,7 @@ fun EditUserScreen(
                     text = "Account Credentials",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = TextPrimary
                     )
                 )
 
@@ -292,7 +292,7 @@ fun EditUserScreen(
                     text = "Username",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.White.copy(alpha = 0.8f)
+                        color = TextPrimary
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -300,15 +300,15 @@ fun EditUserScreen(
                     value = username,
                     onValueChange = { username = it },
                     leadingIcon = {
-                        Icon(Icons.Default.Person, contentDescription = "Username", tint = BrandEmeraldLight)
+                        Icon(Icons.Default.Person, contentDescription = "Username", tint = com.modxlab.admin.ui.theme.BrandSage)
                     },
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.White.copy(alpha = 0.2f),
-                        unfocusedContainerColor = Color.White.copy(alpha = 0.2f),
-                        focusedBorderColor = BrandEmerald,
-                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
+                        focusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
+                        unfocusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
+                        focusedBorderColor = com.modxlab.admin.ui.theme.BrandSage,
+                        unfocusedBorderColor = com.modxlab.admin.ui.theme.AppBorder,
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary
                     ),
@@ -323,7 +323,7 @@ fun EditUserScreen(
                     text = "Password / Token",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.White.copy(alpha = 0.8f)
+                        color = TextPrimary
                     )
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -331,15 +331,15 @@ fun EditUserScreen(
                     value = password,
                     onValueChange = { password = it },
                     leadingIcon = {
-                        Icon(Icons.Default.Lock, contentDescription = "Password", tint = BrandEmeraldLight)
+                        Icon(Icons.Default.Lock, contentDescription = "Password", tint = com.modxlab.admin.ui.theme.BrandSage)
                     },
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.White.copy(alpha = 0.2f),
-                        unfocusedContainerColor = Color.White.copy(alpha = 0.2f),
-                        focusedBorderColor = BrandEmerald,
-                        unfocusedBorderColor = Color.White.copy(alpha = 0.2f),
+                        focusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
+                        unfocusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
+                        focusedBorderColor = com.modxlab.admin.ui.theme.BrandSage,
+                        unfocusedBorderColor = com.modxlab.admin.ui.theme.AppBorder,
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary
                     ),
@@ -355,7 +355,7 @@ fun EditUserScreen(
                     text = "Device Access Limit",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.White.copy(alpha = 0.8f)
+                        color = TextPrimary
                     )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -370,10 +370,10 @@ fun EditUserScreen(
                         modifier = Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(if (isOne) BrandEmerald.copy(alpha = 0.25f) else Color.White.copy(alpha = 0.10f))
+                            .background(if (isOne) com.modxlab.admin.ui.theme.BrandSage else com.modxlab.admin.ui.theme.AppSurfaceVariant)
                             .border(
-                                width = if (isOne) 1.2.dp else 0.8.dp,
-                                color = if (isOne) BrandEmerald else Color.White.copy(alpha = 0.20f),
+                                width = 1.dp,
+                                color = if (isOne) com.modxlab.admin.ui.theme.BrandSage else com.modxlab.admin.ui.theme.AppBorder,
                                 shape = RoundedCornerShape(10.dp)
                             )
                             .clickable { accessLimit = "1" }
@@ -384,7 +384,7 @@ fun EditUserScreen(
                             text = "1 Device",
                             style = MaterialTheme.typography.labelMedium.copy(
                                 fontWeight = FontWeight.Bold,
-                                color = if (isOne) BrandEmeraldLight else Color.White.copy(alpha = 0.85f)
+                                color = if (isOne) Color.White else TextPrimary
                             ),
                             maxLines = 1
                         )
@@ -395,10 +395,10 @@ fun EditUserScreen(
                         modifier = Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(if (isUnlimited) BrandEmerald.copy(alpha = 0.25f) else Color.White.copy(alpha = 0.10f))
+                            .background(if (isUnlimited) com.modxlab.admin.ui.theme.BrandSage else com.modxlab.admin.ui.theme.AppSurfaceVariant)
                             .border(
-                                width = if (isUnlimited) 1.2.dp else 0.8.dp,
-                                color = if (isUnlimited) BrandEmerald else Color.White.copy(alpha = 0.20f),
+                                width = 1.dp,
+                                color = if (isUnlimited) com.modxlab.admin.ui.theme.BrandSage else com.modxlab.admin.ui.theme.AppBorder,
                                 shape = RoundedCornerShape(10.dp)
                             )
                             .clickable { accessLimit = "unlimited" }
@@ -409,7 +409,7 @@ fun EditUserScreen(
                             text = "Unlimited (∞)",
                             style = MaterialTheme.typography.labelMedium.copy(
                                 fontWeight = FontWeight.Bold,
-                                color = if (isUnlimited) BrandEmeraldLight else Color.White.copy(alpha = 0.85f)
+                                color = if (isUnlimited) Color.White else TextPrimary
                             ),
                             maxLines = 1
                         )
@@ -420,10 +420,10 @@ fun EditUserScreen(
                         modifier = Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(if (isCustom) BrandEmerald.copy(alpha = 0.25f) else Color.White.copy(alpha = 0.10f))
+                            .background(if (isCustom) com.modxlab.admin.ui.theme.BrandSage else com.modxlab.admin.ui.theme.AppSurfaceVariant)
                             .border(
-                                width = if (isCustom) 1.2.dp else 0.8.dp,
-                                color = if (isCustom) BrandEmerald else Color.White.copy(alpha = 0.20f),
+                                width = 1.dp,
+                                color = if (isCustom) com.modxlab.admin.ui.theme.BrandSage else com.modxlab.admin.ui.theme.AppBorder,
                                 shape = RoundedCornerShape(10.dp)
                             )
                             .clickable { accessLimit = "custom" }
@@ -437,7 +437,7 @@ fun EditUserScreen(
                                 singleLine = true,
                                 textStyle = MaterialTheme.typography.labelMedium.copy(
                                     fontWeight = FontWeight.Bold,
-                                    color = BrandEmeraldLight,
+                                    color = Color.White,
                                     textAlign = androidx.compose.ui.text.style.TextAlign.Center
                                 ),
                                 keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
@@ -448,7 +448,7 @@ fun EditUserScreen(
                                         Text(
                                             text = "Custom",
                                             style = MaterialTheme.typography.labelMedium.copy(
-                                                color = Color.White.copy(alpha = 0.6f),
+                                                color = Color.White.copy(alpha = 0.7f),
                                                 fontWeight = FontWeight.Bold,
                                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
                                             )
@@ -462,7 +462,7 @@ fun EditUserScreen(
                                 text = "Custom",
                                 style = MaterialTheme.typography.labelMedium.copy(
                                     fontWeight = FontWeight.Bold,
-                                    color = Color.White.copy(alpha = 0.85f)
+                                    color = TextPrimary
                                 ),
                                 maxLines = 1
                             )
@@ -494,14 +494,14 @@ fun EditUserScreen(
                         )
                     },
                     enabled = !isSaving,
-                    colors = ButtonDefaults.buttonColors(containerColor = BrandEmerald, contentColor = Color.Black),
+                    colors = ButtonDefaults.buttonColors(containerColor = com.modxlab.admin.ui.theme.BrandSage, contentColor = Color.White),
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("btn_save_user_changes")
                 ) {
                     if (isSaving) {
-                        CircularProgressIndicator(color = Color.Black, modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
+                        CircularProgressIndicator(color = Color.White, modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
                     } else {
                         Icon(Icons.Default.Save, contentDescription = "Save", modifier = Modifier.size(18.dp))
                         Spacer(modifier = Modifier.width(6.dp))
