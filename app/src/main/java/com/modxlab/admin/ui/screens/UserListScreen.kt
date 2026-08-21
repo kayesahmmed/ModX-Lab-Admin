@@ -223,7 +223,7 @@ fun UserListScreen(
                 ) {
                     Column {
                         Text(
-                            text = if (statusFilter == "LOGGED_IN") "Logged In Users" else "Client Keys",
+                            text = if (statusFilter == "LOGGED_IN") "Logged In Users" else "All Users",
                             style = MaterialTheme.typography.headlineMedium.copy(
                                 fontWeight = FontWeight.Bold,
                                 color = TextPrimary
@@ -304,7 +304,7 @@ fun UserListScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 listOf(
-                    "ALL" to "All Keys",
+                    "ALL" to "All Users",
                     "LOGGED_IN" to "Logged In",
                     "ACTIVE" to "Active Only",
                     "INACTIVE" to "Blocked"
@@ -814,22 +814,11 @@ private fun UserCardItem(
 
                 Spacer(modifier = Modifier.width(6.dp))
 
-                // Action Icons: Block, Edit & Delete (Guaranteed visible)
+                // Action Icons: Edit & Delete (Guaranteed visible)
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(2.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(
-                        onClick = onToggleStatusClick,
-                        modifier = Modifier.size(30.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Block,
-                            contentDescription = "Block User",
-                            tint = if (user.isActive) TextSecondary else BrandCrimson,
-                            modifier = Modifier.size(15.dp)
-                        )
-                    }
                     IconButton(
                         onClick = onEditClick,
                         modifier = Modifier.size(30.dp)
@@ -841,7 +830,6 @@ private fun UserCardItem(
                             modifier = Modifier.size(15.dp)
                         )
                     }
-
                     IconButton(
                         onClick = onDeleteClick,
                         modifier = Modifier.size(30.dp)

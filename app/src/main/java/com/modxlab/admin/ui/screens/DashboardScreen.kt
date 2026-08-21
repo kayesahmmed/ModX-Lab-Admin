@@ -230,24 +230,24 @@ fun DashboardScreen(
             ) {
                 MetricCard(
                     title = "Total Users",
-                    value = stats.loggedInUsers.toString(),
-                    subtitle = "${stats.loggedInUsers} Logged In",
+                    value = stats.totalKeys.toString(),
+                    subtitle = "${stats.activeUsers} Active",
                     color = BrandEmerald,
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        viewModel.setUserStatusFilter("LOGGED_IN")
+                        viewModel.setUserStatusFilter("ALL")
                         onNavigateToUsers()
                     }
                 )
 
                 MetricCard(
-                    title = "Total Keys",
-                    value = stats.totalKeys.toString(),
-                    subtitle = "${stats.activeUsers} Active / Set",
+                    title = "Logged In",
+                    value = stats.loggedInUsers.toString(),
+                    subtitle = "Active on device",
                     color = BrandCyan,
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        viewModel.setUserStatusFilter("ALL")
+                        viewModel.setUserStatusFilter("LOGGED_IN")
                         onNavigateToUsers()
                     }
                 )
