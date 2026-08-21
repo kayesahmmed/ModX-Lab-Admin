@@ -388,7 +388,7 @@ fun UserListScreen(
                             onLongClick = {
                                 if (!isSelectionMode) {
                                     isSelectionMode = true
-                                    selectedKeys = users.map { it.key }.toSet()
+                                    selectedKeys = setOf(userItem.key)
                                 } else {
                                     selectedKeys = if (isSelected) {
                                         selectedKeys - userItem.key
