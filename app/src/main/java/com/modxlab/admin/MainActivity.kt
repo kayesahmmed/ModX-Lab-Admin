@@ -56,6 +56,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.ui.draw.shadow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -209,19 +210,19 @@ fun MainApp(viewModel: AdminViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .windowInsetsPadding(WindowInsets.navigationBars)
-                        .height(80.dp),
+                        .height(82.dp),
                     contentAlignment = Alignment.BottomCenter
                 ) {
                     // The dark background with cutout
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(62.dp),
+                            .height(60.dp),
                         shape = com.modxlab.admin.ui.components.BottomNavShape(
-                            cradleRadius = 24.dp,
-                            cradleMargin = 6.dp,
-                            cornerRadius = 14.dp,
-                            cradleDepth = 24.dp
+                            cradleRadius = 27.dp,
+                            shoulderRadius = 12.dp,
+                            cradleDepth = 30.dp,
+                            cornerRadius = 16.dp
                         ),
                         color = Color(0xFF1E1E1E),
                         shadowElevation = 12.dp
@@ -229,7 +230,7 @@ fun MainApp(viewModel: AdminViewModel) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 24.dp),
+                                .padding(horizontal = 28.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -249,7 +250,7 @@ fun MainApp(viewModel: AdminViewModel) {
                                             }
                                         }
                                     }
-                                    .padding(8.dp)
+                                    .padding(vertical = 4.dp, horizontal = 8.dp)
                             ) {
                                 com.modxlab.admin.ui.components.AnimatedFillIcon(
                                     selected = homeSelected,
@@ -257,14 +258,14 @@ fun MainApp(viewModel: AdminViewModel) {
                                     unselectedIcon = Icons.Outlined.Home,
                                     selectedColor = BrandEmerald,
                                     unselectedColor = Color.White,
-                                    modifier = Modifier.size(28.dp)
+                                    modifier = Modifier.size(26.dp)
                                 )
-                                Spacer(modifier = Modifier.height(4.dp))
+                                Spacer(modifier = Modifier.height(3.dp))
                                 Text(
                                     text = "Home",
                                     style = MaterialTheme.typography.labelSmall.copy(
-                                        color = if (homeSelected) BrandEmerald else Color.White.copy(alpha = 0.85f),
-                                        fontSize = 12.sp,
+                                        color = Color.White,
+                                        fontSize = 11.sp,
                                         fontWeight = if (homeSelected) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Normal
                                     )
                                 )
@@ -286,7 +287,7 @@ fun MainApp(viewModel: AdminViewModel) {
                                             }
                                         }
                                     }
-                                    .padding(8.dp)
+                                    .padding(vertical = 4.dp, horizontal = 8.dp)
                             ) {
                                 com.modxlab.admin.ui.components.AnimatedFillIcon(
                                     selected = updateSelected,
@@ -294,14 +295,14 @@ fun MainApp(viewModel: AdminViewModel) {
                                     unselectedIcon = Icons.Outlined.SystemUpdate,
                                     selectedColor = BrandEmerald,
                                     unselectedColor = Color.White,
-                                    modifier = Modifier.size(28.dp)
+                                    modifier = Modifier.size(26.dp)
                                 )
-                                Spacer(modifier = Modifier.height(4.dp))
+                                Spacer(modifier = Modifier.height(3.dp))
                                 Text(
                                     text = "Update",
                                     style = MaterialTheme.typography.labelSmall.copy(
-                                        color = if (updateSelected) BrandEmerald else Color.White.copy(alpha = 0.85f),
-                                        fontSize = 12.sp,
+                                        color = Color.White,
+                                        fontSize = 11.sp,
                                         fontWeight = if (updateSelected) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Normal
                                     )
                                 )
@@ -309,12 +310,65 @@ fun MainApp(viewModel: AdminViewModel) {
                         }
                     }
 
-                    // Center Floating Button closely connected to cradle
+                    // Center Section: Floating FAB + "Set Pass" Label
                     val setPassSelected = currentRoute?.startsWith(Screen.AddUser.route) == true
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                    
+                    // Floating Action Button docked into top cutout
+                    Box(
                         modifier = Modifier
-                            .offset(y = (-16).dp)
+                            .align(Alignment.TopCenter)
+                            .offset(y = 2.dp)
+                            .size(46.dp)
+                            .shadow(8.dp, CircleShape)
+                            .clip(CircleShape)
+                            .background(
+                                if (setPassSelected) {
+                                    Brush.verticalGradient(
+                                        listOf(BrandEmerald, BrandEmerald.copy(alpha = 0.85f))
+                                    )
+                                } else {
+                                    Brush.verticalGradient(
+                                        listOf(Color(0xFF333333), Color(0xFF222222))
+                                    )
+                                }
+                            )
+                            .border(
+                                width = 1.5.dp,
+                                color = if (setPassSelected) BrandEmerald else Color.White.copy(alpha = 0.35f),
+                                shape = CircleShape
+                            )
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) {
+                                if (currentRoute != Screen.AddUser.route) {
+                                    navController.navigate(Screen.AddUser.route) {
+                                        popUpTo(Screen.Dashboard.route)
+                                        launchSingleTop = true
+                                    }
+                                }
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = "Set Pass",
+                            tint = Color.White,
+                            modifier = Modifier.size(26.dp)
+                        )
+                    }
+
+                    // "Set Pass" Label positioned clearly inside bottom bar
+                    Text(
+                        text = "Set Pass",
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            color = Color.White,
+                            fontSize = 11.sp,
+                            fontWeight = if (setPassSelected) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Normal
+                        ),
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 10.dp)
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null
@@ -326,36 +380,7 @@ fun MainApp(viewModel: AdminViewModel) {
                                     }
                                 }
                             }
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(48.dp)
-                                .clip(CircleShape)
-                                .background(Color(0xFF2B2B2B))
-                                .border(
-                                    width = 1.5.dp,
-                                    color = if (setPassSelected) BrandEmerald else Color.White.copy(alpha = 0.4f),
-                                    shape = CircleShape
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Add,
-                                contentDescription = "Set Pass",
-                                tint = if (setPassSelected) BrandEmerald else Color.White,
-                                modifier = Modifier.size(26.dp)
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = "Set Pass",
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                color = if (setPassSelected) BrandEmerald else Color.White.copy(alpha = 0.85f),
-                                fontSize = 11.sp,
-                                fontWeight = if (setPassSelected) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Normal
-                            )
-                        )
-                    }
+                    )
                 }
             }
         }

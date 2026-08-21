@@ -10,24 +10,27 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 class BottomNavShape(
-    private val cradleRadius: Dp = 24.dp,
-    private val cradleMargin: Dp = 6.dp,
-    private val cornerRadius: Dp = 14.dp,
-    private val cradleDepth: Dp = 24.dp
+    private val cradleRadius: Dp = 28.dp,
+    private val shoulderRadius: Dp = 12.dp,
+    private val cradleDepth: Dp = 32.dp,
+    private val cornerRadius: Dp = 16.dp
 ) : Shape {
     override fun createOutline(
         size: Size,
         layoutDirection: androidx.compose.ui.unit.LayoutDirection,
         density: Density
     ): Outline {
-        val crPx = with(density) { cradleRadius.toPx() }
-        val marginPx = with(density) { cradleMargin.toPx() }
-        val cornerPx = with(density) { cornerRadius.toPx() }
+        val rPx = with(density) { cradleRadius.toPx() }
+        val sPx = with(density) { shoulderRadius.toPx() }
         val depthPx = with(density) { cradleDepth.toPx() }
-        
+        val cornerPx = with(density) { cornerRadius.toPx() }
+
         val center = size.width / 2f
-        val totalCutoutRadius = crPx + marginPx
-        val shoulder = marginPx * 1.2f
+        val x0 = center - rPx - sPx
+        val x1 = center - rPx
+        val x3 = center + rPx
+        val x4 = center + rPx + sPx
+        val yShoulder = depthPx * 0.25f
 
         val path = Path().apply {
             // Start at top-left corner
@@ -39,31 +42,38 @@ class BottomNavShape(
                 forceMoveTo = false
             )
 
-            // Line towards the center cutout start
-            val cutoutStart = center - totalCutoutRadius - shoulder
-            val cutoutEnd = center + totalCutoutRadius + shoulder
-            lineTo(cutoutStart, 0f)
+            // Flat top edge to cutout shoulder start
+            lineTo(x0, 0f)
 
-            // Smooth gentle entry shoulder into cradle
+            // Left shoulder curve
             cubicTo(
-                cutoutStart + shoulder * 0.7f, 0f,
-                center - totalCutoutRadius, depthPx * 0.4f,
-                center - totalCutoutRadius * 0.7f, depthPx * 0.85f
-            )
-            // Cradle base curve
-            cubicTo(
-                center - totalCutoutRadius * 0.35f, depthPx,
-                center + totalCutoutRadius * 0.35f, depthPx,
-                center + totalCutoutRadius * 0.7f, depthPx * 0.85f
-            )
-            // Smooth gentle exit shoulder out of cradle
-            cubicTo(
-                center + totalCutoutRadius, depthPx * 0.4f,
-                cutoutEnd - shoulder * 0.7f, 0f,
-                cutoutEnd, 0f
+                x0 + sPx * 0.5f, 0f,
+                x1 - sPx * 0.2f, yShoulder,
+                x1, yShoulder
             )
 
-            // Line to top-right corner
+            // Cradle left curve
+            cubicTo(
+                x1 + rPx * 0.35f, yShoulder + (depthPx - yShoulder) * 0.75f,
+                center - rPx * 0.35f, depthPx,
+                center, depthPx
+            )
+
+            // Cradle right curve
+            cubicTo(
+                center + rPx * 0.35f, depthPx,
+                x3 - rPx * 0.35f, yShoulder + (depthPx - yShoulder) * 0.75f,
+                x3, yShoulder
+            )
+
+            // Right shoulder curve
+            cubicTo(
+                x3 + sPx * 0.2f, yShoulder,
+                x4 - sPx * 0.5f, 0f,
+                x4, 0f
+            )
+
+            // Flat top edge to top-right corner
             lineTo(size.width - cornerPx, 0f)
             arcTo(
                 rect = Rect(size.width - cornerPx * 2, 0f, size.width, cornerPx * 2),
@@ -81,4 +91,7 @@ class BottomNavShape(
         return Outline.Generic(path)
     }
 }
+
+
+
 

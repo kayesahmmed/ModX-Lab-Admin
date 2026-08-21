@@ -1,5 +1,6 @@
 package com.modxlab.admin.ui.components
 
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
@@ -28,7 +29,10 @@ fun AnimatedFillIcon(
 ) {
     val fillProgress by animateFloatAsState(
         targetValue = if (selected) 1f else 0f,
-        animationSpec = tween(durationMillis = 400),
+        animationSpec = tween(
+            durationMillis = 750,
+            easing = FastOutSlowInEasing
+        ),
         label = "fill_animation"
     )
 
