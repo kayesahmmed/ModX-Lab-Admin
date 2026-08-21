@@ -36,6 +36,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
@@ -716,8 +717,10 @@ private fun UserCardItem(
                             modifier = Modifier.size(14.dp)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
+                        val loggedInCount = user.device.split(",").size
+                        val accessText = if (user.isUnlimitedDevice) "∞" else user.access
                         Text(
-                            text = "Logged In HWID: ${user.device}",
+                            text = "Logged in: $loggedInCount / $accessText Devices",
                             style = MaterialTheme.typography.labelSmall.copy(
                                 color = TextPrimary,
                                 fontSize = 11.sp,
@@ -811,11 +814,22 @@ private fun UserCardItem(
 
                 Spacer(modifier = Modifier.width(6.dp))
 
-                // Action Icons: Edit & Delete (Guaranteed visible)
+                // Action Icons: Block, Edit & Delete (Guaranteed visible)
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(2.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    IconButton(
+                        onClick = onToggleStatusClick,
+                        modifier = Modifier.size(30.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Block,
+                            contentDescription = "Block User",
+                            tint = if (user.isActive) TextSecondary else BrandCrimson,
+                            modifier = Modifier.size(15.dp)
+                        )
+                    }
                     IconButton(
                         onClick = onEditClick,
                         modifier = Modifier.size(30.dp)
