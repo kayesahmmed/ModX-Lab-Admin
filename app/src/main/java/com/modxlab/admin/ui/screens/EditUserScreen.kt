@@ -453,17 +453,19 @@ fun EditUserScreen(
                                     keyboardType = androidx.compose.ui.text.input.KeyboardType.Number
                                 ),
                                 decorationBox = { innerTextField ->
-                                    if (customAccessText.isEmpty()) {
-                                        Text(
-                                            text = "Custom",
-                                            style = MaterialTheme.typography.labelMedium.copy(
-                                                color = Color.White.copy(alpha = 0.7f),
-                                                fontWeight = FontWeight.Bold,
-                                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                                    Box(contentAlignment = Alignment.Center) {
+                                        if (customAccessText.isEmpty()) {
+                                            Text(
+                                                text = "Custom",
+                                                style = MaterialTheme.typography.labelMedium.copy(
+                                                    color = Color.White.copy(alpha = 0.7f),
+                                                    fontWeight = FontWeight.Bold,
+                                                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                                                )
                                             )
-                                        )
+                                        }
+                                        innerTextField()
                                     }
-                                    innerTextField()
                                 }
                             )
                         } else {

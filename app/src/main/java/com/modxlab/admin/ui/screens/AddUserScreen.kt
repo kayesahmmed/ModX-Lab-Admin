@@ -395,35 +395,67 @@ fun AddUserScreen(
 
                     // Custom Input Option
                     val isCustom = !isSingle && !isUnlimited
-                    OutlinedTextField(
-                        value = if (isCustom) deviceAccess else "",
-                        onValueChange = { newValue -> 
-                            if (newValue.all { it.isDigit() }) {
-                                deviceAccess = if (newValue.isEmpty()) "2" else newValue
-                            }
-                        },
-                        placeholder = { 
-                            Text("Custom", color = TextSecondary.copy(alpha = 0.6f), fontSize = 12.sp) 
-                        },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    Box(
                         modifier = Modifier
-                            .weight(1.2f)
-                            .height(48.dp),
-                        textStyle = androidx.compose.ui.text.TextStyle(
-                            color = TextPrimary,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
-                        ),
-                        singleLine = true,
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = com.modxlab.admin.ui.theme.BrandSage,
-                            unfocusedBorderColor = com.modxlab.admin.ui.theme.AppBorder,
-                            focusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant,
-                            unfocusedContainerColor = com.modxlab.admin.ui.theme.AppSurfaceVariant
-                        ),
-                        shape = RoundedCornerShape(10.dp)
-                    )
+                            .weight(1f)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(if (isCustom) com.modxlab.admin.ui.theme.BrandSage else com.modxlab.admin.ui.theme.AppSurfaceVariant)
+                            .border(
+                                width = 1.dp,
+                                color = if (isCustom) com.modxlab.admin.ui.theme.BrandSage else com.modxlab.admin.ui.theme.AppBorder,
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                            .clickable {
+                                if (!isCustom) {
+                                    deviceAccess = "2"
+                                }
+                            }
+                            .padding(vertical = 12.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (isCustom) {
+                            androidx.compose.foundation.text.BasicTextField(
+                                value = deviceAccess,
+                                onValueChange = { newValue ->
+                                    if (newValue.all { it.isDigit() }) {
+                                        deviceAccess = newValue
+                                    }
+                                },
+                                singleLine = true,
+                                textStyle = MaterialTheme.typography.titleSmall.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
+                                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                                ),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                decorationBox = { innerTextField ->
+                                    Box(contentAlignment = Alignment.Center) {
+                                        if (deviceAccess.isEmpty()) {
+                                            Text(
+                                                text = "Custom",
+                                                style = MaterialTheme.typography.titleSmall.copy(
+                                                    color = Color.White.copy(alpha = 0.7f),
+                                                    fontWeight = FontWeight.Bold,
+                                                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                                                )
+                                            )
+                                        }
+                                        innerTextField()
+                                    }
+                                }
+                            )
+                        } else {
+                            Text(
+                                text = "Custom",
+                                style = MaterialTheme.typography.titleSmall.copy(
+                                    color = TextPrimary,
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                                ),
+                                maxLines = 1
+                            )
+                        }
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))

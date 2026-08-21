@@ -41,8 +41,14 @@ class AuthViewModel : ViewModel() {
                             _isLoggedIn.value = true
                         }
                         .addOnFailureListener { createException ->
-                            // Suppress loud error if Firebase Auth is not enabled in Firebase Console yet
-                            Log.w("AuthViewModel", "Silent auth fallback: ${createException.message}")
+                            Log.w("AuthViewModel", "Silent email auth failed: ${createException.message}. Trying anonymous auth...")
+                            auth.signInAnonymously()
+                                .addOnSuccessListener {
+                                    _isLoggedIn.value = true
+                                }
+                                .addOnFailureListener { anonException ->
+                                    Log.e("AuthViewModel", "Silent anonymous auth failed: ${anonException.message}")
+                                }
                         }
                 }
         } catch (e: Exception) {
