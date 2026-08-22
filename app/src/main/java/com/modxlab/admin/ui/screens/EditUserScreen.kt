@@ -415,7 +415,7 @@ fun EditUserScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "Unlimited (∞)",
+                            text = "Unlimited",
                             style = MaterialTheme.typography.labelMedium.copy(
                                 fontWeight = FontWeight.Bold,
                                 color = if (isUnlimited) Color.White else TextPrimary
@@ -458,8 +458,8 @@ fun EditUserScreen(
                                             Text(
                                                 text = "Custom",
                                                 style = MaterialTheme.typography.labelMedium.copy(
-                                                    color = Color.White.copy(alpha = 0.7f),
-                                                    fontWeight = FontWeight.Bold,
+                                                    color = Color.White.copy(alpha = 0.5f),
+                                                    fontWeight = FontWeight.SemiBold,
                                                     textAlign = androidx.compose.ui.text.style.TextAlign.Center
                                                 )
                                             )
@@ -664,22 +664,6 @@ fun EditUserScreen(
                 Spacer(modifier = Modifier.height(14.dp))
 
                 InfoRow(
-                    icon = Icons.Default.Smartphone,
-                    label = "Bound Hardware Device",
-                    value = if (!isDeviceBound) "Not Bound (Ready to login)" else user.device
-                )
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                InfoRow(
-                    icon = Icons.Default.Update,
-                    label = "Client App Version",
-                    value = if (user.version == "null" || user.version.isBlank()) "Not Registered Yet (null)" else user.version
-                )
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                InfoRow(
                     icon = Icons.Default.CalendarMonth,
                     label = "Registration Timestamp",
                     value = user.rgtime.ifEmpty { "N/A" }
@@ -698,7 +682,7 @@ fun EditUserScreen(
                 InfoRow(
                     icon = Icons.Default.Devices,
                     label = "Hardware Access Restriction",
-                    value = if (user.isUnlimitedDevice) "Unlimited Devices (∞)" else "${user.access} Device(s) Allowed"
+                    value = if (user.isUnlimitedDevice) "Unlimited Devices" else "${user.access} Device(s) Allowed"
                 )
             }
         }

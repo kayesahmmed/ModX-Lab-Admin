@@ -44,33 +44,37 @@ fun PremiumToast(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        shape = RoundedCornerShape(24.dp),
-        color = com.modxlab.admin.ui.theme.AppSurface.copy(alpha = 0.95f),
+        shape = RoundedCornerShape(20.dp),
+        color = com.modxlab.admin.ui.theme.AppSurface.copy(alpha = 0.98f),
         border = BorderStroke(
             width = 1.dp,
             brush = Brush.linearGradient(
                 colors = listOf(
-                    BrandSage.copy(alpha = 0.7f),
-                    BrandEmerald.copy(alpha = 0.3f),
+                    BrandSage.copy(alpha = 0.8f),
+                    BrandEmerald.copy(alpha = 0.2f),
                     BrandSage.copy(alpha = 0.1f),
-                    BrandSage.copy(alpha = 0.8f)
+                    BrandSage.copy(alpha = 0.6f)
                 )
             )
         ),
-        shadowElevation = 16.dp,
+        shadowElevation = 12.dp,
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 12.dp)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
             .animateContentSize()
     ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(20.dp))
+        ) {
             // Subtle Top-Left Glow
             Box(
                 modifier = Modifier
-                    .size(60.dp)
+                    .size(80.dp)
                     .background(
                         brush = Brush.radialGradient(
-                            colors = listOf(BrandEmerald.copy(alpha = 0.15f), Color.Transparent)
+                            colors = listOf(BrandEmerald.copy(alpha = 0.2f), Color.Transparent)
                         )
                     )
             )
@@ -82,7 +86,7 @@ fun PremiumToast(
                             colors = listOf(
                                 BrandSage.copy(alpha = 0.15f),
                                 Color.Transparent,
-                                BrandSage.copy(alpha = 0.08f)
+                                BrandSage.copy(alpha = 0.05f)
                             )
                         )
                     )

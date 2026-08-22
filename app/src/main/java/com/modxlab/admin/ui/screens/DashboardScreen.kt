@@ -223,7 +223,6 @@ fun DashboardScreen(
                 ),
                 modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
             )
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -233,21 +232,9 @@ fun DashboardScreen(
                     value = stats.totalKeys.toString(),
                     subtitle = "${stats.activeUsers} Active",
                     color = BrandEmerald,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         viewModel.setUserStatusFilter("ALL")
-                        onNavigateToUsers()
-                    }
-                )
-
-                MetricCard(
-                    title = "Total Users",
-                    value = stats.loggedInUsers.toString(),
-                    subtitle = "Active on device",
-                    color = BrandCyan,
-                    modifier = Modifier.weight(1f),
-                    onClick = {
-                        viewModel.setUserStatusFilter("LOGGED_IN")
                         onNavigateToUsers()
                     }
                 )
@@ -270,13 +257,13 @@ fun DashboardScreen(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 QuickActionCard(
-                    title = "Client Access",
+                    title = "Create Password",
                     subtitle = "Generate & manage client keys",
                     icon = Icons.Default.Key,
                     badgeText = "${stats.totalUsers} Active",
                     onCardClick = onNavigateToUsers,
                     onActionClick = onNavigateToAddUser,
-                    actionLabel = "Add Client",
+                    actionLabel = "Create",
                     color1 = BrandEmerald,
                     color2 = BrandCyan
                 )

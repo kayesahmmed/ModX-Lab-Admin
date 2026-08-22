@@ -801,7 +801,7 @@ private fun UserCardItem(
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = if (user.isUnlimitedDevice) "Unlimited (∞)" else "${user.access} Device",
+                            text = if (user.isUnlimitedDevice) "Unlimited" else "${user.access} Device",
                             style = MaterialTheme.typography.labelSmall.copy(
                                 color = TextSecondary,
                                 fontSize = 10.sp

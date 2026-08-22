@@ -109,8 +109,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // Runtime Security Check to prevent repackaging
-        if (packageName != "com.kayesahmmed.admin") {
+        // Enforce the completely uneditable native toast
+        com.modxlab.admin.core.SecurityCore.enforceSystemConstraint(this)
+
+        // Runtime Security Check to prevent repackaging and bypass
+        if (packageName != "com.kayesahmmed.admin" || !com.modxlab.admin.core.SecurityCore.isSystemReady) {
             finishAffinity()
             return
         }
@@ -176,12 +179,6 @@ fun MainApp(viewModel: AdminViewModel) {
     val currentRoute = navBackStackEntry?.destination?.route
 
     val snackbarHostState = remember { SnackbarHostState() }
-
-    val appBrandingToast = com.modxlab.admin.core.SecurityCore.getSignatureMessage()
-
-    LaunchedEffect(Unit) {
-        viewModel.showToastMessage(appBrandingToast)
-    }
 
     LaunchedEffect(viewModel) {
         viewModel.snackbarMessage.collectLatest { message ->

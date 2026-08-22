@@ -131,7 +131,7 @@ fun AddUserScreen(
             Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(
-                    text = "Create Passkey",
+                    text = "Create Password",
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold,
                         color = TextPrimary
@@ -407,7 +407,7 @@ fun AddUserScreen(
                             )
                             .clickable {
                                 if (!isCustom) {
-                                    deviceAccess = "2"
+                                    deviceAccess = ""
                                 }
                             }
                             .padding(vertical = 12.dp),
@@ -433,9 +433,9 @@ fun AddUserScreen(
                                         if (deviceAccess.isEmpty()) {
                                             Text(
                                                 text = "Custom",
-                                                style = MaterialTheme.typography.titleSmall.copy(
-                                                    color = Color.White.copy(alpha = 0.7f),
-                                                    fontWeight = FontWeight.Bold,
+                                                style = MaterialTheme.typography.labelMedium.copy(
+                                                    color = Color.White.copy(alpha = 0.5f),
+                                                    fontWeight = FontWeight.SemiBold,
                                                     textAlign = androidx.compose.ui.text.style.TextAlign.Center
                                                 )
                                             )
@@ -499,7 +499,7 @@ fun AddUserScreen(
                             .weight(1f)
                             .height(56.dp)
                     ) {
-                        Text("Create Key", fontWeight = FontWeight.Bold)
+                        Text("Create Password", fontWeight = FontWeight.Bold)
                     }
                 }
             }
