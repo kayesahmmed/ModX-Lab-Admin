@@ -36,6 +36,8 @@ import com.modxlab.admin.ui.theme.BrandSage
 import com.modxlab.admin.ui.theme.TextPrimary
 import androidx.compose.animation.animateContentSize
 
+import androidx.compose.ui.draw.shadow
+
 @Composable
 fun PremiumToast(
     message: String,
@@ -43,30 +45,36 @@ fun PremiumToast(
     onActionClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    Surface(
-        shape = RoundedCornerShape(24.dp),
-        color = com.modxlab.admin.ui.theme.AppSurface, // Fully opaque to prevent FAB bleeding through
-        border = BorderStroke(
-            width = 1.dp,
-            brush = Brush.linearGradient(
-                colors = listOf(
-                    BrandSage.copy(alpha = 0.8f),
-                    BrandEmerald.copy(alpha = 0.2f),
-                    BrandSage.copy(alpha = 0.1f),
-                    BrandSage.copy(alpha = 0.6f)
-                )
-            )
-        ),
-        shadowElevation = 16.dp,
+    Box(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 16.dp)
+            .shadow(
+                elevation = 16.dp,
+                shape = RoundedCornerShape(24.dp),
+                clip = false,
+                ambientColor = BrandSage,
+                spotColor = BrandEmerald
+            )
+            .background(com.modxlab.admin.ui.theme.AppSurface, RoundedCornerShape(24.dp))
+            .border(
+                width = 1.dp,
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        BrandSage.copy(alpha = 0.8f),
+                        BrandEmerald.copy(alpha = 0.2f),
+                        BrandSage.copy(alpha = 0.1f),
+                        BrandSage.copy(alpha = 0.6f)
+                    )
+                ),
+                shape = RoundedCornerShape(24.dp)
+            )
+            .clip(RoundedCornerShape(24.dp))
             .animateContentSize()
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(24.dp))
         ) {
             // Subtle Top-Left Glow
             Box(

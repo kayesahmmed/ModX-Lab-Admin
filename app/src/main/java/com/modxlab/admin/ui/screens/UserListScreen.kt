@@ -9,6 +9,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.ui.draw.scale
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.horizontalScroll
@@ -180,17 +181,32 @@ fun UserListScreen(
                         }
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            TextButton(
-                                onClick = {
-                                    if (selectedKeys.size == users.size) {
-                                        selectedKeys = emptySet()
-                                    } else {
-                                        selectedKeys = users.map { it.key }.toSet()
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .clickable {
+                                        if (selectedKeys.size == users.size && users.isNotEmpty()) {
+                                            selectedKeys = emptySet()
+                                        } else {
+                                            selectedKeys = users.map { it.key }.toSet()
+                                        }
                                     }
-                                }
+                                    .padding(horizontal = 8.dp, vertical = 6.dp)
                             ) {
+                                GlassCheckbox(
+                                    checked = selectedKeys.size == users.size && users.isNotEmpty(),
+                                    onCheckedChange = {
+                                        if (selectedKeys.size == users.size && users.isNotEmpty()) {
+                                            selectedKeys = emptySet()
+                                        } else {
+                                            selectedKeys = users.map { it.key }.toSet()
+                                        }
+                                    }
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
                                 Text(
-                                    text = if (selectedKeys.size == users.size) "Deselect All" else "Select All",
+                                    text = if (selectedKeys.size == users.size && users.isNotEmpty()) "Deselect All" else "Select All",
                                     style = MaterialTheme.typography.labelLarge.copy(
                                         color = com.modxlab.admin.ui.theme.BrandSage,
                                         fontWeight = FontWeight.Bold
@@ -584,14 +600,15 @@ private fun UserCardItem(
 
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = if (isSelected) com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.10f) else com.modxlab.admin.ui.theme.AppSurface,
+        color = if (isSelected) com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.15f) else com.modxlab.admin.ui.theme.AppSurface,
         border = androidx.compose.foundation.BorderStroke(
-            width = if (isSelected) 1.5.dp else 1.dp,
+            width = if (isSelected) 2.dp else 1.dp,
             color = if (isSelected) com.modxlab.admin.ui.theme.BrandSage else com.modxlab.admin.ui.theme.AppBorder
         ),
-        shadowElevation = 2.dp,
+        shadowElevation = if (isSelected) 8.dp else 2.dp,
         modifier = Modifier
             .fillMaxWidth()
+            .then(if (isSelected) Modifier.scale(1.02f) else Modifier)
             .combinedClickable(
                 onClick = onItemClick,
                 onLongClick = onLongClick
