@@ -44,8 +44,8 @@ fun PremiumToast(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = com.modxlab.admin.ui.theme.AppSurface.copy(alpha = 0.98f),
+        shape = RoundedCornerShape(24.dp),
+        color = com.modxlab.admin.ui.theme.AppSurface, // Fully opaque to prevent FAB bleeding through
         border = BorderStroke(
             width = 1.dp,
             brush = Brush.linearGradient(
@@ -57,16 +57,16 @@ fun PremiumToast(
                 )
             )
         ),
-        shadowElevation = 12.dp,
+        shadowElevation = 16.dp,
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .padding(horizontal = 16.dp, vertical = 16.dp)
             .animateContentSize()
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(20.dp))
+                .clip(RoundedCornerShape(24.dp))
         ) {
             // Subtle Top-Left Glow
             Box(

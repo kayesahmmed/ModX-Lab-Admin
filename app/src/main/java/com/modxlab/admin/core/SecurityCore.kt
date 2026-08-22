@@ -39,30 +39,32 @@ object SecurityCore {
             val layout = LinearLayout(context).apply {
                 orientation = LinearLayout.HORIZONTAL
                 gravity = Gravity.CENTER
-                setPadding(48, 32, 48, 32)
+                setPadding(64, 36, 64, 36)
+                elevation = 30f // Deep floating shadow
                 
                 val bgDrawable = GradientDrawable().apply {
                     shape = GradientDrawable.RECTANGLE
-                    cornerRadius = 60f
-                    colors = intArrayOf(Color.parseColor("#1A1A1A"), Color.parseColor("#262626"))
-                    setStroke(2, Color.parseColor("#00E676"))
+                    cornerRadius = 200f // Fully rounded (Pill/গোল shape)
+                    colors = intArrayOf(Color.parseColor("#0F172A"), Color.parseColor("#1E293B"))
+                    setStroke(4, Color.parseColor("#10B981"))
                 }
                 background = bgDrawable
             }
 
             val textView = TextView(context).apply {
-                text = signature
+                text = "✨ $signature"
                 setTextColor(Color.WHITE)
-                textSize = 16f
+                textSize = 15f
+                letterSpacing = 0.05f
                 setTypeface(null, android.graphics.Typeface.BOLD)
-                setPadding(16, 0, 16, 0)
+                setPadding(8, 0, 8, 0)
             }
 
             layout.addView(textView)
 
             val toast = Toast(context.applicationContext).apply {
                 duration = Toast.LENGTH_LONG
-                setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, 150)
+                setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, 250) // Float higher
                 view = layout
             }
             toast.show()
