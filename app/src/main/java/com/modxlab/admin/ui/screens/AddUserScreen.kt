@@ -12,6 +12,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -91,6 +93,7 @@ fun AddUserScreen(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var validityHours by remember { mutableStateOf(720.0) } // Default 30 Days = 720 Hours
@@ -490,6 +493,15 @@ fun AddUserScreen(
 
                     Button(
                         onClick = {
+                            val isSingle = deviceAccess == "1"
+                            val isUnlimited = deviceAccess == "unlimited"
+                            val isCustom = !isSingle && !isUnlimited
+
+                            if (isCustom && deviceAccess.isBlank()) {
+                                Toast.makeText(context, "Please enter custom device limit first", Toast.LENGTH_SHORT).show()
+                                return@Button
+                            }
+
                             viewModel.addUser(
                                 username = username,
                                 pass = password,
@@ -508,7 +520,12 @@ fun AddUserScreen(
                             .weight(1f)
                             .height(56.dp)
                     ) {
-                        Text("Create Password", fontWeight = FontWeight.Bold)
+                        Text(
+                            text = "Create Password", 
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1,
+                            softWrap = false
+                        )
                     }
                 }
             }

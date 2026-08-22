@@ -494,10 +494,15 @@ fun EditUserScreen(
 
                 Button(
                     onClick = {
+                        if (accessLimit == "custom" && customAccessText.isBlank()) {
+                            Toast.makeText(context, "Please enter custom device limit first", Toast.LENGTH_SHORT).show()
+                            return@Button
+                        }
+                        
                         isSaving = true
                         val finalAccess = when (accessLimit) {
                             "unlimited" -> "unlimited"
-                            "custom" -> if (customAccessText.isNotBlank()) customAccessText else "1"
+                            "custom" -> customAccessText
                             else -> "1"
                         }
                         viewModel.updateUserFull(

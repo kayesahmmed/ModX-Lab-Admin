@@ -53,7 +53,7 @@ fun PremiumToast(
         Surface(
             shape = CircleShape, // Fully rounded pill shape
             color = Color(0xFF1E293B), // Premium dark slate background
-            shadowElevation = 8.dp,
+            shadowElevation = 0.dp,
             modifier = Modifier.animateContentSize()
         ) {
             Row(
