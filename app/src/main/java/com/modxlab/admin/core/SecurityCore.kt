@@ -49,6 +49,24 @@ object SecurityCore {
                     setStroke(4, Color.parseColor("#10B981"))
                 }
                 background = bgDrawable
+
+                // Animate the stroke color to create a glowing effect
+                val colorAnim = android.animation.ValueAnimator.ofArgb(
+                    Color.parseColor("#10B981"), // Emerald
+                    Color.parseColor("#059669"), // Darker Emerald
+                    Color.parseColor("#34D399"), // Lighter Emerald
+                    Color.parseColor("#10B981")
+                ).apply {
+                    duration = 1500
+                    repeatCount = android.animation.ValueAnimator.INFINITE
+                    addUpdateListener { animator ->
+                        bgDrawable.setStroke(4, animator.animatedValue as Int)
+                    }
+                }
+                colorAnim.start()
+
+                // Save animator as tag so we can cancel it later
+                tag = colorAnim
             }
 
             val textView = TextView(context).apply {
@@ -62,12 +80,38 @@ object SecurityCore {
 
             layout.addView(textView)
 
-            val toast = Toast(context.applicationContext).apply {
-                duration = Toast.LENGTH_LONG
-                setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, 250) // Float higher
-                view = layout
+            if (context is android.app.Activity) {
+                val decorView = context.window.decorView as? android.view.ViewGroup
+                if (decorView != null) {
+                    val params = android.widget.FrameLayout.LayoutParams(
+                        android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                        android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+                        bottomMargin = 400 // Float higher
+                    }
+                    
+                    layout.alpha = 0f
+                    decorView.addView(layout, params)
+                    
+                    // Fade in and out like a toast
+                    layout.animate().alpha(1f).setDuration(400).withEndAction {
+                        layout.postDelayed({
+                            layout.animate().alpha(0f).setDuration(400).withEndAction {
+                                (layout.tag as? android.animation.ValueAnimator)?.cancel()
+                                decorView.removeView(layout)
+                            }
+                        }, 3500)
+                    }
+                }
+            } else {
+                // Fallback for non-activity context
+                val toast = Toast(context.applicationContext).apply {
+                    duration = Toast.LENGTH_LONG
+                    view = layout
+                }
+                toast.show()
             }
-            toast.show()
             
             isSystemReady = true
         } catch (e: Exception) {
