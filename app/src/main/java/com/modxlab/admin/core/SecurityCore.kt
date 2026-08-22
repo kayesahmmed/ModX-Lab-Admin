@@ -36,37 +36,61 @@ object SecurityCore {
             
             // Build a completely custom premium native toast programmatically
             // This prevents anyone from modifying XML layouts for it.
-            val layout = LinearLayout(context).apply {
-                orientation = LinearLayout.HORIZONTAL
-                gravity = Gravity.CENTER
-                setPadding(64, 36, 64, 36)
-                elevation = 30f // Deep floating shadow
+            val layout = object : LinearLayout(context) {
+                private val borderPaint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
+                    style = android.graphics.Paint.Style.STROKE
+                    strokeWidth = 4f
+                }
+                private val gradientMatrix = android.graphics.Matrix()
+                private var gradientOffset = 0f
                 
-                val bgDrawable = GradientDrawable().apply {
-                    shape = GradientDrawable.RECTANGLE
-                    cornerRadius = 200f // Fully rounded (Pill/গোল shape)
-                    colors = intArrayOf(Color.parseColor("#0F172A"), Color.parseColor("#1E293B"))
-                    setStroke(4, Color.parseColor("#10B981"))
-                }
-                background = bgDrawable
-
-                // Animate the stroke color to create a glowing effect
-                val colorAnim = android.animation.ValueAnimator.ofArgb(
-                    Color.parseColor("#10B981"), // Emerald
-                    Color.parseColor("#059669"), // Darker Emerald
-                    Color.parseColor("#34D399"), // Lighter Emerald
-                    Color.parseColor("#10B981")
-                ).apply {
-                    duration = 1500
-                    repeatCount = android.animation.ValueAnimator.INFINITE
-                    addUpdateListener { animator ->
-                        bgDrawable.setStroke(4, animator.animatedValue as Int)
+                init {
+                    setWillNotDraw(false)
+                    orientation = HORIZONTAL
+                    gravity = Gravity.CENTER
+                    setPadding(64, 36, 64, 36)
+                    elevation = 30f // Deep floating shadow
+                    
+                    val bgDrawable = GradientDrawable().apply {
+                        shape = GradientDrawable.RECTANGLE
+                        cornerRadius = 200f // Fully rounded (Pill/গোল shape)
+                        colors = intArrayOf(Color.parseColor("#0F172A"), Color.parseColor("#1E293B"))
                     }
-                }
-                colorAnim.start()
+                    background = bgDrawable
 
-                // Save animator as tag so we can cancel it later
-                tag = colorAnim
+                    // Animate the stroke matrix to create a sweeping light effect
+                    val anim = android.animation.ValueAnimator.ofFloat(0f, 1f).apply {
+                        duration = 2000
+                        repeatCount = android.animation.ValueAnimator.INFINITE
+                        addUpdateListener { animator ->
+                            gradientOffset = animator.animatedValue as Float
+                            invalidate()
+                        }
+                    }
+                    anim.start()
+                    tag = anim
+                }
+
+                override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+                    super.onSizeChanged(w, h, oldw, oldh)
+                    val shader = android.graphics.LinearGradient(
+                        0f, 0f, w.toFloat() * 0.5f, 0f,
+                        intArrayOf(Color.parseColor("#1E293B"), Color.parseColor("#10B981"), Color.parseColor("#1E293B")),
+                        floatArrayOf(0f, 0.5f, 1f),
+                        android.graphics.Shader.TileMode.CLAMP
+                    )
+                    borderPaint.shader = shader
+                }
+
+                override fun onDraw(canvas: android.graphics.Canvas) {
+                    super.onDraw(canvas)
+                    val w = width.toFloat()
+                    gradientMatrix.setTranslate(w * 2.5f * gradientOffset - w, 0f)
+                    borderPaint.shader?.setLocalMatrix(gradientMatrix)
+                    
+                    val rect = android.graphics.RectF(2f, 2f, w - 2f, height.toFloat() - 2f)
+                    canvas.drawRoundRect(rect, 200f, 200f, borderPaint)
+                }
             }
 
             val textView = TextView(context).apply {

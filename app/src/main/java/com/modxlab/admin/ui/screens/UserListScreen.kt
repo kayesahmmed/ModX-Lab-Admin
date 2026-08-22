@@ -600,22 +600,27 @@ private fun UserCardItem(
 
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = if (isSelected) com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.15f) else com.modxlab.admin.ui.theme.AppSurface,
+        color = com.modxlab.admin.ui.theme.AppSurface,
         border = androidx.compose.foundation.BorderStroke(
             width = if (isSelected) 2.dp else 1.dp,
             color = if (isSelected) com.modxlab.admin.ui.theme.BrandSage else com.modxlab.admin.ui.theme.AppBorder
         ),
-        shadowElevation = if (isSelected) 8.dp else 2.dp,
+        shadowElevation = if (isSelected) 6.dp else 2.dp,
         modifier = Modifier
             .fillMaxWidth()
-            .then(if (isSelected) Modifier.scale(1.02f) else Modifier)
+            .clip(RoundedCornerShape(12.dp))
             .combinedClickable(
                 onClick = onItemClick,
                 onLongClick = onLongClick
             )
             .testTag("user_item_${user.key}")
     ) {
-        Column(modifier = Modifier.padding(14.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(if (isSelected) com.modxlab.admin.ui.theme.BrandSage.copy(alpha = 0.08f) else androidx.compose.ui.graphics.Color.Transparent)
+                .padding(14.dp)
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically

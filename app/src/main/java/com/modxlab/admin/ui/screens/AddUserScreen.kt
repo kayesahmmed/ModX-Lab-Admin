@@ -9,6 +9,9 @@ import com.modxlab.admin.ui.components.GlassTextField
 import com.modxlab.admin.ui.components.premiumClickable
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -99,6 +102,8 @@ fun AddUserScreen(
 
     var usernameError by remember { mutableStateOf<String?>(null) }
     var passwordError by remember { mutableStateOf<String?>(null) }
+
+    val deviceAccessFocusRequester = remember { FocusRequester() }
 
     val scrollState = rememberScrollState()
 
@@ -414,6 +419,9 @@ fun AddUserScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         if (isCustom) {
+                            LaunchedEffect(Unit) {
+                                deviceAccessFocusRequester.requestFocus()
+                            }
                             androidx.compose.foundation.text.BasicTextField(
                                 value = deviceAccess,
                                 onValueChange = { newValue ->
@@ -422,6 +430,7 @@ fun AddUserScreen(
                                     }
                                 },
                                 singleLine = true,
+                                modifier = Modifier.focusRequester(deviceAccessFocusRequester),
                                 textStyle = MaterialTheme.typography.titleSmall.copy(
                                     fontWeight = FontWeight.Bold,
                                     color = Color.White,

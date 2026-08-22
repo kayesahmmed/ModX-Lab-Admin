@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.CheckCircle
@@ -50,9 +51,9 @@ fun PremiumToast(
         contentAlignment = Alignment.Center
     ) {
         Surface(
-            shape = RoundedCornerShape(50), // Fully rounded pill shape
+            shape = CircleShape, // Fully rounded pill shape
             color = Color(0xFF1E293B), // Premium dark slate background
-            shadowElevation = 12.dp,
+            shadowElevation = 8.dp,
             modifier = Modifier.animateContentSize()
         ) {
             Row(
@@ -65,7 +66,7 @@ fun PremiumToast(
                                 BrandSage.copy(alpha = 0.4f)
                             )
                         ),
-                        shape = RoundedCornerShape(50)
+                        shape = CircleShape
                     )
                     .padding(horizontal = 24.dp, vertical = 14.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -98,9 +99,9 @@ fun PremiumToast(
                     Spacer(modifier = Modifier.width(12.dp))
                     TextButton(
                         onClick = onActionClick,
-                        shape = RoundedCornerShape(50),
+                        shape = CircleShape,
                         modifier = Modifier
-                            .background(BrandSage.copy(alpha = 0.2f), RoundedCornerShape(50))
+                            .background(BrandSage.copy(alpha = 0.2f), CircleShape)
                             .height(32.dp)
                     ) {
                         Text(

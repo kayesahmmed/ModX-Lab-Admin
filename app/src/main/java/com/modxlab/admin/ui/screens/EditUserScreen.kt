@@ -4,6 +4,9 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -104,6 +107,8 @@ fun EditUserScreen(
     var isSaving by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
     var showResetHwidDialog by remember { mutableStateOf(false) }
+
+    val deviceAccessFocusRequester = remember { FocusRequester() }
 
     LaunchedEffect(userKey) {
         val u = viewModel.getUser(userKey)
@@ -440,10 +445,14 @@ fun EditUserScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         if (isCustom) {
+                            LaunchedEffect(Unit) {
+                                deviceAccessFocusRequester.requestFocus()
+                            }
                             androidx.compose.foundation.text.BasicTextField(
                                 value = customAccessText,
                                 onValueChange = { customAccessText = it.filter { ch -> ch.isDigit() } },
                                 singleLine = true,
+                                modifier = Modifier.focusRequester(deviceAccessFocusRequester),
                                 textStyle = MaterialTheme.typography.labelMedium.copy(
                                     fontWeight = FontWeight.Bold,
                                     color = Color.White,
